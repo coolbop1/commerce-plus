@@ -13,7 +13,7 @@ class ProductController extends BaseController
     public function __construct()
     {
         $this->middleware('auth');
-        //$this->middleware('role:ROLE_ADMIN');
+        $this->middleware('role:ROLE_VENDOR');
     }
     /**
      * Display a listing of the resource.

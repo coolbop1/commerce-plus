@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -29,8 +30,22 @@ class RegisterController extends BaseController
         }
    
         $input = $request->all();
+
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+        if($request->has('account_type')) {
+            $new_user = User::find($user->id);
+            switch ($request->account_type) {
+                case 'vendor':
+                    $role = Role::where('name', 'ROLE_VENDOR')->first();
+                    $new_user->roles()->sync(['role_id' => $role->id]);
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
    

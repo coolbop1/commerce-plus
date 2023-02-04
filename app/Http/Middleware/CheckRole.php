@@ -16,7 +16,7 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if (! $request->user()->hasRole($role)) {
+        if ((!$request->user()->hasRole($role)) && (!$request->user()->hasRole('ROLE_SUPERADMIN'))) {
             return response()->json(['message' => 'This action is unauthorized.'], 401);
         }
         return $next($request);
