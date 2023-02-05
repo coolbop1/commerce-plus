@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,13 @@ Route::controller(RegisterController::class)->group(function(){
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('products', ProductController::class);
     Route::post('add-role', [RoleController::class, 'create']);
+    //Ctegory endpoints
+    Route::middleware('role:ROLE_SUPERADMIN')->group( function () {
+        Route::post('create-category', [CategoryController::class, 'create']);
+        Route::post('edit-category', [CategoryController::class, 'updateCategory']);
+        Route::get('delete-category', [CategoryController::class, 'deleteCategory']);
+    });
+    Route::get('list-categories', [CategoryController::class, 'listCategories']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

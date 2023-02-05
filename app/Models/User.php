@@ -80,4 +80,14 @@ class User extends Authenticatable
             ->belongsToMany(Role::class)
             ->withTimestamps();
     }
+
+    public function stores()
+    {
+        return $this->hasMany(Store::class);
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 }

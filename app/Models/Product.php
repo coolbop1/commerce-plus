@@ -15,6 +15,20 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'detail'
+        'name', 'detail', 'store_id', 'category_id'
     ];
+
+    protected $casts = [
+        'approved' => 'booleans',
+    ];
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
