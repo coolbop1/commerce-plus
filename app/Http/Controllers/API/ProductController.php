@@ -6,23 +6,36 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use App\Models\Store;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends BaseController
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('role:ROLE_VENDOR');
+        if(\request()->header('store_id')){
+            $this->middleware('role:ROLE_ADMIN');
+        }
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $products = Product::whereHas('store.user', function($q) use($request){
+            $q->where('store.user.id', $request->user()->id);
+        })->get();
+    
+        return $this->sendResponse(ProductResource::collection($products), 'Products retrieved successfully.');
+    }
+
+    public function listProducts(Request $request)
+    {
+        $products = Product::with('store')->when($request->store_id, function($query) use($request){
+            $query->where('store_id', $request->store_id);
+        })->get();
     
         return $this->sendResponse(ProductResource::collection($products), 'Products retrieved successfully.');
     }
@@ -38,14 +51,24 @@ class ProductController extends BaseController
    
         $validator = Validator::make($input, [
             'name' => 'required',
-            'detail' => 'required'
+            'detail' => 'required',
+            'store_id' => 'required',
+            'category_id' => 'required',
+            'quantity' => 'nullable|integer'
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
    
-        $product = Product::create($input);
+        $product = Product::updateOrCreate(
+            [
+                'name' => $input['name'],
+                'store_id' => $input['store_id'],
+                'category_id' => $input['category_id']
+            ],
+            $input
+        );
    
         return $this->sendResponse(new ProductResource($product), 'Product created successfully.');
     } 
@@ -80,15 +103,21 @@ class ProductController extends BaseController
    
         $validator = Validator ::make($input, [
             'name' => 'required',
-            'detail' => 'required'
+            'detail' => 'required',
+            'store_id' => 'nullable|integer',
+            'category_id' => 'nullable|integer',
+            'quantity' => 'nullable|integer'
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
    
-        $product->name = $input['name'];
-        $product->detail = $input['detail'];
+        $product->name = $request->name ?? $product->name;
+        $product->detail = $request->detail ?? $product->detail;
+        $product->store_id = $request->store_id ?? $product->store_id;
+        $product->category_id = $request->category_id ?? $product->category_id;
+        $product->quantity = $request->quantity ?? $product->quantity;
         $product->save();
    
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');

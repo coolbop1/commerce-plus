@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -39,8 +42,34 @@ class DatabaseSeeder extends Seeder
             //     })->toArray();
             //     //$local_govts_array = LocalGovt::insert($local_govts_array_);
             // }
-
             
         }
+        $roles = [
+            [
+                'name' => 'ROLE_SUPERADMIN',
+                'description' => 'Has all the access'
+            ],
+            [
+                'name' => 'ROLE_VENDOR',
+                'description' => 'Has store acess'
+            ],
+            [
+                'name' => 'ROLE_DELIVERY',
+                'description' => 'Has delivery access'
+            ]
+        ];
+        foreach ($roles as $key => $role) {
+            Role::updateOrCreate($role);
+        }
+
+        $superAmin['name'] = "Super_AdMin";
+        $superAmin['email'] = "admin@commerceplus.com";
+        $superAmin['password'] = bcrypt(env('ADMIN_PASS'));
+        $user = User::firstOrCreate(
+            ["email" => $superAmin['email']],
+            $superAmin
+        );
+        $role = Role::where('name', 'ROLE_SUPERADMIN')->first();
+        $user->roles()->sync(['role_id' => $role->id]);
     }
 }

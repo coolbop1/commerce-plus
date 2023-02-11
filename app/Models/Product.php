@@ -19,7 +19,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'approved' => 'booleans',
+        'approved' => 'boolean',
     ];
 
     public function store()

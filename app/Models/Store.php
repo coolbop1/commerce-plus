@@ -10,16 +10,19 @@ class Store extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'user_id', 'warehoused'
+        'name', 'warehoused'
     ];
 
     protected $casts = [
         'warehoused' => 'boolean',
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        //return $this->belongsTo(User::class);
+        return $this
+            ->belongsToMany(User::class)
+            ->withTimestamps();
     }
 
     public function products()
