@@ -32,7 +32,12 @@ class CategoryController extends BaseController
     }
 
     public function listCategories(Request $request){
-        $categories = Category::where('verified', true)->orWhere('user_id', $request->user()->id)->get(); //Product::all();
+        $user_id = $request->user_id ?? null;
+        $categories = Category::when($user_id, function($query) use($user_id){
+            $query->where('verified', true)->orWhere('user_id', $user_id);
+        }, function($query){
+            $query->where('verified', true);
+        })->get();
     
         return $this->sendResponse(CategoryResource::collection($categories), 'Categories retrieved successfully.');
     }

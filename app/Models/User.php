@@ -81,9 +81,20 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function isStoreAdmin($store_id)
+    {
+        if ($this->stores->where('id', $store_id)->first()) {
+            return true;
+        }
+        return false;
+    }
+
     public function stores()
     {
-        return $this->hasMany(Store::class);
+        //return $this->hasMany(Store::class);
+        return $this
+            ->belongsToMany(Store::class)
+            ->withTimestamps();
     }
 
     public function categories()

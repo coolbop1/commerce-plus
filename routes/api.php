@@ -25,7 +25,9 @@ Route::controller(RegisterController::class)->group(function(){
 });
         
 Route::middleware('auth:sanctum')->group( function () {
-    Route::resource('products', ProductController::class);
+    Route::middleware('role:ROLE_VENDOR')->group( function () {
+        Route::resource('products', ProductController::class);
+    });
     Route::post('add-role', [RoleController::class, 'create']);
     //Category endpoints
     Route::middleware('role:ROLE_SUPERADMIN')->group( function () {
@@ -34,17 +36,19 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::get('delete-category', [CategoryController::class, 'deleteCategory']);
     });
 
-    //Category endpoints
-    Route::middleware('role:ROLE_ADMIN')->group( function () {
+    //Store endpoints
+    Route::middleware('role:ROLE_VENDOR')->group( function () {
         Route::post('create-store', [StoreController::class, 'create']);
-        Route::post('edit-store', [StoreController::class, 'updateStore']);
-        Route::get('delete-store', [StoreController::class, 'deleteStore']);
+        Route::post('edit-store/{store_id}', [StoreController::class, 'updateStore']);
+        Route::get('delete-store/{store_id}', [StoreController::class, 'deleteStore']);
     });
 
 });
+Route::get('list-products', [ProductController::class, 'listProducts']);
 Route::get('list-categories', [CategoryController::class, 'listCategories']);
 Route::get('list-stores', [StoreController::class, 'listStores']);
-Route::get('view-store', [StoreController::class, 'viewStore']);
+Route::get('view-store/{store_id}', [StoreController::class, 'viewStore']);
+Route::get('view-product/{product_id}', [ProductController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

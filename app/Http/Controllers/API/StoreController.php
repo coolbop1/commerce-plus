@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Store;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class StoreController extends BaseController
@@ -16,7 +17,6 @@ class StoreController extends BaseController
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'user_id' => 'nullable|integer',
             'warehoused' => 'nullable|boolean',
             'state_id' => 'nullable|integer',
             'lat' => 'nullable|numeric',
@@ -26,8 +26,8 @@ class StoreController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
         $input = $request->all();
-        $input['user_id'] = $request->user_id ?? $request->user()->id;
-        $already_exist = Store::where('name', $request->name)->where('user_id', '<>', $input['user_id'])->first();
+        $input['user_id'] = $request->user()->id;
+        $already_exist = Store::where('name', $request->name)->first();
         if( $already_exist) {
             return $this->sendError('Store with the same name already exist, please edit the store name.', [], 400);  
         }
@@ -35,17 +35,20 @@ class StoreController extends BaseController
         $store = Store::updateOrCreate(
             [
                 'name' => $request->name,
-                'user_id' => $input['user_id']
             ],
             $input
         );
+        if($store) {
+            $user = User::find($request->user()->id);
+            $user->stores()->sync(['store_id' => $store->id]);
+        }
+
 
         return $this->sendResponse($store, 'Store created successfully.');
     }
 
-    public function updateStore(Request $request) {
+    public function updateStore(Request $request, $id) {
         $validator = Validator::make($request->all(), [
-            'id' => 'required',
             'name' => 'nullable|string',
             'user_id' => 'nullable|integer',
             'warehoused' => 'nullable|boolean',
@@ -57,7 +60,7 @@ class StoreController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
 
-        $store = Store::find($request->id);
+        $store = Store::find($id);
 
         if(is_null($store)){
             return $this->sendError('Store not found', [], 404);
@@ -70,7 +73,7 @@ class StoreController extends BaseController
             'lat' => $request->lat ?? $store->lat,
             'long' => $request->long ?? $store->long,
         ]);
-        $store = Store::with('user')->find($request->id);
+        $store = Store::find($request->id);
 
         return $this->sendResponse($store, 'Store edited successfully.');
     }
@@ -81,15 +84,8 @@ class StoreController extends BaseController
         return $this->sendResponse($stores, 'Stores retrieved successfully.');
     }
 
-    public function viewStore(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required'
-        ]);
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors(), 400);       
-        }
-
-        $store = Store::with('user')->find($request->id);
+    public function viewStore($id) {
+        $store = Store::find($id);
 
         if(is_null($store)){
             return $this->sendError('Store not found', [], 404);
