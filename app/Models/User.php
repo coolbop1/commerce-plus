@@ -89,6 +89,14 @@ class User extends Authenticatable
         return false;
     }
 
+    public function ownsCart($cart_id)
+    {
+        if ($this->carts->where('id', $cart_id)->first()) {
+            return true;
+        }
+        return false;
+    }
+
     public function stores()
     {
         //return $this->hasMany(Store::class);
@@ -100,5 +108,10 @@ class User extends Authenticatable
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }

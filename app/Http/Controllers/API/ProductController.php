@@ -102,11 +102,12 @@ class ProductController extends BaseController
         $input = $request->all();
    
         $validator = Validator ::make($input, [
-            'name' => 'required',
-            'detail' => 'required',
+            'name' => 'nullable|string',
+            'detail' => 'nullable|string',
             'store_id' => 'nullable|integer',
             'category_id' => 'nullable|integer',
-            'quantity' => 'nullable|integer'
+            'quantity' => 'nullable|integer',
+            'price' => 'nullable|numeric'
         ]);
    
         if($validator->fails()){
@@ -118,6 +119,7 @@ class ProductController extends BaseController
         $product->store_id = $request->store_id ?? $product->store_id;
         $product->category_id = $request->category_id ?? $product->category_id;
         $product->quantity = $request->quantity ?? $product->quantity;
+        $product->price = $request->price ?? $product->price;
         $product->save();
    
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');

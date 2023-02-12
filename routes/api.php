@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
@@ -24,7 +25,7 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('login', 'login');
 });
         
-Route::middleware('auth:sanctum')->group( function () {
+Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     Route::middleware('role:ROLE_VENDOR')->group( function () {
         Route::resource('products', ProductController::class);
     });
@@ -43,12 +44,18 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::get('delete-store/{store_id}', [StoreController::class, 'deleteStore']);
     });
 
+    //Cart Route
+    Route::post('add-item-to-cart', [CartController::class, 'addItemToCart']);
+    Route::get('remove-item-from-cart/{cart_id}', [CartController::class, 'removeItemFromCart']);
+    Route::get('view-cart/{cart_user_id}', [CartController::class, 'getMyCart']);
 });
 Route::get('list-products', [ProductController::class, 'listProducts']);
 Route::get('list-categories', [CategoryController::class, 'listCategories']);
 Route::get('list-stores', [StoreController::class, 'listStores']);
 Route::get('view-store/{store_id}', [StoreController::class, 'viewStore']);
 Route::get('view-product/{product_id}', [ProductController::class, 'show']);
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
