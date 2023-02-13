@@ -54,6 +54,8 @@ class ProductController extends  BaseController
             'detail' => 'required',
             'store_id' => 'required',
             'category_id' => 'required',
+            'sub_category_id' => 'nullable|integer',
+            'section_id' => 'nullable|integer',
             'quantity' => 'nullable|integer'
         ]);
    
@@ -65,7 +67,10 @@ class ProductController extends  BaseController
             [
                 'name' => $input['name'],
                 'store_id' => $input['store_id'],
-                'category_id' => $input['category_id']
+                'category_id' => $input['category_id'],
+                'sub_category_id' => $input['sub_category_id'],
+                'section_id' => $input['section_id'],
+                'quantity' => $input['quantity']
             ],
             $input
         );

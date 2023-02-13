@@ -15,7 +15,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'detail', 'store_id', 'category_id', 'price'
+        'name', 'detail', 'store_id', 'category_id', 'sub_category_id', 'section_id', 'price'
     ];
 
     protected $casts = [
@@ -30,5 +30,15 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 }

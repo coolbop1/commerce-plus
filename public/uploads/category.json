@@ -1,0 +1,522 @@
+[
+    {
+        "category": {
+            "name": "Women Clothing & Fashion",
+            "sub_category": [
+                {
+                    "name": "Hot Categories",
+                    "section": [
+                        "Party Dress",
+                        "Beauty & Health",
+                        "Women shoe",
+                        "Sleeping Dress",
+                        "Casual Dress",
+                        "Hoodies & Sweatshirts",
+                        "Jackets",
+                        "T-shirts",
+                        "Shirts",
+                        "Socks"
+                    ]
+                },
+                {
+                    "name": "Wedding & events",
+                    "section": [
+                        "Wedding Dresses",
+                        "Evening Dresses",
+                        "Prom Dresses",
+                        "Bridesmaid Dresses"
+                    ]
+                },
+                {
+                    "name": "Bottom",
+                    "section": [
+                        "Skirts",
+                        "Leggings",
+                        "Jeans",
+                        "Pant & caprices",
+                        "Shorts",
+                        "Formal Pants",
+                        "Casual pants",
+                        "Cargo pants",
+                        "Jeans"
+                    ]
+                },
+                {
+                    "name": "Tops & sets",
+                    "section": [
+                        "Tank tops",
+                        "Suit & sets"
+                    ]
+                },
+                {
+                    "name": "Accessories",
+                    "section": [
+                        "Eyewear & accessories",
+                        "Hats & Caps",
+                        "Gloves",
+                        "Watch",
+                        "Wallet",
+                        "Belt",
+                        "Hats & Cap"
+                    ]
+                },
+                {
+                    "name": "Women Watch",
+                    "section": []
+                },
+                {
+                    "name": "Baby Dresses",
+                    "section": []
+                }
+
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Men Clothing & Fashion",
+            "sub_category": [
+                {
+                    "name": "Hot Categories",
+                    "section": []
+                },
+                {
+                    "name": "Bottom",
+                    "section": []
+                },
+                {
+                    "name": "Accessories",
+                    "section": []
+                },
+                {
+                    "name": "Outwear & jackets",
+                    "section": [
+                        "Genuine Leather",
+                        "Suit & Blazer",
+                        "Wool & Blends"
+                    ]
+                },
+                {
+                    "name": "Underwear & Loungewear Accessories",
+                    "section": [
+                        "Shorts",
+                        "Boxers",
+                        "Men sleep & lounge"
+                    ]
+                },
+                {
+                    "name": "Men Formal Dress",
+                    "section": []
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Computer & Accessories",
+            "sub_category": [
+                {
+                    "name": "Laptop & Accessories",
+                    "section": [
+                        "Notebook",
+                        "Netbook",
+                        "Laptop Battery",
+                        "Laptop Motherboard",
+                        "Laptop Ram",
+                        "Laptop bag"
+                    ]
+                },
+                {
+                    "name": "Gaming pc",
+                    "section": [
+                        "Gaming casing",
+                        "Brand PC",
+                        "Gaming Motherboard",
+                        "GPU",
+                        "Gaming cooling system",
+                        "Gaming mouse",
+                        "Gaming keyboard"
+                    ]
+                },
+                {
+                    "name": "Official Equipment",
+                    "section": [
+                        "Inkjet printer",
+                        "Laser printer",
+                        "3D printer",
+                        "Scanners",
+                        "Photocopy machine"
+                    ]
+                },
+                {
+                    "name": "Components & Peripherals",
+                    "section": [
+                        "Processor",
+                        "Motherboard",
+                        "RAM",
+                        "Graphics card",
+                        "Cooling fan",
+                        "Desktop casing",
+                        "Spekar"
+                    ]
+                },
+                {
+                    "name": "TV $ Soundbox",
+                    "section": []
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Automobile & Motorcycle",
+            "sub_category": [
+                {
+                    "name": "Racing car",
+                    "section": [
+                        "Formula Racing",
+                        "Sports car racing",
+                        "Stock car racing",
+                        "Drag racing",
+                        "Rallying"
+                    ]
+                },
+                {
+                    "name": "Four Seater sedan",
+                    "section": [
+                        "Luxury car",
+                        "Taxi",
+                        "Hybrid car",
+                        "Gasoline car"
+                    ]
+                },
+                {
+                    "name": "SUV",
+                    "section": [
+                        "Luxury SUV",
+                        "Off-road SUV",
+                        "Midsize SUV",
+                        "Mini SUV"
+                    ]
+                },
+                {
+                    "name": "Motor bike",
+                    "section": [
+                        "Racing Bike",
+                        "Adventure Touring Bikes",
+                        "Choppers, Cruisers",
+                        "Cruisers",
+                        "Power Cruisers",
+                        "Motocross Bikes"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Kids & toy",
+            "sub_category": [
+                {
+                    "name": "Baby Clothing",
+                    "section": [
+                        "Baby Dresses",
+                        "Baby rompers",
+                        "Baby pants",
+                        "Baby outwear",
+                        "Jeans"
+                    ]
+                },
+                {
+                    "name": "Boys Clothing",
+                    "section": [
+                        "Clothing sets",
+                        "T-shirts",
+                        "Hoodies"
+                    ]
+                },
+                {
+                    "name": "Girls Clothing",
+                    "section": [
+                        "Dresses",
+                        "Clothing set",
+                        "Tops",
+                        "Sleeping wear"
+                    ]
+                },
+                {
+                    "name": "Shoes & Bag",
+                    "section": [
+                        "Baby's first walker",
+                        "Baby's Shoe",
+                        "Girls Shoe",
+                        "School bag",
+                        "Baby's wallet"
+                    ]
+                },
+                {
+                    "name": "Baby & Mother",
+                    "section": [
+                        "Nappy Changing",
+                        "Baby Care",
+                        "Backpacks & Carriers",
+                        "Maternity"
+                    ]
+                },
+                {
+                    "name": "Baby Dress",
+                    "section": []
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Sports & outdoor",
+            "sub_category": [
+                {
+                    "name": "Swimming",
+                    "section": [
+                        "Bikini set",
+                        "One piece suits",
+                        "Two piece suits",
+                        "Men's swimwear",
+                        "Childrens swimwear"
+                    ]
+                },
+                {
+                    "name": "Cycling",
+                    "section": [
+                        "Bicycles",
+                        "Bicycle Frames",
+                        "Bicycle Lights",
+                        "Bicycle Helmets",
+                        "Cycling Jerseys",
+                        "Cycling Eye wear"
+                    ]
+                },
+                {
+                    "name": "Sneakers",
+                    "section": [
+                        "Running Shoes",
+                        "Hiking Shoes",
+                        "Soccer Shoes",
+                        "Basketball Shoes"
+                    ]
+                },
+                {
+                    "name": "Fishing",
+                    "section": [
+                        "Fishing Reels",
+                        "Fishing Lures",
+                        "Fishing Lines",
+                        "Fishing Rods"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Jewelry & Watches",
+            "sub_category": [
+                {
+                    "name": "Wedding & Engagement",
+                    "section": [
+                        "Bridal Jewelry Sets",
+                        "Engagement Rings",
+                        "Wedding Hair Jewelry"
+                    ]
+                },
+                {
+                    "name": "Men's watch",
+                    "section": [
+                        "Smart watch",
+                        "Mechanical watch",
+                        "Digital watch",
+                        "Sports watch"
+                    ]
+                },
+                {
+                    "name": "Women watch",
+                    "section": [
+                        "Sports Watches",
+                        "Women's Bracelet Watches",
+                        "Dress Watches"
+                    ]
+                },
+                {
+                    "name": "Fashion Jewelry",
+                    "section": [
+                        "Necklaces & Pendants",
+                        "Hot Rings",
+                        "Trendy Earrings",
+                        "Bracelets & Bangles"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Cellphones & Tabs",
+            "sub_category": [
+                {
+                    "name": "Mobile Phones",
+                    "section": [
+                        "Basic phone",
+                        "Android phone",
+                        "IOS phone",
+                        "Windows Phone"
+                    ]
+                },
+                {
+                    "name": "Mobile Phone Parts",
+                    "section": [
+                        "Mobile Phone LCDs",
+                        "Mobile Phone Batteries",
+                        "Mobile Phone Touch, SIM Card & Tools",
+                        "SIM Card & Tools"
+                    ]
+                },
+                {
+                    "name": "Mobile Phone Accessories",
+                    "section": [
+                        "Power Bank",
+                        "Screen Protectors",
+                        "Mobile Phone Cables",
+                        "Holders & Stands"
+                    ]
+                },
+                {
+                    "name": "Tablets & accessories",
+                    "section": [
+                        "IOS Tablet",
+                        "Android Tablet",
+                        "Tablet accessories"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name": "Beauty, Health & Hair",
+            "sub_category": [
+                {
+                    "name": "Makeup",
+                    "section": [
+                        "Eyes",
+                        "Lips",
+                        "Face",
+                        "Makeup Tools"
+                    ]
+                },
+                {
+                    "name": "Skin Care",
+                    "section": [
+                        "Face",
+                        "Eyes",
+                        "Body",
+                        "Skin Care Tools"
+                    ]
+                },
+                {
+                    "name": "Nail Art & Tools",
+                    "section": [
+                        "Nail Gel",
+                        "Nail Drill",
+                        "Nail Dryer",
+                        "Nail Glitter"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name" : "Home Improvement & Tools",
+            "sub_category":[
+                {
+                    "name": "Indoor Lighting",
+                    "section":[
+                        "Ceiling Lights",
+                        "Wall Lamps",
+                        "Night Lights"
+                    ]
+                },
+                {
+                    "name": "Outdoor Lighting",
+                    "section":[
+                        "Flashlights & Torches",
+                        "Solar Lamps",
+                        "Underwater Lights"
+                    ]
+                },
+                {
+                    "name": "LED Lighting",
+                    "section":[
+                        "LED Strips",
+                        "LED Downlights",
+                        "LED Panel Lights",
+                        "LED Spotlights",
+                        "LED Bar Lights"
+                    ]
+                },
+                {
+                    "name": "Tools",
+                    "section":[]
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name" : "Home decoration & Appliance",
+            "sub_category":[
+                {
+                    "name": "Home Decor",
+                    "section":[
+                        "Painting & Calligraphy",
+                        "Wall Stickers",
+                        "Wall Clock"
+                    ]
+                },
+                {
+                    "name": "Home Textile",
+                    "section":[
+                        "Cushions",
+                        "Bedding Set",
+                        "Beach Towels"
+                    ]
+                },
+                {
+                    "name": "Furniture",
+                    "section":[
+                        "Home Furniture",
+                        "Office Furniture",
+                        "Outdoor Furniture",
+                        "Top Furniture Stores"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name" : "Toy",
+            "sub_category":[
+                {
+                    "name": "Baby Toy",
+                    "section": []
+                }
+            ]
+        }
+    },
+    {
+        "category": {
+            "name" : "Software",
+            "sub_category":[]
+        }
+    }
+]

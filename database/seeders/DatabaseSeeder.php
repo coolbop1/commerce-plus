@@ -70,6 +70,37 @@ class DatabaseSeeder extends Seeder
             $superAmin
         );
         $role = Role::where('name', 'ROLE_SUPERADMIN')->first();
-        $user->roles()->sync(['role_id' => $role->id]);
+        $user->roles()->attach($role->id);
+
+
+        //Category seeder
+        $category_data = collect(json_decode(file_get_contents(public_path("uploads/category.json"))));
+
+        foreach ($category_data as $key => $category) {
+            $category_array = [
+                'name' => $category->category->name,
+                'verified' => true
+            ];
+            $category_ = \App\Models\Category::updateOrCreate($category_array);
+            $sub_category_array = $category->category->sub_category;
+            foreach ($sub_category_array as $key => $sub_category) {
+                $sub_category_arr =[
+                    "name" => $sub_category->name,
+                    "category_id" => $category_->id,
+                    'verified' => true
+                ];
+                $sub_category_ = \App\Models\SubCategory::updateOrCreate($sub_category_arr);
+                $sections =  $sub_category->section;
+                foreach ($sections as $key => $section) {
+                    $section_array = [
+                        "name" => $section,
+                        "sub_category_id" => $sub_category_->id,
+                        'verified' => true
+                    ];
+                    \App\Models\Section::updateOrCreate($section_array);
+                }
+            }
+        }
+
     }
 }
