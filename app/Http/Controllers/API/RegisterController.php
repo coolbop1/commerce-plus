@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,18 +20,36 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'c_password' => 'required|same:password',
         ]);
    
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
    
         $input = $request->all();
+
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+        if($request->has('account_type')) {
+            $new_user = User::find($user->id);
+            switch ($request->account_type) {
+                case 'vendor':
+                    $role = Role::where('name', 'ROLE_VENDOR')->first();
+                    $new_user->roles()->sync(['role_id' => $role->id]);
+                    break;
+                case 'delivery':
+                    $role = Role::where('name', 'ROLE_DELIVERY')->first();
+                    $new_user->roles()->sync(['role_id' => $role->id]);
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
    
@@ -52,7 +71,7 @@ class RegisterController extends BaseController
             return $this->sendResponse($success, 'User login successfully.');
         } 
         else{ 
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'], 401);
         } 
     }
 }

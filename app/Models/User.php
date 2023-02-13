@@ -80,4 +80,46 @@ class User extends Authenticatable
             ->belongsToMany(Role::class)
             ->withTimestamps();
     }
+
+    public function isStoreAdmin($store_id)
+    {
+        if ($this->stores->where('id', $store_id)->first()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function ownsCart($cart_id)
+    {
+        if ($this->carts->where('id', $cart_id)->first()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function stores()
+    {
+        //return $this->hasMany(Store::class);
+        return $this
+            ->belongsToMany(Store::class)
+            ->withTimestamps();
+    }
+
+    public function wishList()
+    {
+        //return $this->hasMany(Product::class);
+        return $this
+            ->belongsToMany(Product::class)
+            ->withTimestamps();
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

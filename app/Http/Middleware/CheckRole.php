@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Product;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -16,9 +17,10 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if (! $request->user()->hasRole($role)) {
-            return response()->json(['message' => 'This action is unauthorized.'], 401);
+        if ((!$request->user()->hasRole($role)) && (!$request->user()->hasRole('ROLE_SUPERADMIN'))) {
+            return response()->json(['message' => 'This action is unauthorized .'], 401);
         }
+    
         return $next($request);
     }
 }
