@@ -105,6 +105,14 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function wishList()
+    {
+        //return $this->hasMany(Product::class);
+        return $this
+            ->belongsToMany(Product::class)
+            ->withTimestamps();
+    }
+
     public function categories()
     {
         return $this->hasMany(Category::class);

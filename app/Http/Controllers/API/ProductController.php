@@ -4,18 +4,18 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Store;
+use App\Models\ViwedProducts;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends BaseController
+class ProductController extends  BaseController
 {
     public function __construct()
     {
-        if(\request()->header('store_id')){
-            $this->middleware('role:ROLE_ADMIN');
-        }
+        $this->middleware(['auth:sanctum', 'permission', 'role:ROLE_VENDOR'], ['only' => ['store','update', 'destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -79,12 +79,21 @@ class ProductController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $product = Product::find($id);
   
         if (is_null($product)) {
             return $this->sendError('Product not found.');
+        }
+        $user = $request->user();
+        if(!is_null($user)) {
+            ViwedProducts::updateOrCreate(
+                [
+                    'user_id' => $user->id,
+                    'product_id' => $product->id
+                ]
+                );
         }
    
         return $this->sendResponse(new ProductResource($product), 'Product retrieved successfully.');
@@ -136,5 +145,43 @@ class ProductController extends BaseController
         $product->delete();
    
         return $this->sendResponse([], 'Product deleted successfully.');
+    }
+
+    public function addItemToWishList(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required|integer'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $input = $request->all();
+        //$request->user()->wishList()->sync(['product_id' => $request->product_id]);
+        $request->user()->wishList()->detach($request->product_id);
+        $request->user()->wishList()->attach($request->product_id);
+
+        return $this->getMyWishList($request);
+        //return $this->sendResponse([], 'Product added to wish list successfully.');
+    }
+
+    public function removeItemFromWishList(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required|integer'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+
+        $request->user()->wishList()->detach($request->product_id);
+
+        return $this->sendResponse([], 'Product removed from wish list successfully.');
+    }
+
+    public function getMyWishList(Request $request)
+    {
+        $wishlist = $request->user()->wishList()->get();
+        
+        return $this->sendResponse(ProductResource::collection($wishlist), 'Wish list retrived successfully.');
     }
 }

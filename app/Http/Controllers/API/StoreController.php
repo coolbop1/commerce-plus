@@ -40,7 +40,7 @@ class StoreController extends BaseController
         );
         if($store) {
             $user = User::find($request->user()->id);
-            $user->stores()->sync(['store_id' => $store->id]);
+            $user->stores()->attach($store->id);
         }
 
 

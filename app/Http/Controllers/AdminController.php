@@ -8,12 +8,12 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('webrole:ROLE_ADMIN');
+        //$this->middleware('auth');
+        //$this->middleware('webrole:ROLE_ADMIN');
     }
     
     public function index()
     {
-        return view('admin.home');
+        return view('admin');
     }
 }
