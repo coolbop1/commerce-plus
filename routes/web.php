@@ -15,7 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('temp');
+    return view('home');
+});
+Route::get('/login', function () {
+    return view('login');
+});
+Route::get('/register', function () {
+    return view('register');
 });
 Route::get('/testadmin', function () {
     return view('admin');
@@ -23,6 +29,4 @@ Route::get('/testadmin', function () {
 Route::get('/admin', [AdminController::class, 'index']);
 
 Route::get('/superadmin', 'SuperAdminController@index');
-Route::get('/register', function () {
-    return view('register');
-});
+

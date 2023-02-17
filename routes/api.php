@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     //Cart Route
     Route::post('add-item-to-cart', [CartController::class, 'addItemToCart']);
     Route::get('remove-item-from-cart/{cart_id}', [CartController::class, 'removeItemFromCart']);
-    Route::get('view-cart/{cart_user_id}', [CartController::class, 'getMyCart']);
+    Route::get('view-cart/{cart_user_id?}', [CartController::class, 'getMyCart']);
 
     //wish list
     Route::post('save-item', [ProductController::class, 'addItemToWishList']);
