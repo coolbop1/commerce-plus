@@ -34,7 +34,7 @@ class CartController extends BaseController
 
         Cart::create($input);
 
-        return $this->getMyCart($input['user_id']);
+        return $this->getMyCart($request, $input['user_id']);
     
     }
 
@@ -43,12 +43,14 @@ class CartController extends BaseController
         $cart = Cart::find($id);
         $cart->delete();
         $input['user_id'] = $request->user()->id;
-        return $this->getMyCart($input['user_id']);
+        return $this->getMyCart($request, $input['user_id']);
     }
 
-    public function getMyCart($user_id)
+    public function getMyCart(Request $request, $user_id = null)
     {
-        $cart = Cart::with('product')->where('user_id', $user_id)->get();
+        $c_user_id = $user_id ?? $request->user()->id;
+
+        $cart = Cart::with('product')->where('user_id', $c_user_id)->get();
         $items = CartResource::collection($cart);
         $data['items'] = $items;
         $data['total_price'] =  collect(json_decode(json_encode($items), true))->sum('price');
