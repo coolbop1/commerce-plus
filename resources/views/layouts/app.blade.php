@@ -122,7 +122,7 @@
 
 
 </head>
-<body>
+<body onload="return setAccess()">
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 
@@ -137,149 +137,6 @@
     </button>
 </div>
 <!-- Top Bar -->
-{{-- <div class="top-navbar bg-white border-bottom border-soft-secondary z-1035 h-35px h-sm-auto">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7 col">
-                <ul class="list-inline d-flex justify-content-between justify-content-lg-start mb-0">
-                                        <li class="list-inline-item dropdown mr-3" id="lang-change">
-                                                <a href="javascript:void(0)" class="dropdown-toggle text-reset py-2" data-toggle="dropdown" data-display="static">
-                            <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg" data-src="https://demo.activeitzone.com/ecommerce/public/assets/img/flags/en.png" class="mr-2 lazyload" alt="English" height="11">
-                            <span class="opacity-60">English</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-left">
-                                                            <li>
-                                    <a href="javascript:void(0)" data-flag="en" class="dropdown-item ">
-                                        <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg" data-src="https://demo.activeitzone.com/ecommerce/public/assets/img/flags/en.png" class="mr-1 lazyload" alt="English" height="11">
-                                        <span class="language">English</span>
-                                    </a>
-                                </li>
-                                                            <li>
-                                    <a href="javascript:void(0)" data-flag="bd" class="dropdown-item ">
-                                        <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg" data-src="https://demo.activeitzone.com/ecommerce/public/assets/img/flags/bd.png" class="mr-1 lazyload" alt="Bangla" height="11">
-                                        <span class="language">Bangla</span>
-                                    </a>
-                                </li>
-                                                            <li>
-                                    <a href="javascript:void(0)" data-flag="sa" class="dropdown-item ">
-                                        <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg" data-src="https://demo.activeitzone.com/ecommerce/public/assets/img/flags/sa.png" class="mr-1 lazyload" alt="Arabic" height="11">
-                                        <span class="language">Arabic</span>
-                                    </a>
-                                </li>
-                                                            <li>
-                                    <a href="javascript:void(0)" data-flag="fr" class="dropdown-item ">
-                                        <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg" data-src="https://demo.activeitzone.com/ecommerce/public/assets/img/flags/fr.png" class="mr-1 lazyload" alt="French" height="11">
-                                        <span class="language">French</span>
-                                    </a>
-                                </li>
-                                                    </ul>
-                    </li>
-                    
-                                        <li class="list-inline-item dropdown ml-auto ml-lg-0 mr-0" id="currency-change">
-                                                <a href="javascript:void(0)" class="dropdown-toggle text-reset py-2 opacity-60" data-toggle="dropdown" data-display="static">
-                            U.S. Dollar $
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                                            <li>
-                                    <a class="dropdown-item  active " href="javascript:void(0)" data-currency="USD">U.S. Dollar ($)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="AUD">Australian Dollar ($)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="BRL">Brazilian Real (R$)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="CAD">Canadian Dollar ($)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="CZK">Czech Koruna (Kč)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="DKK">Danish Krone (kr)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="EUR">Euro (€)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="HKD">Hong Kong Dollar ($)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="HUF">Hungarian Forint (Ft)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="ILS">Israeli New Sheqel ()</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="JPY">Japanese Yen (¥)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="MYR">Malaysian Ringgit (RM)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="MXN">Mexican Peso ($)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="NOK">Norwegian Krone (kr)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="NZD">New Zealand Dollar ($)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="PHP">Philippine Peso (₱)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="PLN">Polish Zloty (zł)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="GBP">Pound Sterling ()</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="RUB">Russian Ruble (рб)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="SGD">Singapore Dollar ($)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="SEK">Swedish Krona (kr)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="CHF">Swiss Franc (CHF)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="THB">Thai Baht (฿)</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="BDT">Taka ()</a>
-                                </li>
-                                                            <li>
-                                    <a class="dropdown-item " href="javascript:void(0)" data-currency="Rupee">Indian Rupee (Rs)</a>
-                                </li>
-                                                    </ul>
-                    </li>
-                                    </ul>
-            </div>
-
-            <div class="col-5 text-right d-none d-lg-block">
-                <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
-                                            <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                            <a href="tel:+01 112 352 566" class="text-reset d-inline-block opacity-60 py-2">
-                                <i class="la la-phone"></i>
-                                <span>Help line</span>  
-                                <span>+01 112 352 566</span>    
-                            </a>
-                        </li>
-                                                                                            <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                                <a href="https://demo.activeitzone.com/ecommerce/admin" class="text-reset d-inline-block opacity-60 py-2">My Panel</a>
-                            </li>
-                                                <li class="list-inline-item">
-                            <a href="https://demo.activeitzone.com/ecommerce/logout" class="text-reset d-inline-block opacity-60 py-2">Logout</a>
-                        </li>
-                                    </ul>
-            </div>
-        </div>
-    </div>
-</div> --}}
 <div class="top-navbar bg-white border-bottom border-soft-secondary z-1035 h-35px h-sm-auto">
     <div class="container">
         <div class="row">
@@ -295,16 +152,7 @@
                 </ul>
             </div>
 
-            <div class="col-5 text-right d-none d-lg-block">
-                <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">    
-                        <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                            <a href="login" class="text-reset d-inline-block opacity-60 py-2">Login</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="register" class="text-reset d-inline-block opacity-60 py-2">Registration</a>
-                        </li>
-                </ul>
-            </div>
+            <div id="top-account-access" class="col-5 text-right d-none d-lg-block"></div>
         </div>
     </div>
 </div>
@@ -316,7 +164,7 @@
 
                 <div class="col-auto col-xl-3 pl-0 pr-3 d-flex align-items-center">
                     <a class="d-block py-20px mr-3 ml-0" href="/">
-                        <img src="uploads/logo.png" alt="COMMERCE PLUS" class="mw-100 h-30px h-md-40px" height="40">
+                        <img src="uploads/logo.png" alt="COMMERCE PLUS" class="mw-100 h-30px h-md-30px" height="40">
                     </a>
 
                 </div>
@@ -406,12 +254,12 @@
             <div class="container">
                 <ul class="list-inline mb-0 pl-0 mobile-hor-swipe text-center">
                     <li class="list-inline-item mr-0">
-                        <a href="https://demo.activeitzone.com/ecommerce/" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="/" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             Home
                         </a>
                     </li>
                     <li class="list-inline-item mr-0">
-                        <a href="https://demo.activeitzone.com/ecommerce/flash-deals" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="flash-deals" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             Flash Sale
                         </a>
                     </li>
@@ -421,22 +269,22 @@
                         </a>
                     </li> --}}
                     <li class="list-inline-item mr-0">
-                        <a href="https://demo.activeitzone.com/ecommerce/brands" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="brands" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             All Brands
                         </a>
                     </li>
                     <li class="list-inline-item mr-0">
-                        <a href="https://demo.activeitzone.com/ecommerce/categories" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="categories" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             All Categories
                         </a>
                     </li>
                     <li class="list-inline-item mr-0">
-                        <a href="https://demo.activeitzone.com/ecommerce/sellers" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="sellers" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             All Sellers
                         </a>
                     </li>
                     <li class="list-inline-item mr-0">
-                        <a href="https://demo.activeitzone.com/ecommerce/coupons" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="coupons" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             Coupons
                         </a>
                     </li>
@@ -492,13 +340,13 @@
 <div class="aiz-mobile-bottom-nav d-xl-none fixed-bottom bg-white shadow-lg border-top rounded-top" style="box-shadow: 0px -1px 10px rgb(0 0 0 / 15%)!important; ">
     <div class="row align-items-center gutters-5">
         <div class="col">
-            <a href="https://demo.activeitzone.com/ecommerce" class="text-reset d-block text-center pb-2 pt-3">
+            <a href="/" class="text-reset d-block text-center pb-2 pt-3">
                 <i class="las la-home fs-20 opacity-60 opacity-100 text-primary"></i>
                 <span class="d-block fs-10 fw-600 opacity-60 opacity-100 fw-600">Home</span>
             </a>
         </div>
         <div class="col">
-            <a href="https://demo.activeitzone.com/ecommerce/categories" class="text-reset d-block text-center pb-2 pt-3">
+            <a href="categories" class="text-reset d-block text-center pb-2 pt-3">
                 <i class="las la-list-ul fs-20 opacity-60 "></i>
                 <span class="d-block fs-10 fw-600 opacity-60 ">Categories</span>
             </a>

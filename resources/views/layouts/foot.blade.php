@@ -35,9 +35,9 @@
         <div class="row">
             <div class="col-lg-5 col-xl-4 text-center text-md-left">
                 <div class="mt-4">
-                    <a href="https://demo.activeitzone.com/ecommerce" class="d-block">
-                                                    <img class="lazyload" src="uploads/logo.png" alt="Active eCommerce CMS" height="44">
-                                            </a>
+                    <a href="/" class="d-block">
+                        <img class="lazyload" src="uploads/logo.png" alt="Active eCommerce CMS" height="44">
+                    </a>
                     <div class="my-3">
                         <span style="color: rgb(242, 243, 248); font-family: "Open Sans", sans-serif; background-color: rgb(17, 23, 35);">Complete system for your eCommerce business</span>
                     </div>
@@ -52,13 +52,13 @@
                         </form>
                     </div>
                     <div class="w-300px mw-100 mx-auto mx-md-0">
-                                                    <a href="#" target="_blank" class="d-inline-block mr-3 ml-0">
+                            <a href="#" target="_blank" class="d-inline-block mr-3 ml-0">
                                 <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/play.png" class="mx-100 h-40px">
                             </a>
-                                                                            <a href="#" target="_blank" class="d-inline-block">
+                            <a href="#" target="_blank" class="d-inline-block">
                                 <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/app.png" class="mx-100 h-40px">
                             </a>
-                                            </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 ml-xl-auto col-md-4 mr-0">
@@ -73,7 +73,7 @@
                         </li>
                         <li class="mb-2">
                            <span class="d-block opacity-30">Phone:</span>
-                           <span class="d-block opacity-70">123456789</span>
+                           <span class="d-block opacity-70">+234 700 CPLUSNG</span>
                         </li>
                         <li class="mb-2">
                            <span class="d-block opacity-30">Email:</span>
@@ -130,12 +130,8 @@
                         My Account
                     </h4>
                     <ul class="list-unstyled">
-                                                    <li class="mb-2">
-                                <a class="opacity-50 hov-opacity-100 text-reset" href="https://demo.activeitzone.com/ecommerce/logout">
-                                    Logout
-                                </a>
-                            </li>
-                                                <li class="mb-2">
+                        <li id="footer-access" class="mb-2"></li>
+                        <li class="mb-2">
                             <a class="opacity-50 hov-opacity-100 text-reset" href="https://demo.activeitzone.com/ecommerce/purchase_history">
                                 Order History
                             </a>

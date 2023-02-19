@@ -61,5 +61,13 @@ Route::get('view-product/{product_id}', [ProductController::class, 'show']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    if(isset($_GET['session'])) {
+        session_start();
+        $_SESSION['logged_in'] = true;
+    }
     return $request->user();
+});
+Route::get('/logout', function (Request $request) {
+    session_start();
+    session_destroy();
 });

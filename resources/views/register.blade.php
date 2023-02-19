@@ -12,7 +12,7 @@
           </div>
           <div class="px-4 py-3 py-lg-4">
             <div class="">
-              <form id="reg-form" class="form-default" role="form" onsubmit="return registerUser(this, url = '/api/register')">
+              <form id="reg-form" class="form-default" role="form" onsubmit="return submitForm(this, url = '/api/register')">
                   <span id="validate-name" class="alert-danger"></span>                                       
                   <div class="form-group">
                       <input type="text" class="form-control" value="" placeholder="Full Name" name="name">

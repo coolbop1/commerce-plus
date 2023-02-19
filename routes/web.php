@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\API\CategoryWebController;
+use App\Http\Controllers\API\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-Route::get('/login', function () {
-    return view('login');
-});
-Route::get('/register', function () {
-    return view('register');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::middleware(['checksession'])->group( function () {
+    Route::get('/login', function () {
+        return view('login');
+    })->name('login');
+    Route::get('/register', function () {
+        return view('register');
+    });
 });
 Route::get('/testadmin', function () {
     return view('admin');
@@ -29,4 +32,8 @@ Route::get('/testadmin', function () {
 Route::get('/admin', [AdminController::class, 'index']);
 
 Route::get('/superadmin', 'SuperAdminController@index');
+
+Route::middleware(['session'])->group( function () {
+    Route::get('/categories', [CategoryWebController::class, 'index']);
+});
 

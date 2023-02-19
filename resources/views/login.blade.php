@@ -12,11 +12,12 @@
 
             <div class="px-4 py-3 py-lg-4">
                 <div class="">
-                    <form class="form-default" role="form" action="https://demo.activeitzone.com/ecommerce/login" method="POST">
-                        <input type="hidden" name="_token" value="lToouXB0BiSnZdmSko6UD3ukDjpULRoKs9b2paJs">                                                                                    <div class="form-group">
-                                <input type="email" class="form-control" value="" placeholder="Email" name="email" id="email" autocomplete="off">
-                                                                            </div>
-                        
+                    <form class="form-default" role="form" onsubmit="return submitForm(this, url = '/api/login', 'POST', 'login-button')">
+                        <span id="validate-email" class="alert-danger"></span>
+                        <div class="form-group">
+                            <input type="email" class="form-control" value="" placeholder="Email" name="email" id="email" autocomplete="off">
+                         </div>
+                         <span id="validate-password" class="alert-danger"></span>
                         <div class="form-group">
                             <input type="password" class="form-control " placeholder="Password" name="password" id="password">
                         </div>
@@ -35,7 +36,7 @@
                         </div>
 
                         <div class="mb-5">
-                            <button type="submit" class="btn btn-primary btn-block fw-600">Login</button>
+                            <button id="login-button" type="submit" class="btn btn-primary btn-block fw-600">Login</button>
                         </div>
                     </form>
 
