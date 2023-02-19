@@ -7,9 +7,10 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-class SetSession
+class CheckSession 
 {
-     /**
+   
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -20,10 +21,13 @@ class SetSession
     public function handle(Request $request, Closure $next, ...$guards)
     {
         session_start();
-        if(!isset($_SESSION['logged_in'])) {
-            return route('/');
+        info('request->route '.json_encode($request->route()));
+        info('_SESSION[logged_in] '.($_SESSION['logged_in'] ?? 'no'));
+        if (isset($_SESSION['logged_in'])) {
+            return redirect('/');
         }
-        info("got to the end here");
+        
+
         return $next($request);
     }
 }
