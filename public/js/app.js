@@ -1,9 +1,9 @@
-const setAccess = () => {
-    let commerce_plus_token = localStorage.getItem('commerce_plus_token');
-    if(commerce_plus_token) {
+const COMMERCE_PLUS_TOKEN = localStorage.getItem('COMMERCE_PLUS_TOKEN');
+const setAccessss = () => {
+    if(COMMERCE_PLUS_TOKEN) {
         let http_f = new XMLHttpRequest();
         http_f.open("GET", 'api/user?session', true);
-        http_f.setRequestHeader("Authorization", "Bearer "+commerce_plus_token);
+        http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
         http_f.onreadystatechange = function() {
             if(http_f.readyState == 4) {
                 if(http_f.status == 200) {
@@ -25,35 +25,11 @@ const setAccess = () => {
         }
         http_f.send();
     }
-    document.getElementById('top-account-access').innerHTML = commerce_plus_token ? 
-    `<ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
-        <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-            <a href="https://demo.activeitzone.com/ecommerce/admin" class="text-reset d-inline-block opacity-60 py-2">My Panel</a>
-        </li>
-        <li class="list-inline-item">
-            <a style="cursor: pointer;" onclick="return logout()" class="text-reset d-inline-block opacity-60 py-2">Logout</a>
-        </li>
-    </ul>` :
-    `<ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">    
-        <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-            <a href="login" class="text-reset d-inline-block opacity-60 py-2">Login</a>
-        </li>
-        <li class="list-inline-item">
-            <a href="register" class="text-reset d-inline-block opacity-60 py-2">Registration</a>
-        </li>
-    </ul>`;
-    document.getElementById('footer-access').innerHTML = commerce_plus_token ? 
-    `<a style="cursor: pointer;"  class="opacity-50 hov-opacity-100 text-reset" onclick="return logout()">
-        Logout
-    </a>` : 
-    `<a class="opacity-50 hov-opacity-100 text-reset" href="login">
-        Login
-    </a>`;
 }
 
 // let http_f = new XMLHttpRequest();
 // http_f.open("GET", 'api/user?session', true);
-// http_f.setRequestHeader("Authorization", "Bearer "+commerce_plus_token);
+// http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
 // http_f.onreadystatechange = function() {
 //     if(http_f.readyState == 4) {
 //         if(http_f.status == 200) {
@@ -138,6 +114,11 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
     })
     let http = new XMLHttpRequest();
     http.open(method, url, true);
+    if(COMMERCE_PLUS_TOKEN) {
+        console.log("url "+url);
+        console.log("COMMERCE_PLUS_TOKEN "+COMMERCE_PLUS_TOKEN);
+        http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    }
     http.onreadystatechange = function() {
         let response = JSON.parse(this.responseText);
         if(http.readyState == 4) {
@@ -145,7 +126,7 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                 console.log("this.responseText", this.responseText);
                 clickedButton.innerText =  buttonText;
                 let token = response.data.token;
-                localStorage.setItem('commerce_plus_token', token);
+                localStorage.setItem('COMMERCE_PLUS_TOKEN', token);
                 let message = response.message;
                 showAlert(message, 'alert-success');
                 window.location.href = '/';
@@ -163,8 +144,17 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
 }
 
 const logout = () => {
-    localStorage.removeItem('commerce_plus_token');
-    window.location.href = '/';
+    localStorage.removeItem('COMMERCE_PLUS_TOKEN');
+    let http_f = new XMLHttpRequest();
+    http_f.open("GET", 'api/logout', true);
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            if(http_f.status == 200) {
+                window.location.href = '/';
+            }
+        }
+    }
+    http_f.send();
 }
 
 function showAlert(message, type, data = []) {

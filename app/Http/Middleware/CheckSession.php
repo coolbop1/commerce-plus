@@ -21,8 +21,6 @@ class CheckSession
     public function handle(Request $request, Closure $next, ...$guards)
     {
         session_start();
-        info('request->route '.json_encode($request->route()));
-        info('_SESSION[logged_in] '.($_SESSION['logged_in'] ?? 'no'));
         if (isset($_SESSION['logged_in'])) {
             return redirect('/');
         }

@@ -21,9 +21,8 @@ class SetSession
     {
         session_start();
         if(!isset($_SESSION['logged_in'])) {
-            return route('/');
+            return redirect('/');
         }
-        info("got to the end here");
         return $next($request);
     }
 }

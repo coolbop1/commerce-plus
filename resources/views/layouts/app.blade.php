@@ -1,3 +1,15 @@
+
+@php
+    if(isset($_SESSION['logged_in'])) {
+        $user = $_SESSION['logged_in'];
+        $cart = $user->carts->count();
+        $role = $user->roles->first()->name;
+    } else {
+        $cart = 0;
+        $user = null;
+    }
+    
+@endphp
 @include('layouts.foot')
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +57,10 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
-        <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css">
+    {{-- <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
+        <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css"> --}}
+        <link rel="stylesheet" href="css/vendors.css">
+    <link rel="stylesheet" href="css/temp.css">
     <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/custom-style.css">
 
     {{-- <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"> --}}
@@ -122,7 +136,7 @@
 
 
 </head>
-<body onload="return setAccess()">
+<body>
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 
@@ -152,7 +166,29 @@
                 </ul>
             </div>
 
-            <div id="top-account-access" class="col-5 text-right d-none d-lg-block"></div>
+            <div id="top-account-access" class="col-5 text-right d-none d-lg-block">
+                @if ($user)
+                    <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
+                        @if ($user->stores->count() > 0 && $role == 'ROLE_VENDOR')
+                            <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+                                <a href="/seller/dashboard" class="text-reset d-inline-block opacity-60 py-2">My Panel</a>
+                            </li>   
+                        @endif
+                        <li class="list-inline-item">
+                            <a style="cursor: pointer;" onclick="return logout()" class="text-reset d-inline-block opacity-60 py-2">Logout</a>
+                        </li>
+                    </ul>
+                @else
+                    <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">    
+                        <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+                            <a href="login" class="text-reset d-inline-block opacity-60 py-2">Login</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="register" class="text-reset d-inline-block opacity-60 py-2">Registration</a>
+                        </li>
+                    </ul>
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -232,7 +268,7 @@
                         <a href="javascript:void(0)" class="d-flex align-items-center text-reset h-100" data-toggle="dropdown" data-display="static">
                             <i class="la la-shopping-cart la-2x opacity-80"></i>
                             <span class="flex-grow-1 ml-1">
-                                <span class="badge badge-primary badge-inline badge-pill cart-count">0</span>
+                                <span class="badge badge-primary badge-inline badge-pill cart-count">{{ $cart ?? 0 }}</span>
                                 <span class="nav-box-text d-none d-xl-block opacity-70">Cart</span>
                             </span>
                         </a>

@@ -130,7 +130,17 @@
                         My Account
                     </h4>
                     <ul class="list-unstyled">
-                        <li id="footer-access" class="mb-2"></li>
+                        <li id="footer-access" class="mb-2">
+                            @if ($user)
+                                <a style="cursor: pointer;"  class="opacity-50 hov-opacity-100 text-reset" onclick="return logout()">
+                                    Logout
+                                </a>
+                            @else
+                                <a class="opacity-50 hov-opacity-100 text-reset" href="login">
+                                    Login
+                                </a> 
+                            @endif
+                        </li>
                         <li class="mb-2">
                             <a class="opacity-50 hov-opacity-100 text-reset" href="https://demo.activeitzone.com/ecommerce/purchase_history">
                                 Order History
@@ -155,7 +165,7 @@
                         <h4 class="fs-13 text-uppercase fw-600 border-bottom border-gray-900 pb-2 mb-4">
                             Be a Seller
                         </h4>
-                        <a href="https://demo.activeitzone.com/ecommerce/shops/create" class="btn btn-primary btn-sm shadow-md">
+                        <a href="create-shop" class="btn btn-primary btn-sm shadow-md">
                             Apply Now
                         </a>
                     </div>
