@@ -2,8 +2,12 @@
    
 namespace App\Http\Controllers\API;
    
+session_start();
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Cart;
 use App\Models\Category;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class HomeController extends BaseController
 {
