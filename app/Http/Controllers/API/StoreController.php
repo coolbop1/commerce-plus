@@ -16,7 +16,7 @@ class StoreController extends BaseController
 {
     public function create(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'shop_name' => 'required',
             'warehoused' => 'nullable|boolean',
             'state_id' => 'nullable|integer',
             'lat' => 'nullable|numeric',
@@ -27,14 +27,14 @@ class StoreController extends BaseController
         }
         $input = $request->all();
         $input['user_id'] = $request->user()->id;
-        $already_exist = Store::where('name', $request->name)->first();
+        $already_exist = Store::where('name', $request->shop_name)->first();
         if( $already_exist) {
             return $this->sendError('Store with the same name already exist, please edit the store name.', [], 400);  
         }
 
         $store = Store::updateOrCreate(
             [
-                'name' => $request->name,
+                'name' => $request->shop_name,
             ],
             $input
         );

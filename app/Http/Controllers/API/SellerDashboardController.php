@@ -21,8 +21,16 @@ class SellerDashboardController extends BaseController
 
         if(isset($_SESSION['logged_in'])) {
             $user = $_SESSION['logged_in'];
+            info("user__ ".json_encode($user));
         }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->value('id');
+        }
+        $store = Store::with('products')->find($store_id);
 
-        return view('vendor-dasboard', compact('user'));
+
+        return view('vendor-dasboard', compact('user', 'store'));
     }
 }

@@ -5,10 +5,23 @@
     <div class="aiz-sidebar left c-scrollbar">
         <div class="aiz-side-nav-logo-wrap">
             <div class="d-block text-center my-3">
-                                    <img class="mw-100 mb-3" src="https://demo.activeitzone.com/ecommerce/public/uploads/all/Qjj4dDEMSrAv6RlftG5Ue1BKLvgW7Ai5kPYL22xZ.png" class="brand-icon"
-                        alt="">
-                                <h3 class="fs-16  m-0 text-primary">{{ $user->stores->first()->value('name') }}</h3>
-                <p class="text-primary"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c8bbada4a4adba88adb0a9a5b8a4ade6aba7a5">[email&#160;protected]</a></p>
+                    <img class="mw-100 mb-3" src="https://demo.activeitzone.com/ecommerce/public/uploads/all/Qjj4dDEMSrAv6RlftG5Ue1BKLvgW7Ai5kPYL22xZ.png" class="brand-icon"alt="">
+                    <ul class="aiz-side-nav-list">
+                        <li class="aiz-side-nav-item">
+                            <a class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text"><h3 class="fs-16  m-0 text-primary">{{ $store->name }}</h3></span>
+                                <span class="aiz-side-nav-arrow"></span>
+                            </a>
+                        </li>
+                        <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                                <a href="https://demo.activeitzone.com/ecommerce/seller/products"
+                                    class="aiz-side-nav-link ">
+                                    <span class="aiz-side-nav-text">Products</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
             </div>
         </div>
         <div class="aiz-side-nav-wrap">
@@ -598,7 +611,7 @@
                                 >
                             </span>
                             <span class="d-none d-md-block">
-                                <span class="d-block fw-500">{{ $user->stores->first()->value('name') }}</span>
+                                <span class="d-block fw-500">{{ $store->name }}</span>
                                 <span class="d-block small opacity-60">seller : {{ $user->name }}</span>
                             </span>
                         </span>
@@ -640,7 +653,7 @@
                                 <span class="fs-14 text-light">Products</span>
                             </p>
                             <h3 class="mb-0 text-white fs-30">
-                                15
+                                {{ $store->products->count() }}
                             </h3>
 
                         </div>
