@@ -40,9 +40,8 @@ Route::get('/create-shop', function () {
 Route::get('/admin', [AdminController::class, 'index']);
 
 Route::get('/superadmin', 'SuperAdminController@index');
-
+Route::get('/categories', [CategoryWebController::class, 'index']);
 Route::middleware(['session'])->group( function () {
-    Route::get('/categories', [CategoryWebController::class, 'index']);
     Route::get('/seller/dashboard', [SellerDashboardController::class, 'index']);
 });
 

@@ -3637,7 +3637,7 @@ input[type="number"] {
 .aiz-main-wrapper {
     min-height: 100vh;
     max-width: 100vw;
-    background-color: var(--white);
+    background-color: var(--light);
 }
 
 .aiz-titlebar h1,

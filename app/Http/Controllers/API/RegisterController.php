@@ -55,7 +55,7 @@ class RegisterController extends BaseController
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
    
-        $_SESSION['logged_in'] = $user->id;
+        $_SESSION['logged_in'] = User::with(['roles', 'carts'])->find($user->id);
         return $this->sendResponse($success, 'User register successfully.');
     }
 

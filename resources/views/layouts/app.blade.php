@@ -3,7 +3,7 @@
     if(isset($_SESSION['logged_in'])) {
         $user = $_SESSION['logged_in'];
         $cart = $user->carts->count();
-        $role = $user->roles->first()->name;
+        $role = optional($user->roles->first())->name;
     } else {
         $cart = 0;
         $user = null;
@@ -16,8 +16,8 @@
 <head>
 
     <meta name="csrf-token" content="P54hNJtbnPpNjyx9nY1tneWSGkmotlKPs4rLaJjl">
-    <meta name="app-url" content="//demo.activeitzone.com/ecommerce/">
-    <meta name="file-base-url" content="//demo.activeitzone.com/ecommerce/public/">
+    <meta name="app-url" content="">
+    <meta name="file-base-url" content="">
 
     <title>Active eCommerce | Demo of Active eCommerce CMS</title>
 
@@ -59,7 +59,7 @@
     <!-- CSS Files -->
     {{-- <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
         <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css"> --}}
-        <link rel="stylesheet" href="css/vendors.css">
+    <link rel="stylesheet" href="css/vendors.css">
     <link rel="stylesheet" href="css/temp.css">
     <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/custom-style.css">
 
@@ -171,7 +171,7 @@
                     <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
                         @if ($user->stores->count() > 0 && $role == 'ROLE_VENDOR')
                             <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                                <a href="/seller/dashboard" class="text-reset d-inline-block opacity-60 py-2">My Panel</a>
+                                <a href="/seller/dashboard" class="text-reset d-inline-block opacity-60 py-2">My Dashboard</a>
                             </li>   
                         @endif
                         <li class="list-inline-item">

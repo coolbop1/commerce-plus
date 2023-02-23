@@ -3,8 +3,8 @@
 <html lang="en">
 <head>
 	<meta name="csrf-token" content="qQmo9YcVdFUwnhQIqYfAFD6HgSLHz6bqWifKTNLS">
-	{{-- <meta name="app-url" content="//demo.activeitzone.com/ecommerce/">
-	<meta name="file-base-url" content="//demo.activeitzone.com/ecommerce/public/"> --}}
+	<meta name="app-url" content="">
+	<meta name="file-base-url" content="">
 
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
