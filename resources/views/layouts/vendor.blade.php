@@ -39,6 +39,18 @@
             z-index: 100000;
         }
 
+        .minimize {
+            display: none;
+        }
+
+        .expand {
+            display: block;
+        }
+
+        .rotate {
+            -webkit-transform: rotate(+90deg);
+            transform: rotate(+90deg);
+        }
     </style>
 	<script>
     	var AIZ = AIZ || {};

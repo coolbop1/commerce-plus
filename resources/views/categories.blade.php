@@ -1,3 +1,6 @@
+@php
+    session_start();
+@endphp
 @extends('layouts.app')
 @section('content')
 <section class="pt-4 mb-4">

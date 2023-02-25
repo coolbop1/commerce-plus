@@ -7,19 +7,23 @@
             <div class="d-block text-center my-3">
                     <img class="mw-100 mb-3" src="https://demo.activeitzone.com/ecommerce/public/uploads/all/Qjj4dDEMSrAv6RlftG5Ue1BKLvgW7Ai5kPYL22xZ.png" class="brand-icon"alt="">
                     <ul class="aiz-side-nav-list">
-                        <li class="aiz-side-nav-item">
+                        <li onclick="return expandStoreList()" class="aiz-side-nav-item" style="cursor: pointer">
                             <a class="aiz-side-nav-link">
                                 <span class="aiz-side-nav-text"><h3 class="fs-16  m-0 text-primary">{{ $store->name }}</h3></span>
-                                <span class="aiz-side-nav-arrow"></span>
+                                <span id='expand-icon' class="aiz-side-nav-arrow"></span>
                             </a>
                         </li>
-                        <ul class="aiz-side-nav-list level-2">
-                            <li class="aiz-side-nav-item">
-                                <a href="https://demo.activeitzone.com/ecommerce/seller/products"
-                                    class="aiz-side-nav-link ">
-                                    <span class="aiz-side-nav-text">Products</span>
+                        @php
+                            $remaining_stores = $user->stores->where('id', '<>', $store->id);
+                        @endphp
+                        <ul id="other-store-list" class="aiz-side-nav-list minimize">
+                        @foreach ($remaining_stores as $store_)
+                            <li onclick="return switchStore({{ $store_->id }})" class="aiz-side-nav-item" style="cursor: pointer">
+                                <a class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ $store_->name }}</span>
                                 </a>
                             </li>
+                        @endforeach
                         </ul>
                     </ul>
             </div>
@@ -237,7 +241,7 @@
             <div class="d-flex justify-content-around align-items-center align-items-stretch">
                 <div class="aiz-topbar-item">
                     <div class="d-flex align-items-center">
-                        <a class="btn btn-icon btn-circle btn-light" href="https://demo.activeitzone.com/ecommerce" target="_blank" title="Browse Website">
+                        <a class="btn btn-icon btn-circle btn-light" href="/" target="_blank" title="Browse Website">
                             <i class="las la-globe"></i>
                         </a>
                     </div>
@@ -678,7 +682,7 @@
                                 <span class="fs-14 text-light">Rating</span>
                             </p>
                             <h3 class="mb-0 text-white fs-30">
-                                5
+                                {{ $ratings }}
                             </h3>
 
                         </div>
@@ -703,7 +707,7 @@
                                 <span class="fs-14 text-light">Total Order</span>
                             </p>
                             <h3 class="mb-0 text-white fs-30">
-                                10
+                                {{ $store->orders->count() }}
                             </h3>
                         </div>
                         <div class="col-auto text-right">
@@ -759,7 +763,7 @@
                                 <span class="fs-14 text-light">Total Sales</span>
                             </p>
                             <h3 class="mb-0 text-white fs-30">
-                                                                $584.900
+                                ₦{{ $store->orders->where('status', 'completed')->sum('amount') }}
                             </h3>
 
                         </div>
@@ -806,10 +810,15 @@
                     </div>
                     <p>Your sold amount (current month)</p>
                     <h3 class="text-primary fw-600 fs-30">
-                        $0.000
+                        @php
+                            $current_month_start = Carbon\Carbon::now()->startOfMonth();
+                            $current_month_end = Carbon\Carbon::now()->endOfMonth();
+                            $last_month_start = Carbon\Carbon::now()->startOfMonth()->subMonth(1);
+                        @endphp
+                        ₦{{ $store->orders->whereBetween('created_at',[$current_month_start, $current_month_end])->where('status', 'completed')->sum('amount') ?? '0.000' }}
                     </h3>
                     <p class="mt-4">
-                                                Last Month: $0.000
+                        Last Month: ₦{{ $store->orders->whereBetween('created_at',[$last_month_start, $current_month_start])->where('status', 'completed')->sum('amount') ?? '0.000' }}
                     </p>
                 </div>
             </div>
@@ -822,31 +831,14 @@
                     </div>
                     <hr>
                     <ul class="list-group">
-                                                                                                                                        <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
-                                    Men Clothing &amp; Fashion
-                                    <span class="">
-                                        9
-                                    </span>
-                                </li>
-                                                                                                                <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
-                                    Computer &amp; Accessories
-                                    <span class="">
-                                        1
-                                    </span>
-                                </li>
-                                                                                                                                                                                                                        <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
-                                    Sports &amp; outdoor
-                                    <span class="">
-                                        2
-                                    </span>
-                                </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
-                                    Software
-                                    <span class="">
-                                        3
-                                    </span>
-                                </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    </ul>
+                        @foreach ($store->products->groupBy('category.name') as $category_title => $category_products)
+                            <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
+                                {{ $category_title }}
+                                <span class="">
+                                    {{ $category_products->count() }}
+                                </span>
+                            </li>
+                        @endforeach                                                                                                                                                                                                                                                                                                                                                                                                                         </ul>
                 </div>
             </div>
         </div>
@@ -882,7 +874,7 @@
                                 <span class="fs-13 text-primary fw-600">New Order</span>
                             </p>
                             <h3 class="mb-0" style="color: #A9A3CC">
-                                15
+                                {{ $store->orders->where('status', 'pending')->count() }}
                             </h3>
                         </div>
                     </div>
@@ -921,7 +913,7 @@
                                 <span class="fs-13 text-primary fw-600">Cancelled</span>
                             </p>
                             <h3 class="mb-0" style="color: #A9A3CC">
-                                0
+                                {{ $store->orders->where('status', 'cancelled')->count() }}
                             </h3>
                         </div>
                     </div>
@@ -963,7 +955,7 @@
                                 <span class="fs-13 text-primary fw-600">On Delivery</span>
                             </p>
                             <h3 class="mb-0" style="color: #A9A3CC">
-                                6
+                                {{ $store->orders->where('status', 'out_for_delivery')->count() }}
                             </h3>
                         </div>
                     </div>
@@ -993,7 +985,7 @@
                                 <span class="fs-13 text-primary fw-600">Delivered</span>
                             </p>
                             <h3 class="mb-0" style="color: #A9A3CC">
-                                22
+                                {{ $store->orders->where('status', 'delivered')->count() }}
                             </h3>
                         </div>
                     </div>
@@ -1161,7 +1153,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$15.000</span>
+                                                                        <span class="fw-700 text-primary">₦15.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1187,8 +1179,8 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                            <del class="fw-600 opacity-50 mr-1">$120.000</del>
-                                                                        <span class="fw-700 text-primary">$97.200</span>
+                                                                            <del class="fw-600 opacity-50 mr-1">₦120.000</del>
+                                                                        <span class="fw-700 text-primary">₦97.200</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star'></i>
@@ -1214,8 +1206,8 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                            <del class="fw-600 opacity-50 mr-1">$35.000</del>
-                                                                        <span class="fw-700 text-primary">$23.800</span>
+                                                                            <del class="fw-600 opacity-50 mr-1">₦35.000</del>
+                                                                        <span class="fw-700 text-primary">₦23.800</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1241,7 +1233,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$95.000</span>
+                                                                        <span class="fw-700 text-primary">₦95.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1267,8 +1259,8 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                            <del class="fw-600 opacity-50 mr-1">$25.000</del>
-                                                                        <span class="fw-700 text-primary">$14.000</span>
+                                                                            <del class="fw-600 opacity-50 mr-1">₦25.000</del>
+                                                                        <span class="fw-700 text-primary">₦14.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i>
@@ -1294,7 +1286,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$60.000</span>
+                                                                        <span class="fw-700 text-primary">₦60.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i><i class = 'las la-star active'></i>
@@ -1320,7 +1312,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$113.300</span>
+                                                                        <span class="fw-700 text-primary">₦113.300</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1346,8 +1338,8 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                            <del class="fw-600 opacity-50 mr-1">$50.000</del>
-                                                                        <span class="fw-700 text-primary">$45.000</span>
+                                                                            <del class="fw-600 opacity-50 mr-1">₦50.000</del>
+                                                                        <span class="fw-700 text-primary">₦45.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1373,7 +1365,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$25.000</span>
+                                                                        <span class="fw-700 text-primary">₦25.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1399,7 +1391,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$25.000</span>
+                                                                        <span class="fw-700 text-primary">₦25.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1425,7 +1417,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$55.000</span>
+                                                                        <span class="fw-700 text-primary">₦55.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
@@ -1451,7 +1443,7 @@
                             </div>
                             <div class="p-md-3 p-2 text-left">
                                 <div class="fs-15">
-                                                                        <span class="fw-700 text-primary">$109.000</span>
+                                                                        <span class="fw-700 text-primary">₦109.000</span>
                                 </div>
                                 <div class="rating rating-sm mt-1">
                                     <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>
