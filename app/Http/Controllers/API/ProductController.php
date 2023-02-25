@@ -62,15 +62,19 @@ class ProductController extends  BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+        if(!$request->user()->isStoreAdmin($request->store_id)){
+            return $this->sendError('Permission denied.', []);
+        }
+
    
         $product = Product::updateOrCreate(
             [
                 'name' => $input['name'],
                 'store_id' => $input['store_id'],
                 'category_id' => $input['category_id'],
-                'sub_category_id' => $input['sub_category_id'],
-                'section_id' => $input['section_id'],
-                'quantity' => $input['quantity']
+                'sub_category_id' => $input['sub_category_id'] ?? null,
+                'section_id' => $input['section_id'] ?? null,
+                'quantity' => $input['quantity'] ?? 1
             ],
             $input
         );

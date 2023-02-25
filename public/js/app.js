@@ -177,3 +177,31 @@ function showAlert(message, type, data = []) {
 
 }
 
+
+function expandStoreList() {
+    $expanded = document.getElementById('other-store-list').classList.contains('expand');
+    if($expanded) {
+        document.getElementById('other-store-list').classList.replace('expand', 'minimize');
+        document.getElementById('expand-icon').classList.remove('rotate');
+    } else {
+        document.getElementById('other-store-list').classList.replace('minimize', 'expand');
+        document.getElementById('expand-icon').classList.add('rotate');
+    }
+}
+
+const switchStore = (store_id) => {
+    expandStoreList();
+    let http_f = new XMLHttpRequest();
+    http_f.open("GET", '/api/switch-store?id='+store_id, true);
+    http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            if(http_f.status == 200) {
+                window.location.href = '/seller/dashboard';
+            }
+        }
+    }
+    http_f.send();
+
+}
+

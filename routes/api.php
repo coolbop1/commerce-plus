@@ -27,6 +27,14 @@ Route::controller(RegisterController::class)->group(function(){
 });
         
 Route::middleware(['auth:sanctum', 'permission'])->group( function () {
+    
+    Route::get('switch-store', function (Request $request) {
+        if($request->id) {
+            session_start();
+            $_SESSION['vendor_current_store_id'] = $request->id;
+        }
+        return $request->user();
+    });
     Route::post('add-role', [RoleController::class, 'create']);
     //Category endpoints
     Route::middleware('role:ROLE_SUPERADMIN')->group( function () {

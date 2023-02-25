@@ -12,6 +12,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Store;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SellerDashboardController extends BaseController
@@ -21,16 +22,22 @@ class SellerDashboardController extends BaseController
 
         if(isset($_SESSION['logged_in'])) {
             $user = $_SESSION['logged_in'];
-            info("user__ ".json_encode($user));
         }
         if(isset($_SESSION['vendor_current_store_id'])) {
             $store_id = $_SESSION['vendor_current_store_id'];
         } else {
-            $store_id = $user->stores->first()->value('id');
+            $store_id = $user->stores->first()->id;
         }
-        $store = Store::with('products')->find($store_id);
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $products_id = $store->products->pluck('id')->toArray();
+        $ratings_data = Cart::whereHas('checkout', function($q) {
+            $q->where('status', 'completed');
+        })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->select(DB::raw('count(*) as num'), DB::raw('sum(ratings) as total_ratings'))->first();
+        $total_ratings = $ratings_data->total_ratings ?? 0;
+        $total_sold = $ratings_data->num;
+        $ratings = $total_sold > 0 ? ($total_ratings/$total_sold) : 0;
 
 
-        return view('vendor-dasboard', compact('user', 'store'));
+        return view('vendor-dasboard', compact('user', 'store', 'ratings'));
     }
 }
