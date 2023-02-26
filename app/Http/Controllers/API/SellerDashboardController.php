@@ -36,8 +36,25 @@ class SellerDashboardController extends BaseController
         $total_ratings = $ratings_data->total_ratings ?? 0;
         $total_sold = $ratings_data->num;
         $ratings = $total_sold > 0 ? ($total_ratings/$total_sold) : 0;
+        $page ='dashboard';
 
 
-        return view('vendor-dasboard', compact('user', 'store', 'ratings'));
+        return view('vendor-dasboard', compact('user', 'store', 'ratings', 'page'));
+    }
+
+    public function shop()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $page ='shop';
+
+        return view('vendor-shop', compact('user', 'store', 'page'));
     }
 }

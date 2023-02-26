@@ -43,5 +43,6 @@ Route::get('/superadmin', 'SuperAdminController@index');
 Route::get('/categories', [CategoryWebController::class, 'index']);
 Route::middleware(['session'])->group( function () {
     Route::get('/seller/dashboard', [SellerDashboardController::class, 'index']);
+    Route::get('/seller/shop', [SellerDashboardController::class, 'shop']);
 });
 

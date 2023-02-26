@@ -7,6 +7,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\StoreController;
 use App\Models\Category;
+use App\Models\TemporaryFiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,23 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     Route::post('remove-saved-item', [ProductController::class, 'removeItemFromWishList']);
     Route::get('get-my-wish-list', [ProductController::class, 'getMyWishList']);
     Route::resource('products', ProductController::class);
+    Route::post('/file-upload', function (Request $request) {
+        $file = $request->file('file');
+    
+        $fileName = time().'.'.$file->extension();
+        $destinationPath = 'uploads';
+        // $fileinfo = getimagesize($file);
+        // $width = $fileinfo[0];
+        // $height = $fileinfo[1];
+    
+        $file->move($destinationPath,$fileName);
+        $temp_file = TemporaryFiles::create([
+            'user_id' => $request->user()->id,
+            'file_path' => $destinationPath.'/'.$fileName
+        ]);
+    
+        return response()->json(['message' => 'File saved', 'data' => $temp_file, 'file_path' => $destinationPath.'/'.$fileName], 200);
+    });
 });
 Route::get('list-products', [ProductController::class, 'listProducts']);
 Route::get('list-categories', [CategoryController::class, 'listCategories']);
