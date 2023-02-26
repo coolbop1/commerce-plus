@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Store;
+use App\Models\TemporaryFiles;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,6 +56,17 @@ class StoreController extends BaseController
             'state_id' => 'nullable|integer',
             'lat' => 'nullable|numeric',
             'long' => 'nullable|numeric',
+            'shop_logo' => 'nullable|string',
+            'shop_phone' => 'nullable|string',
+            'shop_address' => 'nullable|string',
+            'meta_title' => 'nullable|string',
+            'meta_description' => 'nullable|string', 
+            'banner' => 'nullable|string',
+            'facebook' => 'nullable|string',
+            'instagram' => 'nullable|string',
+            'twitter' => 'nullable|string',
+            'google' => 'nullable|string',
+            'youtube' => 'nullable|string',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
@@ -65,6 +77,14 @@ class StoreController extends BaseController
         if(is_null($store)){
             return $this->sendError('Store not found', [], 404);
         }
+        if($request->shop_logo){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->shop_logo))->orWhereIn('file_path', explode(',', $request->shop_logo))->latest()->first();
+            $request_shop_logo = $temp->file_path ?? null;
+        }
+        if($request->banner){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->banner))->orWhereIn('file_path', explode(',', $request->banner))->pluck('file_path')->toArray();
+            $request_shop_banner = count($temp) > 0 ? implode(',', $temp) : null;
+        }
         $store->update([
             'name' => $request->name ?? $store->name,
             'user_id' => $request->user_id ?? $store->user_id,
@@ -72,8 +92,19 @@ class StoreController extends BaseController
             'state_id' => $request->state_id ?? $store->state_id,
             'lat' => $request->lat ?? $store->lat,
             'long' => $request->long ?? $store->long,
+            'shop_logo' => $request_shop_logo ?? $store->shop_logo,
+            'shop_phone' => $request->shop_phone ?? $store->shop_phone,
+            'shop_address' => $request->shop_address ?? $store->shop_address,
+            'meta_title' => $request->meta_title ?? $store->meta_title,
+            'meta_description' => $request->meta_description ?? $store->meta_description,
+            'banner' => $request_shop_banner ?? $store->banner,
+            'facebook' => $request->facebook ?? $store->facebook,
+            'instagram' => $request->instagram ?? $store->instagram,
+            'twitter' => $request->twitter ?? $store->twitter,
+            'google' => $request->google ?? $store->google,
+            'youtube' => $request->youtube ?? $store->youtube,
         ]);
-        $store = Store::find($request->id);
+        $store = Store::find($id);
 
         return $this->sendResponse($store, 'Store edited successfully.');
     }

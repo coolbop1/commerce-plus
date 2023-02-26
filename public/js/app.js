@@ -102,12 +102,84 @@ function register() {
     
 }
 
+const upload = (element, input_id) => {
+    console.log('got to this place');
+    let url = '/api/file-upload';
+    let photo = element.files[0];
+    let params = new FormData();
+    params.append("file", photo);
+    let http = new XMLHttpRequest();
+    http.open('POST', url, true);
+    if(COMMERCE_PLUS_TOKEN) {
+        http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    }
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) {
+                console.log("this.responseText", this.responseText);
+                let value = document.getElementById(input_id).value;
+                let value_array = value == '' ? [] : value.split(',')
+                value_array.push(response?.data?.id);
+                let new_value = value_array.join(',');
+                document.getElementById(input_id).value = new_value ?? response.file_path;
+                switch (input_id) {
+                    case 'shop_logo_input':
+                        document.getElementById('preview_'+input_id).innerHTML = `<img src="/`+response.file_path+`" class="img-fit">`;    
+                        break;
+                    case 'store_banner_input':
+                        document.getElementById('preview_'+input_id).innerHTML += `
+                        <div id="preview_store_banner_input" class="file-preview box sm">
+                            <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                                <div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                    <img src="/`+response.file_path+`" class="img-fit">
+                                </div>
+                                <div class="remove">
+                                    <button class="btn btn-sm btn-link remove-attachment" type="button">
+                                        <i class="la la-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                        break;
+                
+                    default:
+                        break;
+                }
+                
+            }
+        }
+    }
+    http.send(params);
+
+}
+
+const getCurrentLocation = () => {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            document.getElementById('lat').value = lat;
+            document.getElementById('long').value = lon;
+            document.getElementById('lat_').value = lat;
+            document.getElementById('long_').value = lon;
+            document.getElementById('lat_').setAttribute('disabled', 'true');
+            document.getElementById('long_').setAttribute('disabled', 'true');
+        })
+    } else {
+        showAlert('Please enable location on your browser and try again!', 'alert-warning', []);
+    }
+}
+
 function submitForm(formElement, url, method = 'POST', button_id = 'reg-button') {
     let clickedButton = document.getElementById(button_id);
     let buttonText = clickedButton.innerText;
     clickedButton.innerHTML = `<i class="las la-spinner la-spin la-3x opacity-70"></i>`;
     let params = new FormData(formElement);
+    console.log("button_id ",button_id);
     params.forEach((val, key, parent) => {
+        console.log("see ",val);
         let val_span = document.getElementById('validate-'+key);
         if(val_span)
         val_span.innerText = '';
@@ -120,16 +192,28 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
         http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
     }
     http.onreadystatechange = function() {
-        let response = JSON.parse(this.responseText);
         if(http.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
             if(http.status == 200) {
                 console.log("this.responseText", this.responseText);
                 clickedButton.innerText =  buttonText;
-                let token = response.data.token;
+                let token = response?.data?.token ?? null;
+                if(token)
                 localStorage.setItem('COMMERCE_PLUS_TOKEN', token);
                 let message = response.message;
                 showAlert(message, 'alert-success');
-                window.location.href = '/';
+                switch (button_id) {
+                    case 'edit-shop-details-button':
+                    case 'edit-shop-location-button':
+                    case 'edit-shop-banner-button':
+                    case 'edit-shop-socials-button':
+                        window.location.href = '/seller/shop';
+                        break;
+                
+                    default:
+                        window.location.href = '/';
+                        break;
+                }
             } else { 
                 console.log(" Error this.responseText", this.responseText);
                 clickedButton.innerText =  buttonText;

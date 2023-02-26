@@ -10,7 +10,8 @@ class Store extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'warehoused'
+        'name', 'warehoused','shop_logo','shop_phone','shop_address','meta_title','meta_description', 'lat', 'long',
+        'banner','facebook', 'instagram', 'twitter','google','youtube'
     ];
 
     protected $casts = [
