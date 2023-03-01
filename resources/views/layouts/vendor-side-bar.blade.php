@@ -3,7 +3,7 @@
     <div class="aiz-sidebar left c-scrollbar">
         <div class="aiz-side-nav-logo-wrap">
             <div class="d-block text-center my-3">
-                    <img class="mw-100 mb-3" src="/{{ $store->shop_logo }}" class="brand-icon"alt="">
+                    <img class="mw-100 mb-3" src="/{{ $store->shop_logo ?? 'uploads/store_logo_placeholder.png' }}" class="brand-icon"alt="">
                     <ul class="aiz-side-nav-list">
                         <li onclick="return expandStoreList()" class="aiz-side-nav-item" style="cursor: pointer">
                             <a class="aiz-side-nav-link">
