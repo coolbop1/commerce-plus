@@ -51,7 +51,7 @@
         <meta property="fb:app_id" content="">
     
     <!-- Favicon -->
-    <link rel="icon" href="uploads/icon.png">
+    <link rel="icon" href="/uploads/icon.png">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
@@ -59,13 +59,13 @@
     <!-- CSS Files -->
     {{-- <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
         <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css"> --}}
-    <link rel="stylesheet" href="css/vendors.css">
-    <link rel="stylesheet" href="css/temp.css">
+    <link rel="stylesheet" href="/css/vendors.css">
+    <link rel="stylesheet" href="/css/temp.css">
     <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/custom-style.css">
 
     {{-- <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"> --}}
-    <link rel="stylesheet" href="1.3.0/css/line-awesome.min.css">
-    <script src="js/app.js"></script>
+    <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
+    <script src="/js/app.js"></script>
     
 
     <script>
@@ -200,7 +200,7 @@
 
                 <div class="col-auto col-xl-3 pl-0 pr-3 d-flex align-items-center">
                     <a class="d-block py-20px mr-3 ml-0" href="/">
-                        <img src="uploads/logo.png" alt="COMMERCE PLUS" class="mw-100 h-30px h-md-30px" height="40">
+                        <img src="/uploads/logo.png" alt="COMMERCE PLUS" class="mw-100 h-30px h-md-30px" height="40">
                     </a>
 
                 </div>
@@ -310,7 +310,7 @@
                         </a>
                     </li>
                     <li class="list-inline-item mr-0">
-                        <a href="categories" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="/categories" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             All Categories
                         </a>
                     </li>

@@ -14,7 +14,10 @@
   <div class="row align-items-center">
     <div class="col-md-6">
         <h1 class="h3">Shop Settings
-            <a href="https://demo.activeitzone.com/ecommerce/shop/Filon-Asset-Store-2" class="btn btn-link btn-sm" target="_blank">(Visit Shop)<i class="la la-external-link"></i>)</a>
+            @php
+                $store_name = str_replace(' ', '-',$store->name);
+            @endphp
+            <a href="/shop/{{ $store_name }}" class="btn btn-link btn-sm" target="_blank">(Visit Shop)<i class="la la-external-link"></i>)</a>
         </h1>
     </div>
   </div>

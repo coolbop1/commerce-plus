@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\CategoryWebController;
 use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\SellerDashboardController;
+use App\Http\Controllers\API\ShopWebController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,6 +42,7 @@ Route::get('/admin', [AdminController::class, 'index']);
 
 Route::get('/superadmin', 'SuperAdminController@index');
 Route::get('/categories', [CategoryWebController::class, 'index']);
+Route::get('/shop/{shop_name}', [ShopWebController::class, 'index']);
 Route::middleware(['session'])->group( function () {
     Route::get('/seller/dashboard', [SellerDashboardController::class, 'index']);
     Route::get('/seller/shop', [SellerDashboardController::class, 'shop']);
