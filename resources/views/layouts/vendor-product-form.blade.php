@@ -1,5 +1,10 @@
 @section('product-form')
+@if ($product)
+<form class="" onsubmit="return submitForm(this, url = '/api/products/{{ $product->id }}', 'PUT', 'create-product-button')">
+@else
 <form class="" onsubmit="return submitForm(this, url = '/api/products', 'POST', 'create-product-button')">
+@endif
+
     <div class="row gutters-5">
         <div class="col-lg-8">
             <div class="card">
@@ -10,7 +15,7 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Product Name</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="name"
+                            <input value="{{ $product ? $product->name : '' }}" type="text" class="form-control" name="name"
                                 placeholder="Product Name" onchange="update_sku()" required>
                                 <input type="hidden" name="store_id" value="{{ $store->id }}"> 
                         </div>
@@ -21,11 +26,17 @@
                             <select class="form-control aiz-selectpicker" name="category_id" id="category_id"
                                 data-live-search="true" required>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option 
+                                    {{ $product ? ($product->category_id == $category->id ? 'selected' : '' ) : '' }} 
+                                    value="{{ $category->id }}">{{ $category->name }}</option>
                                     @foreach ($category->subCategories as $subCategory)
-                                        <option value="{{ $category->id }}_{{ $subCategory->id }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ $subCategory->name }}</option>
+                                        <option 
+                                        {{ $product ? ($product->sub_category_id == $subCategory->id ? 'selected' : '' ) : '' }} 
+                                        value="{{ $category->id }}_{{ $subCategory->id }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ $subCategory->name }}</option>
                                         @foreach ($subCategory->sections as $section)
-                                            <option value="{{ $category->id }}_{{ $subCategory->id }}_{{ $section->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ "_ ".$section->name }}</option>
+                                            <option 
+                                            {{ $product ? ($product->section_id == $section->id ? 'selected' : '' ) : '' }}
+                                            value="{{ $category->id }}_{{ $subCategory->id }}_{{ $section->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ "_ ".$section->name }}</option>
                                         @endforeach
                                     @endforeach
                                 @endforeach                       
@@ -39,7 +50,7 @@
                                 data-live-search="true">
                                 <option value="">Select Brand</option>
                                 @foreach ($brands as $brand)
-                                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                    <option {{ $product && $product->brand_id == $brand->id ? 'selected' : ''  }} value="{{ $brand->id }}">{{ $brand->name }}</option>
                                 @endforeach
                                                                 
                             </select>
@@ -48,34 +59,34 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Unit</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="unit"
+                            <input value="{{ $product ? $product->unit : '' }}" type="text" class="form-control" name="unit"
                                 placeholder="Unit (e.g. KG, Pc etc)" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Weight <small>(In Kg)</small></label>
                         <div class="col-md-8">
-                            <input type="number" class="form-control" name="weight" step="0.01" value="0.00" placeholder="0.00">
+                            <input type="number" class="form-control" name="weight" step="0.01" value="{{ $product ? $product->weight : '0.00' }}" placeholder="0.00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Minimum Purchase Qty</label>
                         <div class="col-md-8">
-                            <input type="number" lang="en" class="form-control" name="min_qty" value="1" min="1"
+                            <input type="number" lang="en" class="form-control" name="min_qty" value="{{ $product ? $product->min_qty : '1' }}" min="1"
                                 required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Tags</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control aiz-tag-input" name="tags[]"
+                            <input type="text" value="{{ $product ? $product->tags : '' }}" class="form-control aiz-tag-input" name="tags"
                                 placeholder="Type and hit enter to add a tag">
                         </div>
                     </div>
                                         <div class="form-group row">
                         <label class="col-md-3 col-from-label">Barcode</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="barcode"
+                            <input value="{{ $product ? $product->barcode : '' }}" type="text" class="form-control" name="barcode"
                                 placeholder="Barcode">
                         </div>
                     </div>
@@ -83,7 +94,7 @@
                         <label class="col-md-3 col-from-label">Refundable</label>
                         <div class="col-md-8">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="checkbox" name="refundable" checked value="1">
+                                <input type="checkbox" name="refundable" checked value="{{ $product ? $product->refundable : '1' }}">
                                 <span></span>
                             </label>
                         </div>
@@ -107,8 +118,27 @@
                                 <div class="form-control file-amount">Choose file</div>
                                 <input id='product_image' type="file" onchange="return upload(this, 'product_image_input')">
                             </div>
-                            <input id="product_image_input" type="hidden" name="photos">
+                            <input value="{{ $product ? $product->photos : '' }}" id="product_image_input" type="hidden" name="photos">
+                            @php
+                                if($product) {
+                                    $product_photos_string = $product->photos;
+                                    $product_photos = $product_photos_string ? explode(',', $product_photos_string) : [];
+                                } else {
+                                    $product_photos = [];
+                                }    
+                            @endphp
                             <div id="preview_product_image_input">
+                            @foreach ($product_photos as $photo)
+                                <div class="file-preview box sm">
+                                    <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                                        <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                            <img src="/{{ $photo }}" class="img-fit">
+                                        </div>
+                                        <div class="col body"><h6 class="d-flex"><span class="text-truncate title">{{ '' }}</span><span class="ext flex-shrink-0">{{ '' }}</span></h6><p></p></div>
+                                        <div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div>
+                                    </div>
+                                </div>
+                            @endforeach
                             </div>
                         </div>
                     </div>
@@ -124,8 +154,20 @@
                                 <div class="form-control file-amount">Choose file</div>
                                 <input id='product_image' type="file" onchange="return upload(this, 'product_thumbnail_input')">
                             </div>
-                            <input id="product_thumbnail_input" type="hidden" name="thumbnail_img" class="selected-files">
+                            <input value="{{ $product ? $product->thumbnail_img : '' }}" id="product_thumbnail_input" type="hidden" name="thumbnail_img" class="selected-files">
                             <div id="preview_product_thumbnail_input" class="file-preview box sm">
+                                @if ($product)
+                                <div class="file-preview box sm">
+                                    <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                                        <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                            <img src="/{{ $product->thumbnail_img }}" class="img-fit">
+                                        </div>
+                                        <div class="col body"><h6 class="d-flex"><span class="text-truncate title">{{ '' }}</span><span class="ext flex-shrink-0">{{ '' }}</span></h6><p></p></div>
+                                        <div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div>
+                                    </div>
+                                </div>
+                                    
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -140,16 +182,14 @@
                         <label class="col-md-3 col-from-label">Video Provider</label>
                         <div class="col-md-8">
                             <select class="form-control aiz-selectpicker" name="video_provider" id="video_provider">
-                                <option value="youtube">Youtube</option>
-                                <option value="dailymotion">Dailymotion</option>
-                                <option value="vimeo">Vimeo</option>
+                                <option {{ $product && $product->video_provider == 'youtube' ? 'selected' : '' }} value="youtube">Youtube</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Video Link</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="video_link"
+                            <input value="{{ $product ? $product->video_link : '' }}" type="text" class="form-control" name="video_link"
                                 placeholder="Video Link">
                         </div>
                     </div>
@@ -642,7 +682,7 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Unit price</label>
                         <div class="col-md-6">
-                            <input type="number" lang="en" min="0" value="0" step="0.01"
+                            <input type="number" lang="en" min="0" value="{{ $product ? $product->price : '0' }}" step="0.01"
                                 placeholder="Unit price" name="price" class="form-control"
                                 required>
                         </div>
@@ -651,20 +691,20 @@
                     <div class="form-group row">
                         <label class="col-md-3 control-label" for="start_date">Discount Date Range</label>
                         <div class="col-md-9">
-                          <input type="text" class="form-control aiz-date-range" name="date_range" placeholder="Select Date" data-time-picker="true" data-format="DD-MM-Y HH:mm:ss" data-separator=" to " autocomplete="off">
+                          <input value="{{ $product ? $product->date_range : '' }}" type="text" class="form-control aiz-date-range" name="date_range" placeholder="Select Date" data-time-picker="true" data-format="DD-MM-Y HH:mm:ss" data-separator=" to " autocomplete="off">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Discount</label>
                         <div class="col-md-6">
-                            <input type="number" lang="en" min="0" value="0" step="0.01"
+                            <input type="number" lang="en" min="0" value="{{ $product ? $product->discount : '0' }}" step="0.01"
                                 placeholder="Discount" name="discount" class="form-control" required>
                         </div>
                         <div class="col-md-3">
                             <select class="form-control aiz-selectpicker" name="discount_type">
-                                <option value="amount">Flat</option>
-                                <option value="percent">Percent</option>
+                                <option {{ $product && $product->discount_type == 'amount' ? 'selected' : '' }} value="amount">Flat</option>
+                                <option {{ $product && $product->discount_type == 'percent' ? 'selected' : '' }} value="percent">Percent</option>
                             </select>
                         </div>
                     </div>
@@ -673,7 +713,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">Quantity</label>
                             <div class="col-md-6">
-                                <input type="number" lang="en" min="0" value="0" step="1"
+                                <input type="number" lang="en" min="0" value="{{ $product ? $product->quantity : '' }}" step="1"
                                     placeholder="Quantity" name="quantity" class="form-control"
                                     required>
                             </div>
@@ -683,7 +723,7 @@
                                 SKU
                             </label>
                             <div class="col-md-6">
-                                <input type="text" placeholder="SKU" name="sku" class="form-control">
+                                <input value="{{ $product ? $product->sku : '' }}" type="text" placeholder="SKU" name="sku" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -692,7 +732,7 @@
                             External link
                         </label>
                         <div class="col-md-9">
-                            <input type="text" placeholder="External link" name="external_link" class="form-control">
+                            <input value="{{ $product ? $product->external_link : '' }}" type="text" placeholder="External link" name="external_link" class="form-control">
                             <small class="text-muted">Leave it blank if you do not use external site link</small>
                         </div>
                     </div>
@@ -701,7 +741,7 @@
                             External link button text
                         </label>
                         <div class="col-md-9">
-                            <input type="text" placeholder="External link button text" name="external_link_btn" class="form-control">
+                            <input value="{{ $product ? $product->external_link_btn : '' }}" type="text" placeholder="External link button text" name="external_link_btn" class="form-control">
                             <small class="text-muted">Leave it blank if you do not use external site link</small>
                         </div>
                     </div>
@@ -719,7 +759,7 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Description</label>
                         <div class="col-md-8">
-                            <textarea rows="8" class="form-control" name="detail"></textarea>
+                            <textarea rows="8" class="form-control" name="detail">{{ $product ? $product->detail : '' }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -740,7 +780,7 @@
                                         Browse</div>
                                 </div>
                                 <div class="form-control file-amount">Choose file</div>
-                                <input type="hidden" name="pdf" class="selected-files">
+                                <input value="{{ $product ? $product->pdf : '' }}" type="hidden" name="pdf" class="selected-files">
                             </div>
                             <div class="file-preview box sm">
                             </div>
@@ -756,14 +796,14 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Meta Title</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="meta_title"
+                            <input value="{{ $product ? $product->meta_title : '' }}" type="text" class="form-control" name="meta_title"
                                 placeholder="Meta Title">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Description</label>
                         <div class="col-md-8">
-                            <textarea name="meta_description" rows="8" class="form-control"></textarea>
+                            <textarea name="meta_description" rows="8" class="form-control">{{ $product ? $product->meta_description : '' }}</textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -775,7 +815,7 @@
                                         Browse</div>
                                 </div>
                                 <div class="form-control file-amount">Choose file</div>
-                                <input type="hidden" name="meta_img" class="selected-files">
+                                <input value="{{ $product ? $product->meta_img : '' }}" type="hidden" name="meta_img" class="selected-files">
                             </div>
                             <div class="file-preview box sm">
                             </div>
@@ -798,7 +838,7 @@
                         <label class="col-md-6 col-from-label">Free Shipping</label>
                         <div class="col-md-6">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="radio" name="shipping_type" value="free" checked>
+                                <input type="radio" name="shipping_type" value="free" {{ $product && $product->shipping_type == 'free' ? 'checked' : '' }}>
                                 <span></span>
                             </label>
                         </div>
@@ -808,7 +848,7 @@
                         <label class="col-md-6 col-from-label">Flat Rate</label>
                         <div class="col-md-6">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="radio" name="shipping_type" value="flat_rate">
+                                <input type="radio" name="shipping_type" value="flat_rate" {{ $product && $product->shipping_type == 'flat_rate' ? 'checked' : '' }}>
                                 <span></span>
                             </label>
                         </div>
@@ -837,7 +877,7 @@
                         <label for="name">
                             Quantity
                         </label>
-                        <input type="number" name="low_stock_quantity" value="1" min="0" step="1" class="form-control">
+                        <input type="number" name="low_stock_quantity" value="{{ $product ? $product->low_stock_quantity : '1' }}" min="0" step="1" class="form-control">
                     </div>
                 </div>
             </div>
@@ -855,7 +895,7 @@
                         <label class="col-md-6 col-from-label">Show Stock Quantity</label>
                         <div class="col-md-6">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="radio" name="stock_visibility_state" value="quantity" checked>
+                                <input type="radio" name="stock_visibility_state" value="quantity" {{ $product && $product->stock_visibility_state == 'quantity' ? 'checked' : '' }}>
                                 <span></span>
                             </label>
                         </div>
@@ -865,7 +905,7 @@
                         <label class="col-md-6 col-from-label">Show Stock With Text Only</label>
                         <div class="col-md-6">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="radio" name="stock_visibility_state" value="text">
+                                <input type="radio" name="stock_visibility_state" value="text" {{ $product && $product->stock_visibility_state == 'text' ? 'checked' : '' }}>
                                 <span></span>
                             </label>
                         </div>
@@ -875,7 +915,7 @@
                         <label class="col-md-6 col-from-label">Hide Stock</label>
                         <div class="col-md-6">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="radio" name="stock_visibility_state" value="hide">
+                                <input type="radio" name="stock_visibility_state" value="hide" {{ $product && $product->stock_visibility_state == 'hide' ? 'checked' : '' }}>
                                 <span></span>
                             </label>
                         </div>
@@ -893,7 +933,7 @@
                         <label class="col-md-6 col-from-label">Status</label>
                         <div class="col-md-6">
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input type="checkbox" name="cash_on_delivery" value="1" checked="">
+                                <input type="checkbox" name="cash_on_delivery" value="1" {{ $product && $product->cash_on_delivery ? 'checked' : '' }}>
                                 <span></span>
                             </label>
                         </div>
@@ -911,7 +951,7 @@
                             Shipping Days
                         </label>
                         <div class="input-group">
-                            <input type="number" class="form-control" name="est_shipping_days" min="1" step="1"
+                            <input value="{{ $product ? $product->est_shipping_days : '' }}" type="number" class="form-control" name="est_shipping_days" min="1" step="1"
                                 placeholder="Shipping Days">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroupPrepend">Days</span>
@@ -932,13 +972,13 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <input type="number" lang="en" min="0" value="0" step="0.01"
+                            <input type="number" lang="en" min="0" value="{{ $product ? $product->tax : 0 }}" step="0.01"
                                 placeholder="Tax" name="tax" class="form-control" required>
                         </div>
                         <div class="form-group col-md-6">
                             <select class="form-control aiz-selectpicker" name="tax_type">
-                                <option value="amount">Flat</option>
-                                <option value="percent">Percent</option>
+                                <option {{ $product && $product->tax_type == 'amount' ? 'selected' : '' }} value="amount">Flat</option>
+                                <option {{ $product && $product->tax_type == 'percent' ? 'selected' : '' }} value="percent">Percent</option>
                             </select>
                         </div>
                     </div>
@@ -948,13 +988,13 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <input type="number" lang="en" min="0" value="0" step="0.01"
+                            <input type="number" lang="en" min="0" value="{{ $product ? $product->vat : '0' }}" step="0.01"
                                 placeholder="Tax" name="vat" class="form-control" required>
                         </div>
                         <div class="form-group col-md-6">
                             <select class="form-control aiz-selectpicker" name="vat_type">
-                                <option value="amount">Flat</option>
-                                <option value="percent">Percent</option>
+                                <option {{ $product && $product->vat_type == 'amount' ? 'selected' : '' }} value="amount">Flat</option>
+                                <option {{ $product && $product->vat_type == 'percent' ? 'selected' : '' }} value="percent">Percent</option>
                             </select>
                         </div>
                     </div>
@@ -965,7 +1005,7 @@
         <div class="col-12">
             <div class="mar-all text-right mb-2">
                 <button id="create-product-button" type="submit" name="button" value="publish"
-                    class="btn btn-primary">Upload Product</button>
+                    class="btn btn-primary">{{ $product ? 'Update' : 'Upload' }} Product</button>
             </div>
         </div>
     </div>

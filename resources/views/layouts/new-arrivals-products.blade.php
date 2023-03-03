@@ -13,18 +13,32 @@
                 @php
                     $product_name_link = str_replace(' ', '-', $product->name);
                     $product_hero_image = $product->thumbnail_img;
+                    $date_range = $product->date_range;
+                    $within_range = true;
+                    if($date_range) {
+                        $dates = explode(' to ', $date_range);
+                        $from_date = $dates[0];
+                        $to_date = $dates[1];
+                        $within_range =  Carbon\Carbon::parse($from_date)->lte(now()) && Carbon\Carbon::parse($to_date)->gte(now());
+                    }  
+                    $has_discount = $product->discount > 0 && $within_range;
+                    if($has_discount) {
+                        $perc = $product->discount_type == 'percent' ? $product->discount : ((100 * $product->discount)/$product->price);
+                    }
                 @endphp
                 <div class="col mb-3">
                     <div class="aiz-card-box border border-light rounded hov-shadow-md mt-1 mb-2 has-transition bg-white">
-                        <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;5%</span></span>
+                        @if ($has_discount)
+                        <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $perc }}%</span></span>
+                        @endif
                         <div class="position-relative">
                             <a href="/product/{{ $product_name_link }}" class="d-block">
                                 <img
                                     class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                    src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg"
+                                    src="{{ asset('/assets/img/placeholder.jpg') }}"
                                     data-src="/{{ $product_hero_image }}"
                                     alt="{{ $product->name }}"
-                                    onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg';"
+                                    onerror="this.onerror=null;this.src='{{ asset('/assets/img/placeholder.jpg') }}';"
                                 >
                             </a>
                             <div class="absolute-top-right aiz-p-hov-icon">
@@ -41,8 +55,13 @@
                         </div>
                         <div class="p-md-3 p-2 text-left">
                             <div class="fs-15">
-                                <del class="fw-600 opacity-50 mr-1">₦59.000</del>
-                                <span class="fw-700 text-primary">₦{{ $product->price }}</span>
+                                @if ($has_discount)
+                                @php
+                                    $new_price = $product->price - (($perc/100) * $product->price);
+                                @endphp
+                                    <del class="fw-600 opacity-50 mr-1">₦{{ $product->price }}</del>
+                                @endif
+                                <span class="fw-700 text-primary">₦{{ $new_price ?? $product->price }}</span>
                             </div>
                             <div class="rating rating-sm mt-1">
                                 <i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i><i class = 'las la-star'></i>

@@ -146,12 +146,28 @@ const upload = (element, input_id) => {
                     case 'product_image_input':
                         document.getElementById('preview_'+input_id).innerHTML += `
                         <div class="file-preview box sm">
-                            <img src="/`+response.file_path+`" class="img-fit">
+                            <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                                <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                    <img src="/`+response.file_path+`" class="img-fit">
+                                </div>
+                                <div class="col body"><h6 class="d-flex"><span class="text-truncate title"></span><span class="ext flex-shrink-0"></span></h6><p></p></div>
+                                <div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div>
+                            </div>
                         </div>
                         `;
                         break;
                     case 'product_thumbnail_input':
-                        document.getElementById('preview_'+input_id).innerHTML = `<img src="/`+response.file_path+`" class="img-fit">`;
+                        document.getElementById('preview_'+input_id).innerHTML = `
+                        <div class="file-preview box sm">
+                            <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                                <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                    <img src="/`+response.file_path+`" class="img-fit">
+                                </div>
+                                <div class="col body"><h6 class="d-flex"><span class="text-truncate title"></span><span class="ext flex-shrink-0"></span></h6><p></p></div>
+                                <div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div>
+                            </div>
+                        </div>
+                        `;
                         break;
                 
                     default:
@@ -188,8 +204,10 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
     clickedButton.innerHTML = `<i class="las la-spinner la-spin la-3x opacity-70"></i>`;
     let params = new FormData(formElement);
     console.log("button_id ",button_id);
+    var object = {};
     params.forEach((val, key, parent) => {
         console.log(key,val);
+        object[key] = val;
         let val_span = document.getElementById('validate-'+key);
         if(val_span)
         val_span.innerText = '';
@@ -200,6 +218,7 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
         console.log("url "+url);
         console.log("COMMERCE_PLUS_TOKEN "+COMMERCE_PLUS_TOKEN);
         http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+        http.setRequestHeader("Content-type", "application/json;");
     }
     http.onreadystatechange = function() {
         if(http.readyState == 4) {
@@ -236,7 +255,10 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
         } 
         
     }
-    http.send(params);
+    var json = JSON.stringify(object);
+    console.log('json', json);
+    http.send(json);
+    
     return false;
 }
 
