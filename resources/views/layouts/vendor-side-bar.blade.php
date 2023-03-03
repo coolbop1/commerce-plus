@@ -44,14 +44,14 @@
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">
                         <i class="las la-shopping-cart aiz-side-nav-icon"></i>
-                        <span class="aiz-side-nav-text">Products</span>
+                        <span class="aiz-side-nav-text {{ $page == 'products' ? 'active' : '' }}">Products</span>
                         <span class="aiz-side-nav-arrow"></span>
                     </a>
                     <!--Submenu-->
                     <ul class="aiz-side-nav-list level-2">
                         <li class="aiz-side-nav-item">
-                            <a href="https://demo.activeitzone.com/ecommerce/seller/products"
-                                class="aiz-side-nav-link ">
+                            <a href="/seller/products"
+                                class="aiz-side-nav-link {{ $page == 'products' ? 'active' : '' }}">
                                 <span class="aiz-side-nav-text">Products</span>
                             </a>
                         </li>

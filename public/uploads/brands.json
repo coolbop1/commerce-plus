@@ -1,0 +1,502 @@
+[
+    {
+        "name": "Ford",
+        "description": "Ford",
+        "verified": true
+    },
+    {
+        "name": "Chevrolet",
+        "description": "Chevrolet",
+        "verified": true
+    },
+    {
+        "name": "Audi",
+        "description": "Audi",
+        "verified": true
+    },
+    {
+        "name": "Hyundai",
+        "description": "Hyundai",
+        "verified": true
+    },
+    {
+        "name": "Nissan",
+        "description": "Nissan",
+        "verified": true
+    },
+    {
+        "name": "BMW",
+        "description": "BMW",
+        "verified": true
+      },
+      {
+        "name": "Mercedes-Benz",
+        "description": "Mercedes-Benz",
+        "verified": true
+      },
+      {
+        "name": "Toyota",
+        "description": "Toyota",
+        "verified": true
+      },
+      {
+        "name": "Suzuki",
+        "description": "Suzuki",
+        "verified": true
+      },
+      {
+        "name": "Mitsubishi",
+        "description": "Mitsubishi",
+        "verified": true
+      },
+      {
+        "name": "Honda",
+        "description": "Honda",
+        "verified": true
+      },
+      {
+        "name": "Volvo",
+        "description": "Volvo",
+        "verified": true
+      },
+      {
+        "name": "Yamaha",
+        "description": "Yamaha",
+        "verified": true
+      },
+      {
+        "name": "Brighton",
+        "description": "Brighton",
+        "verified": true
+      },
+      {
+        "name": "Tanishq",
+        "description": "Tanishq",
+        "verified": true
+      },
+      {
+        "name": "Victorias Secret",
+        "description": "Victorias Secret",
+        "verified": true
+      },
+      {
+        "name": "Dior",
+        "description": "Dior",
+        "verified": true
+      },
+      {
+        "name": "Bucketfeet",
+        "description": "Bucketfeet",
+        "verified": true
+      },
+      {
+        "name": "JLO",
+        "description": "JLO",
+        "verified": true
+      },
+      {
+        "name": "Enor",
+        "description": "Enor",
+        "verified": true
+      },
+      {
+        "name": "Rolex",
+        "description": "Rolex",
+        "verified": true
+      },
+      {
+        "name": "Polo",
+        "description": "Polo",
+        "verified": true
+      },
+      {
+        "name": "Aigner",
+        "description": "Aigner",
+        "verified": true
+      },
+      {
+        "name": "Omega",
+        "description": "Omega",
+        "verified": true
+      },
+      {
+        "name": "Axe",
+        "description": "Axe",
+        "verified": true
+      },
+      {
+        "name": "Addidas",
+        "description": "Addidas",
+        "verified": true
+      },
+      {
+        "name": "Nike",
+        "description": "Nike",
+        "verified": true
+      },
+      {
+        "name": "Puma",
+        "description": "Puma",
+        "verified": true
+      },
+      {
+        "name": "Reebok",
+        "description": "Reebok",
+        "verified": true
+      },
+      {
+        "name": "Samsung",
+        "description": "Samsung",
+        "verified": true
+      },
+      {
+        "name": "Apple",
+        "description": "Apple",
+        "verified": true
+      },
+      {
+        "name": "Dell",
+        "description": "Dell",
+        "verified": true
+      },
+      {
+        "name": "HP",
+        "description": "HP",
+        "verified": true
+      },
+      {
+        "name": "Acer",
+        "description": "Acer",
+        "verified": true
+      },
+      {
+        "name": "Asus",
+        "description": "Asus",
+        "verified": true
+      },
+      {
+        "name": "Sony",
+        "description": "Sony",
+        "verified": true
+      },
+      {
+        "name": "Lenovo",
+        "description": "Lenovo",
+        "verified": true
+      },
+      {
+        "name": "Corsair",
+        "description": "Corsair",
+        "verified": true
+      },
+      {
+        "name": "Microsoft",
+        "description": "Microsoft",
+        "verified": true
+      },
+      {
+        "name": "Hitachi",
+        "description": "Hitachi",
+        "verified": true
+      },
+      {
+        "name": "Lakme",
+        "description": "Lakme",
+        "verified": true
+      },
+      {
+        "name": "Logitech",
+        "description": "Logitech",
+        "verified": true
+      },
+      {
+        "name": "Calvin Klein",
+        "description": "Calvin Klein",
+        "verified": true
+      },
+      {
+        "name": "Little live pets",
+        "description": "Little live pets",
+        "verified": true
+      },
+      {
+        "name": "Baby TV",
+        "description": "Baby TV",
+        "verified": true
+      },
+      {
+        "name": "Kickers",
+        "description": "Kickers",
+        "verified": true
+      },
+      {
+        "name": "lucky Brand",
+        "description": "lucky Brand",
+        "verified": true
+      },
+      {
+        "name": "Nihal",
+        "description": "Nihal",
+        "verified": true
+      },
+      {
+        "name": "ELLE",
+        "description": "ELLE",
+        "verified": true
+      },
+      {
+        "name": "The Crystal Bride",
+        "description": "The Crystal Bride",
+        "verified": true
+      },
+      {
+        "name": "DG",
+        "description": "DG",
+        "verified": true
+      },
+      {
+        "name": "Hudson",
+        "description": "Hudson",
+        "verified": true
+      },
+      {
+        "name": "Muratti",
+        "description": "Muratti",
+        "verified": true
+      },
+      {
+        "name": "Breitling",
+        "description": "Breitling",
+        "verified": true
+      },
+      {
+        "name": "Burberry",
+        "description": "Burberry",
+        "verified": true
+      },
+      {
+        "name": "Huwaei",
+        "description": "Huwaei",
+        "verified": true
+      },
+      {
+        "name": "HTC",
+        "description": "HTC",
+        "verified": true
+      },
+      {
+        "name": "Nokia",
+        "description": "Nokia",
+        "verified": true
+      },
+      {
+        "name": "Johnsons baby",
+        "description": "Johnsons baby",
+        "verified": true
+      },
+      {
+        "name": "Cerelac",
+        "description": "Cerelac",
+        "verified": true
+      },
+      {
+        "name": "Babies Outfits",
+        "description": "Babies Outfits",
+        "verified": true
+      },
+      {
+        "name": "Pampers",
+        "description": "Pampers",
+        "verified": true
+      },
+      {
+        "name": "Toys Pino",
+        "description": "Toys Pino",
+        "verified": true
+      },
+      {
+        "name": "Belly Baby",
+        "description": "Belly Baby",
+        "verified": true
+      },
+      {
+        "name": "Baby Care",
+        "description": "Baby Care",
+        "verified": true
+      },
+      {
+        "name": "Baby &amp; me",
+        "description": "Baby &amp; me",
+        "verified": true
+      },
+      {
+        "name": "Razer",
+        "description": "Razer",
+        "verified": true
+      },
+      {
+        "name": "Loreal",
+        "description": "Loreal",
+        "verified": true
+      },
+      {
+        "name": "Dove",
+        "description": "Dove",
+        "verified": true
+      },
+      {
+        "name": "NYX",
+        "description": "NYX",
+        "verified": true
+      },
+      {
+        "name": "Guess",
+        "description": "Guess",
+        "verified": true
+      },
+      {
+        "name": "Mac",
+        "description": "Mac",
+        "verified": true
+      },
+      {
+        "name": "Flormar",
+        "description": "Flormar",
+        "verified": true
+      },
+      {
+        "name": "Sephora",
+        "description": "Sephora",
+        "verified": true
+      },
+      {
+        "name": "Urban Decay",
+        "description": "Urban Decay",
+        "verified": true
+      },
+      {
+        "name": "Maybeline",
+        "description": "Maybeline",
+        "verified": true
+      },
+      {
+        "name": "Lexington",
+        "description": "Lexington",
+        "verified": true
+      },
+      {
+        "name": "Jade furniture",
+        "description": "Jade furniture",
+        "verified": true
+      },
+      {
+        "name": "Apato",
+        "description": "Apato",
+        "verified": true
+      },
+      {
+        "name": "Brooks",
+        "description": "Brooks",
+        "verified": true
+      },
+      {
+        "name": "Decor",
+        "description": "Decor",
+        "verified": true
+      },
+      {
+        "name": "IFD",
+        "description": "IFD",
+        "verified": true
+      },
+      {
+        "name": "Interno",
+        "description": "Interno",
+        "verified": true
+      },
+      {
+        "name": "Hilsdale",
+        "description": "Hilsdale",
+        "verified": true
+      },
+      {
+        "name": "Nicoletti",
+        "description": "Nicoletti",
+        "verified": true
+      },
+      {
+        "name": "Rolls royce",
+        "description": "Rolls royce",
+        "verified": true
+      },
+      {
+        "name": "Joules",
+        "description": "Joules",
+        "verified": true
+      },
+      {
+        "name": "Alosa",
+        "description": "Alosa",
+        "verified": true
+      },
+      {
+        "name": "Denim",
+        "description": "Denim",
+        "verified": true
+      },
+      {
+        "name": "One Plus",
+        "description": "One Plus",
+        "verified": true
+      },
+      {
+        "name": "Mercedes",
+        "description": "Mercedes",
+        "verified": true
+      },
+      {
+        "name": "BAS Vampire",
+        "description": "BAS Vampire",
+        "verified": true
+      },
+      {
+        "name": "WOODWORM",
+        "description": "WOODWORM",
+        "verified": true
+      },
+      {
+        "name": "Google",
+        "description": "Google",
+        "verified": true
+      },
+      {
+        "name": "Xiaomi",
+        "description": "Xiaomi",
+        "verified": true
+      },
+      {
+        "name": "Riyal Enfield",
+        "description": "Riyal Enfield",
+        "verified": true
+      },
+      {
+        "name": "Royal Enfield",
+        "description": "Royal Enfield",
+        "verified": true
+      },
+      {
+        "name": "Philipps",
+        "description": "Philipps",
+        "verified": true
+      },
+      {
+        "name": "LOUIS-VUITTON",
+        "description": "LOUIS-VUITTON",
+        "verified": true
+      },
+      {
+        "name": "Canon",
+        "description": "Canon",
+        "verified": true
+      }
+]

@@ -21,6 +21,7 @@
 	<link rel="stylesheet" href="/css/vendors.css">
     <link rel="stylesheet" href="/css/temp.css">
     <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{{ asset('/assets/css/aiz-seller.css') }}">
     <script src="/js/app.js"></script>
 
     <style>
@@ -81,8 +82,25 @@
 </head>
 <body class="">
     @yield('body')
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://demo.activeitzone.com/ecommerce/public/assets/js/vendors.js" ></script>
-<script src="https://demo.activeitzone.com/ecommerce/public/assets/js/aiz-core.js" ></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="{{ asset('assets/js/vendors.js') }}" ></script>
+<script src="{{ asset('assets/js/aiz-core.js') }}" ></script>
+<!-- delete Modal -->
+<div id="delete-modal" class="modal fade">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title h6">Delete Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mt-1">Are you sure to delete this?</p>
+                <button type="button" class="btn btn-link mt-2" data-dismiss="modal">Cancel</button>
+                <a href="" id="delete-link" class="btn btn-primary mt-2">Delete</a>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
 
     <script type="text/javascript">
     AIZ.plugins.chart('#graph-1', {
