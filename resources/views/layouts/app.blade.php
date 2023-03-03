@@ -337,7 +337,7 @@
         <div class="row align-items-center">
             <div class="col-lg-4">
                 <div class="text-center text-md-left" current-verison="6.5.0">
-                    © Active eCommerce CMS 2021
+                    © Commerce Plus <script> document.write((new Date).getFullYear()) </script>
                 </div>
             </div>
             <div class="col-lg-4">

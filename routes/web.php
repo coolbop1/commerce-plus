@@ -46,5 +46,7 @@ Route::get('/shop/{shop_name}', [ShopWebController::class, 'index']);
 Route::middleware(['session'])->group( function () {
     Route::get('/seller/dashboard', [SellerDashboardController::class, 'index']);
     Route::get('/seller/shop', [SellerDashboardController::class, 'shop']);
+    Route::get('/seller/products', [SellerDashboardController::class, 'products']);
+    Route::get('/seller/product/create', [SellerDashboardController::class, 'productCreate']);
 });
 

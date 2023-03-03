@@ -102,5 +102,14 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        $brand_data = collect(json_decode(file_get_contents(public_path("uploads/brands.json"))));
+        foreach ($brand_data as $key => $brand) {
+            $brand_array = [
+                'name' => $brand->name,
+                'verified' => true
+            ];
+            \App\Models\Brand::updateOrCreate($brand_array);
+        }
+
     }
 }

@@ -143,6 +143,16 @@ const upload = (element, input_id) => {
                         </div>
                         `;
                         break;
+                    case 'product_image_input':
+                        document.getElementById('preview_'+input_id).innerHTML += `
+                        <div class="file-preview box sm">
+                            <img src="/`+response.file_path+`" class="img-fit">
+                        </div>
+                        `;
+                        break;
+                    case 'product_thumbnail_input':
+                        document.getElementById('preview_'+input_id).innerHTML = `<img src="/`+response.file_path+`" class="img-fit">`;
+                        break;
                 
                     default:
                         break;
@@ -179,7 +189,7 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
     let params = new FormData(formElement);
     console.log("button_id ",button_id);
     params.forEach((val, key, parent) => {
-        console.log("see ",val);
+        console.log(key,val);
         let val_span = document.getElementById('validate-'+key);
         if(val_span)
         val_span.innerText = '';
@@ -208,6 +218,9 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                     case 'edit-shop-banner-button':
                     case 'edit-shop-socials-button':
                         window.location.href = '/seller/shop';
+                        break;
+                    case 'create-product-button':
+                        window.location.href = '/seller/products';
                         break;
                 
                     default:

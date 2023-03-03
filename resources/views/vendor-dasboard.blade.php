@@ -428,7 +428,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-3">
-            <a href="https://demo.activeitzone.com/ecommerce/seller/products" class="card mb-4 p-4 text-center h-180px">
+            <a href="/seller/products" class="card mb-4 p-4 text-center h-180px">
                 <div class="fs-16 fw-600 text-primary">
                     Add New product
                 </div>
@@ -831,7 +831,7 @@
 
 				</div>
 				<div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto border-sm-top">
-					<p class="mb-0">&copy;  v6.5.0</p>
+					<p class="mb-0">&copy; Commerce Plus <script> document.write((new Date).getFullYear()) </script></p>
 				</div>
 			</div><!-- .aiz-main-content -->
 		</div><!-- .aiz-content-wrapper -->

@@ -225,7 +225,7 @@
 
             </div>
             <div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto border-sm-top">
-                <p class="mb-0">©  v6.5.0</p>
+                <p class="mb-0">&copy; Commerce Plus <script> document.write((new Date).getFullYear()) </script></p>
             </div>
         </div><!-- .aiz-main-content -->
     </div><!-- .aiz-content-wrapper -->

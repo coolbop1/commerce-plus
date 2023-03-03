@@ -36,7 +36,7 @@
             <div class="col-lg-5 col-xl-4 text-center text-md-left">
                 <div class="mt-4">
                     <a href="/" class="d-block">
-                        <img class="lazyload" src="uploads/logo.png" alt="Active eCommerce CMS" height="44">
+                        <img class="lazyload" src="/uploads/logo.png" alt="Active eCommerce CMS" height="44">
                     </a>
                     <div class="my-3">
                         <span style="color: rgb(242, 243, 248); font-family: "Open Sans", sans-serif; background-color: rgb(17, 23, 35);">Complete system for your eCommerce business</span>

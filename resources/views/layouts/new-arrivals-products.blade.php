@@ -12,7 +12,7 @@
             @foreach ($store->products as $product)
                 @php
                     $product_name_link = str_replace(' ', '-', $product->name);
-                    $product_hero_image =''
+                    $product_hero_image = $product->thumbnail_img;
                 @endphp
                 <div class="col mb-3">
                     <div class="aiz-card-box border border-light rounded hov-shadow-md mt-1 mb-2 has-transition bg-white">
