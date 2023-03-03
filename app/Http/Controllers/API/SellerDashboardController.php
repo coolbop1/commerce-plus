@@ -82,7 +82,7 @@ class SellerDashboardController extends BaseController
         return view('vendor-products', compact('user', 'store', 'page', 'remaining_uploads'));
     }
 
-    public function productCreate()
+    public function productCreate($product_id = null)
     {
         if(isset($_SESSION['logged_in'])) {
             $user = $_SESSION['logged_in'];
@@ -96,7 +96,11 @@ class SellerDashboardController extends BaseController
         $page = 'products';
         $categories = Category::with('subCategories.sections')->get();
         $brands = Brand::all();
+        $product = null;
+        if($product_id) {
+            $product = Product::find($product_id);
+        }
 
-        return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands'));
+        return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product'));
     }
 }

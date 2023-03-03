@@ -21,8 +21,8 @@
                     <th data-breakpoints="md">Category</th>
                     <th data-breakpoints="md">Qty</th>
                     <th>Price</th>
-                                                <th data-breakpoints="md">Approval</th>
-                                            <th data-breakpoints="md">Published</th>
+                    <th data-breakpoints="md">Approval</th>
+                    <th data-breakpoints="md">Published</th>
                     <th data-breakpoints="md">Featured</th>
                     <th data-breakpoints="md" class="text-right">Options</th>
                 </tr>
@@ -32,7 +32,7 @@
                 @foreach ($store->products as $key => $product)
                     @php
                         $num = $key + 1;
-                        $product_name_link = str_replace(' ', '-', $product->name);   
+                        $product_name_link = str_replace(' ', '-', $product->name); 
                     @endphp
                     <tr>
                         <td>{{ $num }}</td>
@@ -52,7 +52,7 @@
                             @endif
                             <span class="badge badge-inline badge-success">Approved</span>
                         </td>
-                                                    <td>
+                        <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input onchange="update_published(this)" value="{{ $product->id }}" type="checkbox" checked >
                                 <span class="slider round"></span>
@@ -65,16 +65,16 @@
                             </label>
                         </td>
                         <td class="text-right">
-                        <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="/seller/product/{{ $product->id }}/edit" title="Edit">
-                            <i class="las la-edit"></i>
-                        </a>
-                        <a href="/products/duplicate/{{ $product->id }}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="Duplicate">
-                            <i class="las la-copy"></i>
-                        </a>
-                        <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="/products/destroy/{{ $product->id }}" title="Delete">
-                            <i class="las la-trash"></i>
-                        </a>
-                    </td>
+                            <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="/seller/product/{{ $product->id }}/edit" title="Edit">
+                                <i class="las la-edit"></i>
+                            </a>
+                            <a href="/products/duplicate/{{ $product->id }}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="Duplicate">
+                                <i class="las la-copy"></i>
+                            </a>
+                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="/products/destroy/{{ $product->id }}" title="Delete">
+                                <i class="las la-trash"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
 

@@ -48,5 +48,6 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/shop', [SellerDashboardController::class, 'shop']);
     Route::get('/seller/products', [SellerDashboardController::class, 'products']);
     Route::get('/seller/product/create', [SellerDashboardController::class, 'productCreate']);
+    Route::get('/seller/product/{product_id}/edit', [SellerDashboardController::class, 'productCreate']);
 });
 
