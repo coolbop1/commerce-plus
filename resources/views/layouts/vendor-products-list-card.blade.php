@@ -48,19 +48,18 @@
                             @if ($product->approved)
                                 <span class="badge badge-inline badge-success">Approved</span>
                             @else
-                                <span class="badge badge-inline">Approved</span>
+                                <span class="badge badge-inline badge-primary">Unapproved</span>
                             @endif
-                            <span class="badge badge-inline badge-success">Approved</span>
                         </td>
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input onchange="update_published(this)" value="{{ $product->id }}" type="checkbox" checked >
+                                <input onchange="toggleProductColumn(this, 'published')" value="{{ $product->id }}" type="checkbox" {{ $product->published ? 'checked' : '' }}>
                                 <span class="slider round"></span>
                             </label>
                         </td>
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
-                                <input onchange="update_featured(this)" value="{{ $product->id }}" type="checkbox" checked >
+                                <input onchange="toggleProductColumn(this, 'featured')" value="{{ $product->id }}" type="checkbox" {{ $product->featured ? 'checked' : '' }} >
                                 <span class="slider round"></span>
                             </label>
                         </td>
@@ -83,6 +82,25 @@
     </div>
 </div>
 @endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @section('product-list-card-temp')
 <div class="card">
     <div class="card-header row gutters-5">

@@ -181,6 +181,74 @@ const upload = (element, input_id) => {
 
 }
 
+const importData = (element, button_id) => {
+    let clickedButton = document.getElementById(button_id);
+    let buttonText = clickedButton.innerText;
+    clickedButton.innerHTML = `<i class="las la-spinner la-spin la-3x opacity-70"></i>`;
+    let params_ = new FormData();
+    let file = element.files[0];
+    params_.append("file", file);
+    let http_ = new XMLHttpRequest();
+    http_.open('POST', '/api/import-products', true);
+    http_.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http_.onreadystatechange = function() {
+        if(http_.readyState == 4) {
+            let response_ = JSON.parse(this.responseText);
+            if(http_.status == 200) {
+                clickedButton.innerText =  buttonText;
+                let message = response_.message;
+                showAlert(message, 'alert-success');
+                switch (button_id) {
+                    case 'import-products':
+                        window.location.href = '/seller/products';
+                        break;
+                
+                    default:
+                        //window.location.href = '/';
+                        break;
+                }
+            } else {
+                clickedButton.innerText =  buttonText;
+                let message = response_.message;
+                showAlert(message, 'alert-warning', response_.data ?? []);
+            }
+        }
+    }
+    http_.send(params_);
+   
+    return false;
+}
+
+const toggleProductColumn = (element, column) => {
+    let product_id = element.value;
+    let params = new FormData();
+    params.append('product_id', product_id);
+    params.append('column', column);
+    let http = new XMLHttpRequest();
+    http.open('POST','/api/toggle-product-column' , true);
+    if(COMMERCE_PLUS_TOKEN) {
+        console.log("COMMERCE_PLUS_TOKEN "+COMMERCE_PLUS_TOKEN);
+        http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+        //http.setRequestHeader("Content-type", "application/json;");
+    }
+
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http.status == 200) {
+                let message = response.message;
+                showAlert(message, 'alert-success');
+            } else {
+                let message = response.message;
+                showAlert(message, 'alert-warning', response.data ?? []);
+            }
+        }
+    }
+
+    http.send(params);
+    return false;
+}
+
 const getCurrentLocation = () => {
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -298,8 +366,8 @@ function showAlert(message, type, data = []) {
 
 
 function expandStoreList() {
-    $expanded = document.getElementById('other-store-list').classList.contains('expand');
-    if($expanded) {
+    let expanded = document.getElementById('other-store-list').classList.contains('expand');
+    if(expanded) {
         document.getElementById('other-store-list').classList.replace('expand', 'minimize');
         document.getElementById('expand-icon').classList.remove('rotate');
     } else {

@@ -116,7 +116,7 @@
                                         Browse</div>
                                 </div>
                                 <div class="form-control file-amount">Choose file</div>
-                                <input id='product_image' type="file" onchange="return upload(this, 'product_image_input')">
+                                <input id='product_image' type="file" onchange="return upload(this, 'product_image_input')" accept="image/*">
                             </div>
                             <input value="{{ $product ? $product->photos : '' }}" id="product_image_input" type="hidden" name="photos">
                             @php
@@ -152,11 +152,11 @@
                                         Browse</div>
                                 </div>
                                 <div class="form-control file-amount">Choose file</div>
-                                <input id='product_image' type="file" onchange="return upload(this, 'product_thumbnail_input')">
+                                <input id='product_image' type="file" onchange="return upload(this, 'product_thumbnail_input')" accept="image/*">
                             </div>
                             <input value="{{ $product ? $product->thumbnail_img : '' }}" id="product_thumbnail_input" type="hidden" name="thumbnail_img" class="selected-files">
                             <div id="preview_product_thumbnail_input" class="file-preview box sm">
-                                @if ($product)
+                                @if ($product && $product->thumbnail_img)
                                 <div class="file-preview box sm">
                                     <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
                                         <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">

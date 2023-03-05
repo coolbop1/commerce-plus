@@ -27,7 +27,7 @@
                                 <span class="fs-14 text-light">Products</span>
                             </p>
                             <h3 class="mb-0 text-white fs-30">
-                                {{ $store->products->count() }}
+                                {{ $store->products->sum('quantity') }}
                             </h3>
 
                         </div>
@@ -205,7 +205,7 @@
                             <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
                                 {{ $category_title }}
                                 <span class="">
-                                    {{ $category_products->count() }}
+                                    {{ $category_products->sum('quantity') }}
                                 </span>
                             </li>
                         @endforeach                                                                                                                                                                                                                                                                                                                                                                                                                         </ul>

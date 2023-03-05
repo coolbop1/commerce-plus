@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col">
                 <div class="aiz-carousel gutters-10" data-items="6" data-xl-items="5" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-autoplay='true' data-infinute="true" data-dots="true">
-                    @foreach ($store->products as $product)
+                    @foreach ($store->products->where('featured', true) as $product)
                         @php
                             $product_name_link = str_replace(' ', '-', $product->name);
                             $product_hero_image = $product->thumbnail_img;
@@ -60,6 +60,10 @@
                                             $new_price = $product->price - (($perc/100) * $product->price);
                                         @endphp
                                             <del class="fw-600 opacity-50 mr-1">₦{{ $product->price }}</del>
+                                        @else
+                                            @php
+                                                $new_price = null;
+                                            @endphp
                                         @endif
                                         <span class="fw-700 text-primary">₦{{ $new_price ?? $product->price }}</span>
                                     </div>
