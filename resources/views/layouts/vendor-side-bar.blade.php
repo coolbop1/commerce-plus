@@ -57,7 +57,7 @@
                         </li>
 
                         <li class="aiz-side-nav-item">
-                            <a href="https://demo.activeitzone.com/ecommerce/seller/product-bulk-upload/index"
+                            <a href="/seller/product-bulk-upload/index"
                                 class="aiz-side-nav-link ">
                                 <span class="aiz-side-nav-text">Product Bulk Upload</span>
                             </a>

@@ -46,10 +46,16 @@ class Product extends Model
             'vat',
             'vat_type',
             'user_id',
+            'featured',
+            'published',
+            'is_digital',
     ];
 
     protected $casts = [
         'approved' => 'boolean',
+        'featured' => 'boolean',
+        'published' => 'boolean',
+        'is_digital' => 'boolean',
     ];
 
     public function store()

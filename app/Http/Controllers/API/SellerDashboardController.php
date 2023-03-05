@@ -8,15 +8,18 @@ use App\Http\Resources\CartResource;
 use App\Http\Resources\CategoryResource;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use App\Imports\ProductsImport;
 use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Store;
+use App\Models\SubCategory;
 use App\Models\TemporaryFiles;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SellerDashboardController extends BaseController
 {
@@ -103,4 +106,49 @@ class SellerDashboardController extends BaseController
 
         return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product'));
     }
+
+    public function productBulkUpload()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $page = 'products-bulk-upload';
+
+        return view('vendor-product-bulk-upload', compact('user', 'store', 'page'));
+    }
+
+    public function productImport(Request $request) 
+    {
+        session_start();
+        $_SESSION['category_array'] = array_change_key_case(Category::pluck('id','name')->toArray(), CASE_LOWER);
+        $_SESSION['sub_category_array'] = array_change_key_case(SubCategory::pluck('id','name')->toArray(), CASE_LOWER);
+        $_SESSION['brand_array'] = array_change_key_case(Brand::pluck('id','name')->toArray(), CASE_LOWER);
+        try {
+            Excel::import(new ProductsImport, $request->file('file'));
+        } catch (\Throwable $th) {
+            return $this->sendError('Validation Error.'. $th->getMessage(), 400);  
+        }
+        
+
+        return $this->sendResponse([], 'Product created successfully.');
+        //return back();
+    }
+
+    public function toggleProductColumn(Request $request) 
+    {
+        $product = Product::find($request->product_id);
+        $column = $request->column;
+        $product->{$column} = !$product->{$column};
+        $product->save();
+
+        return $this->sendResponse([], 'Product '.$column.' column toggled successfully.');
+    }
+
+
 }

@@ -49,5 +49,6 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/products', [SellerDashboardController::class, 'products']);
     Route::get('/seller/product/create', [SellerDashboardController::class, 'productCreate']);
     Route::get('/seller/product/{product_id}/edit', [SellerDashboardController::class, 'productCreate']);
+    Route::get('/seller/product-bulk-upload/index', [SellerDashboardController::class, 'productBulkUpload']);
 });
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\SellerDashboardController;
 use App\Http\Controllers\API\StoreController;
 use App\Models\Category;
 use App\Models\TemporaryFiles;
@@ -60,6 +61,8 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     Route::post('save-item', [ProductController::class, 'addItemToWishList']);
     Route::post('remove-saved-item', [ProductController::class, 'removeItemFromWishList']);
     Route::get('get-my-wish-list', [ProductController::class, 'getMyWishList']);
+    Route::post('import-products', [SellerDashboardController::class, 'productImport']);
+    Route::post('toggle-product-column', [SellerDashboardController::class, 'toggleProductColumn']);
     Route::resource('products', ProductController::class);
     Route::post('/file-upload', function (Request $request) {
         $file = $request->file('file');
