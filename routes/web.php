@@ -47,8 +47,11 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/dashboard', [SellerDashboardController::class, 'index']);
     Route::get('/seller/shop', [SellerDashboardController::class, 'shop']);
     Route::get('/seller/products', [SellerDashboardController::class, 'products']);
+    Route::get('/seller/digitalproducts', [SellerDashboardController::class, 'digitalProducts']);
     Route::get('/seller/product/create', [SellerDashboardController::class, 'productCreate']);
+    Route::get('/seller/digitalproducts/create', [SellerDashboardController::class, 'digitalProductCreate']);
     Route::get('/seller/product/{product_id}/edit', [SellerDashboardController::class, 'productCreate']);
+    Route::get('/seller/digitalproducts/{product_id}/edit', [SellerDashboardController::class, 'digitalProductCreate']);
     Route::get('/seller/product-bulk-upload/index', [SellerDashboardController::class, 'productBulkUpload']);
 });
 

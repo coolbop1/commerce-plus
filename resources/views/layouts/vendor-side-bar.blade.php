@@ -63,7 +63,7 @@
                             </a>
                         </li>
                         <li class="aiz-side-nav-item">
-                            <a href="https://demo.activeitzone.com/ecommerce/seller/digitalproducts"
+                            <a href="/seller/digitalproducts"
                                 class="aiz-side-nav-link ">
                                 <span class="aiz-side-nav-text">Digital Products</span>
                             </a>
