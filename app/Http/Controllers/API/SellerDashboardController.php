@@ -78,11 +78,34 @@ class SellerDashboardController extends BaseController
         $page ='products';
         $current_month_start = Carbon::now()->startOfMonth(); //Todo: This should the subscription start date ;
         $current_month_end = Carbon::now()->endOfMonth();
-        $uploads = TemporaryFiles::where('user_id', $user->id)->whereBetween('created_at', [$current_month_start, $current_month_end])->count();
+        $uploads =  Product::where('store_id', $store_id)->whereBetween('created_at', [$current_month_start, $current_month_end])->count();
         $remaining_uploads = 500 - $uploads;
 
 
         return view('vendor-products', compact('user', 'store', 'page', 'remaining_uploads'));
+    }
+
+    public function digitalProducts()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $page ='digitalproducts';
+        $current_month_start = Carbon::now()->startOfMonth(); //Todo: This should the subscription start date ;
+        $current_month_end = Carbon::now()->endOfMonth();
+        $uploads =  Product::where('store_id', $store_id)->whereBetween('created_at', [$current_month_start, $current_month_end])->count();
+        $remaining_uploads = 500 - $uploads;
+        
+
+
+        return view('vendor-products', compact('user', 'store', 'page', 'remaining_uploads'));
+
     }
 
     public function productCreate($product_id = null)
@@ -105,6 +128,34 @@ class SellerDashboardController extends BaseController
         }
 
         return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product'));
+    }
+
+    public function digitalProductCreate($product_id = null)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $page = 'products';
+        $categories = Category::with('subCategories.sections')->where('name', 'software')->get();
+        $brands = Brand::all();
+        $product = null;
+        if($product_id) {
+            $product = Product::find($product_id);
+        }
+        $files = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+        return view('vendor-digital-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product', 'files'));
+    }
+
+    public function show_uploader(Request $request)
+    {
+        return view('aiz-uploader');
     }
 
     public function productBulkUpload()

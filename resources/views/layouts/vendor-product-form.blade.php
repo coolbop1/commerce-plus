@@ -1049,6 +1049,275 @@
 
 
 
+@section('digital-product-form')
+@if ($product)
+<form class="" onsubmit="return submitForm(this, url = '/api/products/{{ $product->id }}', 'PUT', 'create-product-button')">
+@else
+<form class="" onsubmit="return submitForm(this, url = '/api/products', 'POST', 'create-product-button')">
+@endif
+    <input type="hidden" name="store_id" value="{{ $store->id }}">
+    <input type="hidden" name="is_digital" value="1">
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0 h6">General</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Product Name <span class="text-danger">*</span></label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" value="{{ $product->name ?? '' }}" name="name" placeholder="Product Name" required>
+                </div>
+            </div>
+            <div class="form-group row" id="category">
+                <label class="col-lg-3 col-from-label">Category <span class="text-danger">*</span></label>
+                <div class="col-lg-9">
+                    <select class="form-control aiz-selectpicker" name="category_id" id="category_id" required>
+                        @foreach ($categories as $category)
+                            <option 
+                            {{ $product ? ($product->category_id == $category->id ? 'selected' : '' ) : '' }} 
+                            value="{{ $category->id }}">{{ $category->name }}</option>
+                            @foreach ($category->subCategories as $subCategory)
+                                <option 
+                                {{ $product ? ($product->sub_category_id == $subCategory->id ? 'selected' : '' ) : '' }} 
+                                value="{{ $category->id }}_{{ $subCategory->id }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ $subCategory->name }}</option>
+                                @foreach ($subCategory->sections as $section)
+                                    <option 
+                                    {{ $product ? ($product->section_id == $section->id ? 'selected' : '' ) : '' }}
+                                    value="{{ $category->id }}_{{ $subCategory->id }}_{{ $section->id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ "_ ".$section->name }}</option>
+                                @endforeach
+                            @endforeach
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Product File <span class="text-danger">*</span></label>
+                <div class="col-lg-9">
+                    <div class="input-group" data-toggle="aizuploader" data-multiple="false">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                        </div>
+                        <div class="form-control file-amount">Choose File</div>
+                        <input type="hidden" name="files" value="{{ $product->files ?? '' }}" class="selected-files">
+                    </div>
+                    <div class="file-preview box sm">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Tags <span class="text-danger">*</span></label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control aiz-tag-input" name="tags" value="{{ $product->tags ?? '' }}" placeholder="Type and hit enter">
+                    <small class="text-muted">This is used for search. Input those words by which customer can find this product.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0 h6">Images</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label" for="signinSrEmail">Gallery Images <small>(600x600)</small></label>
+                <div class="col-lg-9">
+                    <div onclick="openFileModal(this, 'digital-product-image')" class="input-group"  data-type="image" data-multiple="true">
+                        <div class="input-group-prepend">
+                            <div  class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                        </div>
+                        <div class="form-control file-amount">Choose File</div>
+                        <input id="digital-product-image" value="{{ $product->photos ?? '' }}" type="hidden" name="photos" class="selected-files">
+                    </div>
+                    <div id="preview_digital-product-image" class="file-preview box sm">
+                    @php
+                        $product_photos_string = $product->photos ?? null;
+                        $product_photos = $product_photos_string ? explode(',', $product_photos_string) : [];
+                    @endphp
+                    @foreach ($product_photos as $product_photo)
+                        <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                            <div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                <img src="/{{ $product_photo }}" class="img-fit">
+                            </div>
+                            <div class="remove">
+                                <button class="btn btn-sm btn-link remove-attachment" type="button">
+                                    <i class="la la-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                    </div>
+                    <small class="text-muted">These images are visible in product details page gallery. Use 600x600 sizes images.</small>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label" for="signinSrEmail">Thumbnail Image <small>(300x300)</small></label>
+                <div class="col-lg-9">
+                    <div class="input-group" onclick="openFileModal(this, 'digital-product-thumb')" data-type="image" data-multiple="false">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                        </div>
+                        <div class="form-control file-amount">Choose File</div>
+                        <input id="digital-product-thumb" value="{{ $product->thumbnail_img ?? '' }}" type="hidden" name="thumbnail_img" class="selected-files">
+                    </div>
+                    <div id="preview_digital-product-thumb" class="file-preview box sm">
+                        @if ($product->thumbnail_img ?? null)
+                        <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                            <div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                <img src="/{{ $product->thumbnail_img }}" class="img-fit">
+                            </div>
+                            <div class="remove">
+                                <button class="btn btn-sm btn-link remove-attachment" type="button">
+                                    <i class="la la-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    <small class="text-muted">This image is visible in all product box. Use 300x300 sizes image. Keep some blank space around main object of your image as we had to crop some edge in different devices to make it responsive.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0 h6">Meta Tags</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Meta Title</label>
+                <div class="col-lg-9">
+                    <input type="text" value="{{ $product->meta_title ?? '' }}" class="form-control" name="meta_title" placeholder="Meta Title">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Description</label>
+                <div class="col-lg-9">
+                    <textarea name="meta_description" rows="5" class="form-control">{{ $product->meta_description ?? '' }}</textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label" for="signinSrEmail">Meta Image</label>
+                <div class="col-lg-9">
+                    <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="false">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
+                        </div>
+                        <div class="form-control file-amount">Choose File</div>
+                        <input type="hidden" name="meta_img" value="{{ $product->meta_img ?? '' }}" class="selected-files">
+                    </div>
+                    <div class="file-preview box sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0 h6">Price</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Unit price <span class="text-danger">*</span></label>
+                <div class="col-lg-9">
+                    <input type="number" lang="en" min="0" value="{{ $product->price ?? '0' }}" step="0.01" placeholder="Unit price" name="price" class="form-control" required>
+                </div>
+            </div>
+            {{-- <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Purchase price <span class="text-danger">*</span></label>
+                <div class="col-lg-9">
+                    <input type="number" lang="en" min="0" value="0" step="0.01" placeholder="Purchase price" name="purchase_price" class="form-control" required>
+                </div>
+            </div> --}}
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">
+                    Tax
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-lg-6">
+                    <input type="number" lang="en" min="0" value="{{ $product->tax ?? '0' }}" step="0.01" placeholder="Tax" name="tax" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control aiz-selectpicker" name="tax_type">
+                        <option {{ $product && $product->tax_type == 'amount' ? 'selected' : '' }} value="amount">Flat</option>
+                        <option {{ $product && $product->tax_type == 'percent' ? 'selected' : '' }} value="percent">Percent</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">
+                    Vat
+                    <span class="text-danger">*</span>
+                </label>
+                <div class="col-lg-6">
+                    <input type="number" lang="en" min="0" value="{{ $product->vat ?? '0' }}" step="0.01" placeholder="Vat" name="vat" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control aiz-selectpicker" name="vat_type">
+                        <option {{ $product && $product->vat_type == 'amount' ? 'selected' : '' }} value="amount">Flat</option>
+                        <option {{ $product && $product->vat_type == 'percent' ? 'selected' : '' }} value="percent">Percent</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Discount <span class="text-danger">*</span></label>
+                <div class="col-lg-6">
+                    <input type="number" lang="en" min="0" value="{{ $product->discount ?? '0' }}" step="0.01" placeholder="Discount" name="discount" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control aiz-selectpicker" name="discount_type">
+                        <option {{ $product && $product->discount_type == 'amount' ? 'selected' : '' }} value="amount">Flat</option>
+                        <option {{ $product && $product->discount_type == 'percent' ? 'selected' : '' }} value="percent">Percent</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0 h6">Product Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-lg-3 col-from-label">Description <span class="text-danger">*</span></label>
+                <div class="col-lg-9">
+                    <textarea rows="5" class="form-control" name="detail" required>{{ $product->detail ?? '' }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group mb-0 text-right mb-2">
+        <button id="create-product-button" type="submit" class="btn btn-primary">Save Product</button>
+    </div>
+</form>
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

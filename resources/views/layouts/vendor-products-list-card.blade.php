@@ -19,9 +19,13 @@
                     <th>#</th>
                     <th width="30%">Name</th>
                     <th data-breakpoints="md">Category</th>
-                    <th data-breakpoints="md">Qty</th>
-                    <th>Price</th>
-                    <th data-breakpoints="md">Approval</th>
+                    @if ($page != 'digitalproducts')
+                        <th data-breakpoints="md">Qty</th>
+                    @endif
+                    <th>{{ $page == 'digitalproducts' ? 'Base ' : '' }}Price</th>
+                    @if ($page != 'digitalproducts')
+                        <th data-breakpoints="md">Approval</th>
+                    @endif
                     <th data-breakpoints="md">Published</th>
                     <th data-breakpoints="md">Featured</th>
                     <th data-breakpoints="md" class="text-right">Options</th>
@@ -29,28 +33,40 @@
             </thead>
 
             <tbody>
-                @foreach ($store->products as $key => $product)
+                @php
+                    $products = $store->products->when($page == 'digitalproducts', function($q) {
+                        return $q->where('is_digital', 1);
+                    }, function($q) {
+                        return $q->where('is_digital', 0);
+                    });
+                    $key = 0;
+                @endphp
+                @foreach ($products as $product)
                     @php
                         $num = $key + 1;
                         $product_name_link = str_replace(' ', '-', $product->name); 
                     @endphp
                     <tr>
-                        <td>{{ $num }}</td>
+                        <td>{{ $num }}<span style="color: #fff">____</span></td>
                         <td>
                             <a href="/product/{{ $product_name_link }}" target="_blank" class="text-reset">
                                 {{ $product->name }}
                             </a>
                         </td>
                         <td>{{ $product->category->name }}</td>
-                        <td>{{ $product->quantity ? : 1 }}</td>
+                        @if ($page != 'digitalproducts')
+                            <td>{{ $product->quantity ? : 1 }}</td>
+                        @endif
                         <td>{{ $product->price }}</td>
-                        <td>
-                            @if ($product->approved)
-                                <span class="badge badge-inline badge-success">Approved</span>
-                            @else
-                                <span class="badge badge-inline badge-primary">Unapproved</span>
-                            @endif
-                        </td>
+                        @if ($page != 'digitalproducts')
+                            <td>
+                                @if ($product->approved)
+                                    <span class="badge badge-inline badge-success">Approved</span>
+                                @else
+                                    <span class="badge badge-inline badge-primary">Unapproved</span>
+                                @endif
+                            </td>
+                        @endif
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input onchange="toggleProductColumn(this, 'published')" value="{{ $product->id }}" type="checkbox" {{ $product->published ? 'checked' : '' }}>
@@ -64,17 +80,33 @@
                             </label>
                         </td>
                         <td class="text-right">
+                            @if ($page == 'digitalproducts')
+                            <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="/seller/digitalproducts/{{ $product->id }}/edit" title="Edit">
+                                <i class="las la-edit"></i>
+                            </a>
+                            @else
                             <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="/seller/product/{{ $product->id }}/edit" title="Edit">
                                 <i class="las la-edit"></i>
                             </a>
+                            @endif
+                            
+                            @if ($page == 'digitalproducts')
+                            <a href="/{{ $product->files }}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="Duplicate">
+                                <i class="las la-download"></i>
+                            </a>
+                            @else
                             <a href="/products/duplicate/{{ $product->id }}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="Duplicate">
                                 <i class="las la-copy"></i>
                             </a>
+                            @endif
                             <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="/products/destroy/{{ $product->id }}" title="Delete">
                                 <i class="las la-trash"></i>
                             </a>
                         </td>
                     </tr>
+                    @php
+                        $key++;
+                    @endphp
                 @endforeach
 
             </tbody>

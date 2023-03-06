@@ -354,6 +354,8 @@ function showAlert(message, type, data = []) {
             let val_span = document.getElementById('validate-'+element);
             if(val_span) {
                 val_span.innerText = propertyValues[index][0];
+            } else {
+                document.getElementById('alert-modal').innerText += propertyValues[index][0];
             }
             
         });
@@ -392,3 +394,131 @@ const switchStore = (store_id) => {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  file selector js
+
+
+const openFileModal = (element, inputFieldId) => {
+    clearSelected();
+    selectAlreadyPicked(inputFieldId);
+    let select_type = element.getAttribute("data-multiple") ?? 'false';
+    document.getElementById('modal-backdrop').style="z-index: 1039;";
+    document.getElementById('modal-backdrop').className = "modal-backdrop fade show modal-stack";
+    document.getElementById('aizUploaderModal').classList.add('show');
+    document.getElementById('aizUploaderModal').setAttribute('aria-modal', 'true');
+    document.getElementById('aizUploaderModal').removeAttribute('aria-hidden');
+    document.getElementById('aizUploaderModal').setAttribute('input-field', inputFieldId);
+    document.getElementById('aizUploaderModal').style="z-index: 1040; display: block;";
+    document.getElementById('aizUploaderModal').setAttribute('data-multiple', select_type);
+    document.getElementsByTagName('body')[0].classList.add('modal-open');
+}
+
+const clearSelected = () => {
+    document.querySelectorAll("[data-selected=true]").forEach(ele => {
+        ele.setAttribute('data-selected', 'false');
+    })
+    document.getElementById('file-select-counter').innerText =  document.querySelectorAll("[data-selected=true]").length;
+}
+
+const selectAlreadyPicked = input_field_id => {
+    let value = document.getElementById(input_field_id).value;
+    let value_array = value == '' ? [] : value.split(',');
+    value_array.forEach(val => {
+        document.querySelectorAll("[data-value='"+val+"']").forEach(ele => {
+            ele.setAttribute('data-selected', 'true');
+        });
+        document.querySelectorAll("[data-preview='"+val+"']").forEach(ele => {
+            ele.setAttribute('data-selected', 'true');
+        })
+    })
+    document.getElementById('file-select-counter').innerText =  document.querySelectorAll("[data-selected=true]").length;
+
+}
+
+const closeFileselctor = () => {
+    clearSelected();
+    document.getElementById('modal-backdrop').style="";
+    document.getElementById('modal-backdrop').className = "";
+    document.getElementById('aizUploaderModal').classList.remove('show');
+    document.getElementById('aizUploaderModal').removeAttribute('aria-modal', 'true');
+    document.getElementById('aizUploaderModal').setAttribute('aria-hidden', 'true');
+    document.getElementById('aizUploaderModal').removeAttribute('input-field');
+    document.getElementById('aizUploaderModal').style="";
+    document.getElementById('aizUploaderModal').removeAttribute('data-multiple');
+    document.getElementsByTagName('body')[0].classList.remove('modal-open');
+}
+
+const imagePicked = element => {
+    let select_type = document.getElementById('aizUploaderModal').getAttribute("data-multiple") ?? 'false';
+    if (select_type == 'false') {
+        document.querySelectorAll("[data-selected=true]").forEach(ele => {
+            ele.setAttribute('data-selected', 'false');
+        })
+    }
+    //file-select-counter
+    element.setAttribute('data-selected', element.getAttribute('data-selected') == 'false' ? 'true' : 'false');
+
+    document.getElementById('file-select-counter').innerText =  document.querySelectorAll("[data-selected=true]").length;
+    //let elementId = document.getElementById('aizUploaderModal').getAttribute('input-field');
+    //console.log("elementId ",elementId);
+}
+
+const addSelectedFiles = () => {
+    let select_type = document.getElementById('aizUploaderModal').getAttribute("data-multiple") ?? 'false';
+    let input_field_id = document.getElementById('aizUploaderModal').getAttribute("input-field");
+    if (select_type == 'false') {
+        document.querySelectorAll("[data-selected=true]").forEach(ele => {
+           document.getElementById(input_field_id).value = ele.getAttribute('data-value');
+           document.getElementById('preview_'+input_field_id).innerHTML = `
+                            <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                                <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                    <img src="/`+ele.getAttribute('data-preview')+`" class="img-fit">
+                                </div>
+                                <div class="col body"><h6 class="d-flex"><span class="text-truncate title"></span><span class="ext flex-shrink-0"></span></h6><p></p></div>
+                                <div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div>
+                            </div>
+                        `;
+        });
+    } else {
+        document.querySelectorAll("[data-selected=true]").forEach(ele => {
+            let value = document.getElementById(input_field_id).value;
+            let value_array = value == '' ? [] : value.split(',')
+            value_array.push(ele.getAttribute('data-value'));
+            let new_value = value_array.join(',');
+            document.getElementById(input_field_id).value = new_value;
+            document.getElementById('preview_'+input_field_id).innerHTML += `
+                             <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                                 <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                     <img src="/`+ele.getAttribute('data-preview')+`" class="img-fit">
+                                 </div>
+                                 <div class="col body"><h6 class="d-flex"><span class="text-truncate title"></span><span class="ext flex-shrink-0"></span></h6><p></p></div>
+                                 <div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div>
+                             </div>
+                         `;
+         });
+    }
+    closeFileselctor();
+}
+
+
+
+// 

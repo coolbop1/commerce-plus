@@ -87,6 +87,7 @@ class ProductController extends  BaseController
             'vat' => 'nullable|integer',
             'vat_type' => 'nullable|in:amount,percent',
             'user_id' => 'nullable|integer',
+            'is_digital' => 'nullable|boolean',
         ]);
    
         if($validator->fails()){
@@ -221,6 +222,7 @@ class ProductController extends  BaseController
             'vat' => 'nullable|integer',
             'vat_type' => 'nullable|in:amount,percent',
             'user_id' => 'nullable|integer',
+            'is_digital' => 'nullable|boolean'
         ]);
    
         if($validator->fails()){

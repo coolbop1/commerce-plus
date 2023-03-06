@@ -101,6 +101,7 @@
         </div>
     </div>
 </div><!-- /.modal -->
+@include('aiz-uploader');
 
     <script type="text/javascript">
     AIZ.plugins.chart('#graph-1', {
