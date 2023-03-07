@@ -53,5 +53,6 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/product/{product_id}/edit', [SellerDashboardController::class, 'productCreate']);
     Route::get('/seller/digitalproducts/{product_id}/edit', [SellerDashboardController::class, 'digitalProductCreate']);
     Route::get('/seller/product-bulk-upload/index', [SellerDashboardController::class, 'productBulkUpload']);
+    Route::get('/seller/reviews', [SellerDashboardController::class, 'productsReviews']);
 });
 
