@@ -69,7 +69,7 @@
                             </a>
                         </li>
                         <li class="aiz-side-nav-item">
-                            <a href="https://demo.activeitzone.com/ecommerce/seller/reviews"
+                            <a href="/seller/reviews"
                                 class="aiz-side-nav-link ">
                                 <span class="aiz-side-nav-text">Product Reviews</span>
                             </a>
