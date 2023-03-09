@@ -96,7 +96,7 @@
             <div class="modal-body text-center">
                 <p class="mt-1">Are you sure to delete this?</p>
                 <button type="button" class="btn btn-link mt-2" data-dismiss="modal">Cancel</button>
-                <a href="" id="delete-link" class="btn btn-primary mt-2">Delete</a>
+                <a href="" id="delete-link" class="btn btn-primary mt-2 confirm-link">Delete</a>
             </div>
         </div>
     </div>

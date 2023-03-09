@@ -54,5 +54,9 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/digitalproducts/{product_id}/edit', [SellerDashboardController::class, 'digitalProductCreate']);
     Route::get('/seller/product-bulk-upload/index', [SellerDashboardController::class, 'productBulkUpload']);
     Route::get('/seller/reviews', [SellerDashboardController::class, 'productsReviews']);
+    Route::get('/seller/uploads', [SellerDashboardController::class, 'uploads']);
+    Route::get('/seller/uploads/create', [SellerDashboardController::class, 'uploadFile']);
+    Route::get('/seller/uploads/destroy/{id}', [SellerDashboardController::class, 'deleteFile']);
+    Route::get('/seller/uploads/delete-multiple', [SellerDashboardController::class, 'deleteMultiple']);
 });
 

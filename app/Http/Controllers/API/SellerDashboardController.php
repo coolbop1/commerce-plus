@@ -60,8 +60,8 @@ class SellerDashboardController extends BaseController
         }
         $store = Store::with('products.category', 'orders')->find($store_id);
         $page ='shop';
-
-        return view('vendor-shop', compact('user', 'store', 'page'));
+        $files = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        return view('vendor-shop', compact('user', 'store', 'page', 'files'));
     }
 
     public function products()
@@ -126,8 +126,9 @@ class SellerDashboardController extends BaseController
         if($product_id) {
             $product = Product::find($product_id);
         }
+        $files = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
-        return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product'));
+        return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product', 'files'));
     }
 
     public function digitalProductCreate($product_id = null)
@@ -222,5 +223,86 @@ class SellerDashboardController extends BaseController
         return view('vendor-reviews', compact('user', 'store', 'page', 'carts'));
     }
 
+    public function uploads(Request $request) 
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $products_id = $store->products->pluck('id')->toArray();
+        $page = 'products-review';
+        $uploads = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+
+        return view('vendor-uploads', compact('user', 'store', 'page', 'uploads'));
+    }
+
+    public function uploadFile(Request $request) 
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $products_id = $store->products->pluck('id')->toArray();
+        $page = 'products-review';
+        $uploads = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+
+        return view('vendor-uploads-create', compact('user', 'store', 'page', 'uploads'));
+    }
+
+    public function deleteFile(Request $request, $id) 
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $products_id = $store->products->pluck('id')->toArray();
+        $page = 'products-review';
+
+        //TODO : Find file id db before delete  Store::whereHas('users',  function($q) {$q->where('users.id', 11);})->select('shop_logo', 'banner')->get();
+        $file_to_delete = TemporaryFiles::find($id);
+        try {
+            unlink($file_to_delete->file_path );
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        optional($file_to_delete)->delete();
+        $uploads = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+
+
+        return redirect('/seller/uploads');
+    }
+
+    public function deleteMultiple() 
+    {
+        $ids = isset($_GET['ids']) ? explode(',', $_GET['ids']) : [];
+        $files_to_delete = TemporaryFiles::whereIn('id', $ids)->get();
+        foreach ($files_to_delete as $key => $file) {
+            try {
+                unlink($file->file_path );
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }
+        TemporaryFiles::whereIn('id', $ids)->delete();
+        return redirect('/seller/uploads');
+    }
 
 }

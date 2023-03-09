@@ -77,7 +77,7 @@
                     </ul>
                 </li>
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/seller/uploads"
+                    <a href="/seller/uploads"
                         class="aiz-side-nav-link ">
                         <i class="las la-folder-open aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">Uploaded Files</span>
@@ -103,21 +103,21 @@
                             </li>
                         </ul>
                     </li>
-                                                    <li class="aiz-side-nav-item">
+                                                    {{-- <li class="aiz-side-nav-item">
                         <a href="https://demo.activeitzone.com/ecommerce/seller/coupon"
                             class="aiz-side-nav-link ">
                             <i class="las la-bullhorn aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">Coupon</span>
                         </a>
-                    </li>
-                                                    <li class="aiz-side-nav-item">
+                    </li> --}}
+                                                    {{-- <li class="aiz-side-nav-item">
                         <a href="https://demo.activeitzone.com/ecommerce/seller/wholesale-products"
                             class="aiz-side-nav-link ">
                             <i class="las la-luggage-cart aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">Wholesale Products</span>
                         </a>
-                    </li>
-                                                    <li class="aiz-side-nav-item">
+                    </li> --}}
+                                                    {{-- <li class="aiz-side-nav-item">
                         <a href="javascript:void(0);" class="aiz-side-nav-link">
                             <i class="las la-gavel aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">Auction</span>
@@ -139,7 +139,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                                                                             <li class="aiz-side-nav-item">
                             <a href="https://demo.activeitzone.com/ecommerce/seller/pos"
                                 class="aiz-side-nav-link ">
@@ -194,7 +194,7 @@
                     </a>
                 </li>
 
-                                                        <li class="aiz-side-nav-item">
+                                                        {{-- <li class="aiz-side-nav-item">
                         <a href="https://demo.activeitzone.com/ecommerce/seller/conversations"
                             class="aiz-side-nav-link ">
                             <i class="las la-comment aiz-side-nav-icon"></i>
@@ -210,7 +210,7 @@
 
                         </a>
                     </li>
-                
+                 --}}
                                 <li class="aiz-side-nav-item">
                     <a href="https://demo.activeitzone.com/ecommerce/seller/support_ticket"
                         class="aiz-side-nav-link ">

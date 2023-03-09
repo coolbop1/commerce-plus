@@ -110,15 +110,14 @@
                         <label class="col-md-3 col-form-label"
                             for="signinSrEmail">Gallery Images</label>
                         <div class="col-md-8">
-                            <div class="input-group masked" style="position: relative">
+                            <div onclick="openFileModal(this, 'product_image_input')"  class="input-group" data-type="image" data-multiple="true">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text bg-soft-secondary font-weight-medium">
                                         Browse</div>
                                 </div>
                                 <div class="form-control file-amount">Choose file</div>
-                                <input id='product_image' type="file" onchange="return upload(this, 'product_image_input')" accept="image/*">
+                                <input value="{{ $product ? $product->photos : '' }}" id="product_image_input" type="hidden" name="photos">
                             </div>
-                            <input value="{{ $product ? $product->photos : '' }}" id="product_image_input" type="hidden" name="photos">
                             @php
                                 if($product) {
                                     $product_photos_string = $product->photos;
@@ -127,9 +126,8 @@
                                     $product_photos = [];
                                 }    
                             @endphp
-                            <div id="preview_product_image_input">
+                            <div id="preview_product_image_input" class="file-preview box sm">
                             @foreach ($product_photos as $photo)
-                                <div class="file-preview box sm">
                                     <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
                                         <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
                                             <img src="/{{ $photo }}" class="img-fit">
@@ -137,7 +135,6 @@
                                         <div class="col body"><h6 class="d-flex"><span class="text-truncate title">{{ '' }}</span><span class="ext flex-shrink-0">{{ '' }}</span></h6><p></p></div>
                                         <div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div>
                                     </div>
-                                </div>
                             @endforeach
                             </div>
                         </div>
@@ -146,15 +143,14 @@
                         <label class="col-md-3 col-form-label" for="signinSrEmail">Thumbnail Image
                             <small>(290x300)</small></label>
                         <div class="col-md-8">
-                            <div class="input-group masked" style="position: relative">
+                            <div onclick="openFileModal(this, 'product_thumbnail_input')" class="input-group"  data-type="image" data-multiple="false">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text bg-soft-secondary font-weight-medium">
                                         Browse</div>
                                 </div>
                                 <div class="form-control file-amount">Choose file</div>
-                                <input id='product_image' type="file" onchange="return upload(this, 'product_thumbnail_input')" accept="image/*">
+                                <input value="{{ $product ? $product->thumbnail_img : '' }}" id="product_thumbnail_input" type="hidden" name="thumbnail_img" class="selected-files">
                             </div>
-                            <input value="{{ $product ? $product->thumbnail_img : '' }}" id="product_thumbnail_input" type="hidden" name="thumbnail_img" class="selected-files">
                             <div id="preview_product_thumbnail_input" class="file-preview box sm">
                                 @if ($product && $product->thumbnail_img)
                                 <div class="file-preview box sm">

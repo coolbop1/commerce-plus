@@ -1437,6 +1437,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
             $(".confirm-delete").click(function (e) {
                 e.preventDefault();
                 var url = $(this).data("href");
+                console.log("url ".url);
                 $("#delete-modal").modal("show");
                 $("#delete-link").attr("href", url);
             });
@@ -1458,10 +1459,12 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
             $(".confirm-alert").click(function (e) {
                 e.preventDefault();
                 var url = $(this).data("href");
+                console.log("url "+url);
                 var target = $(this).data("target");
                 $(target).modal("show");
                 $(target).find(".comfirm-link").attr("href", url);
                 $("#comfirm-link").attr("href", url);
+                $("#delete-link").attr("href", url);
             });
         },
         bytesToSize: function (bytes) {

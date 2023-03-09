@@ -49,7 +49,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="aiz-uploader-all clearfix c-scrollbar-light">
+						<div id="all_uploded_file" class="aiz-uploader-all clearfix c-scrollbar-light">
                             
 							@if (!isset($files) || $files->count() == 0)
                                 <div class="align-items-center d-flex h-100 justify-content-center w-100">
@@ -93,13 +93,13 @@
 						<div id="aiz-upload-files" class="h-100">
                             
 						<div class="uppy-Root uppy-Dashboard uppy-Dashboard--animateOpenClose uppy-size--md uppy-Dashboard--isInnerWrapVisible masked" style="position: relative" aria-hidden="false" aria-label="File Uploader">
-                            <input  type="file" name="files[]" multiple="" style="z-index: 1500;">
+                            <input onchange="return upload(this, 'all_uploded_file')"  type="file" name="files[]" multiple="" style="z-index: 1500;">
                             <div class="uppy-Dashboard-overlay" tabindex="-1">
                                 </div><div class="uppy-Dashboard-inner" style="width: 750px; height: 550px;">
                                     <div class="uppy-Dashboard-innerWrap">
                                         <div class="uppy-Dashboard-dropFilesHereHint">Drop your files here</div>
                                         <div class="uppy-DashboardAddFiles">
-                                            
+											<span style="font-size: 30px" id="uploading_loader_page"></span> 
                                             <div class="uppy-DashboardTabs">
                                                 <div class="uppy-Dashboard-dropFilesTitle">Drop files here, paste or <button type="button" class="uppy-u-reset uppy-Dashboard-browse">Browse</button>
                                                 </div>
