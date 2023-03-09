@@ -39,16 +39,15 @@
             <div class="row mb-3">
                 <label class="col-md-2 col-form-label">Shop Logo</label>
                 <div class="col-md-10">
-                    <div class="input-group masked" style="position: relative" >
+                    <div onclick="openFileModal(this, 'shop_logo_input')" class="input-group"  data-type="image" data-multiple="false">
                         <div class="input-group-prepend">
                             <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
                         </div>
                         <div class="form-control file-amount"></div>
-                        <input id='store_logo' type="file" onchange="return upload(this, 'shop_logo_input')">
+                        <input id="shop_logo_input" type="hidden" name="shop_logo" class="selected-files">
                     </div>
-                    <input id="shop_logo_input" type="hidden" name="shop_logo" class="selected-files">
-                    <div class="file-preview box sm"><div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
-                        <div id="preview_shop_logo_input" class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                    <div id="preview_shop_logo_input" class="file-preview box sm"><div class="d-flex justify-content-between align-items-center mt-2 file-preview-item">
+                        <div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
                             @if ($store->shop_logo)
                                 <img src="/{{ $store->shop_logo }}" class="img-fit">
                             @endif   
@@ -135,14 +134,13 @@
             <div class="row mb-3">
                 <label class="col-md-2 col-form-label">Banners (1500x450)</label>
                 <div class="col-md-10">
-                    <div class="input-group masked" style="position: relative" >
+                    <div onclick="openFileModal(this, 'store_banner_input')" class="input-group"  data-type="image" data-multiple="true" >
                         <div class="input-group-prepend">
                             <div class="input-group-text bg-soft-secondary font-weight-medium">Browse</div>
                         </div>
                         <div class="form-control file-amount"></div>
-                        <input id='store_banner' type="file" onchange="return upload(this, 'store_banner_input')">
+                        <input id="store_banner_input" type="hidden" value="{{ $store->banner }}" name="banner" >
                     </div>
-                    <input id="store_banner_input" type="hidden" value="{{ $store->banner }}" name="banner" >
                     <div id="preview_store_banner_input" class="file-preview box sm">
                         @php
                             $shop_banner_string = $store->banner;

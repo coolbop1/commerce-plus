@@ -104,6 +104,9 @@ function register() {
 
 const upload = (element, input_id) => {
     console.log('got to this place');
+    if(input_id == 'uploading_loader_page' || input_id == 'all_uploded_file') {
+        document.getElementById('uploading_loader_page').innerHTML = `<i class="las la-spinner la-spin la-3x opacity-70"></i>`;
+    }
     let url = '/api/file-upload';
     let photo = element.files[0];
     let params = new FormData();
@@ -117,8 +120,9 @@ const upload = (element, input_id) => {
         if(http.readyState == 4) {
             let response = JSON.parse(this.responseText);
             if(http.status == 200) {
+                document.getElementById('uploading_loader_page').innerHTML = '';
                 console.log("this.responseText", this.responseText);
-                let value = document.getElementById(input_id).value;
+                let value = document.getElementById(input_id)?.value ?? '';
                 let value_array = value == '' ? [] : value.split(',')
                 value_array.push(response?.data?.id);
                 let new_value = value_array.join(',');
@@ -168,6 +172,38 @@ const upload = (element, input_id) => {
                             </div>
                         </div>
                         `;
+                        break;
+                    case 'uploading_loader_page' :
+                        window.location.href = '/seller/uploads';
+                        break;
+                    case 'all_uploded_file' :
+                        let name_array = response?.data?.file_path.replace('uploads/', '');
+                        name_array = name_array.split('.');
+
+                        let previous_html = document.getElementById('all_uploded_file').innerHTML;
+                        document.getElementById('all_uploded_file').innerHTML = `
+                            <div class="aiz-file-box-wrap" data-value="`+response?.data?.id+`" data-preview="`+response?.data?.file_path+`" onclick="imagePicked(this)" aria-hidden="false" data-selected="false">
+                                <div class="aiz-file-box">
+                                    <div class="card card-file aiz-uploader-select" title="`+name_array[0]+`" data-value-last="`+response?.data?.id+`">
+                                        <div class="card-file-thumb">
+                                            <img src="/`+response?.data?.file_path+`" class="img-fit">
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="d-flex">
+                                                <span class="text-truncate title">`+name_array[0]+`</span>
+                                                <span class="ext flex-shrink-0">.`+name_array[1]+`</span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('all_uploded_file').innerHTML += previous_html;
+                        document.querySelector("[href='#aiz-upload-new']").classList.remove('active');
+                        document.getElementById('aiz-upload-new').classList.remove('active');
+                        document.querySelector("[href='#aiz-select-file']").classList.add('active');
+                        document.getElementById('aiz-select-file').classList.add('active');
+
                         break;
                 
                     default:
@@ -519,6 +555,44 @@ const addSelectedFiles = () => {
     closeFileselctor();
 }
 
+const selectAllFile = element => {
+    let checked = element.checked;
+    if (checked) {
+        document.querySelectorAll("[type='checkbox']").forEach(e => {
+            e.setAttribute('checked', '');
+            e.setAttribute('data-checked', 'true');
+        })
+    } else {
+        document.querySelectorAll("[type='checkbox']").forEach(e => {
+            e.removeAttribute('checked');
+            e.removeAttribute('data-checked');
+        })
+    }
+    checkOne();
+}
 
+const checkOne = (element = null) => {
+    let ids_array = [];
+    if(element) {
+        if(element.getAttribute('data-checked') == 'true') {
+            element.removeAttribute('data-checked');
+        } else {
+            element.setAttribute('data-checked', 'true');
+        }
+    }
+
+    document.querySelectorAll("[data-checked='true']").forEach(ele => {
+        if(ele.getAttribute('class') == 'check-one') {
+            ids_array.push(ele.value); 
+        }
+    });
+    console.log('ids_array',ids_array);
+    let id_string = ids_array.join(',');
+    document.getElementById('bulk-delete-button').setAttribute('data-href', "/seller/uploads/delete-multiple?ids="+id_string );
+}
+
+const copyUrl = element => {
+    navigator.clipboard.writeText(element.getAttribute('data-url'));
+}
 
 // 
