@@ -38,7 +38,7 @@
                         return $q->where('is_digital', 1);
                     }, function($q) {
                         return $q->where('is_digital', 0);
-                    });
+                    })->sortByDesc('updated_at');
                     $key = 0;
                 @endphp
                 @foreach ($products as $product)

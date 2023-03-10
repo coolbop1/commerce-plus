@@ -91,7 +91,7 @@
                         </a>
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
-                                <a href="https://demo.activeitzone.com/ecommerce/seller/seller-packages" class="aiz-side-nav-link">
+                                <a href="/seller/seller-packages" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">Packages</span>
                                 </a>
                             </li>

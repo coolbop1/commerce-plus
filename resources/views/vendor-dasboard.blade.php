@@ -27,7 +27,7 @@
                                 <span class="fs-14 text-light">Products</span>
                             </p>
                             <h3 class="mb-0 text-white fs-30">
-                                {{ $store->products->sum('quantity') }}
+                                {{ $store->products->count() }} <small class="fs-15">QTY : {{ $store->products->sum('quantity') }}</small>
                             </h3>
 
                         </div>
