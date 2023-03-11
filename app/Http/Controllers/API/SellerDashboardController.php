@@ -12,6 +12,7 @@ use App\Imports\ProductsImport;
 use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Package;
 use App\Models\Store;
 use App\Models\SubCategory;
 use App\Models\TemporaryFiles;
@@ -78,8 +79,11 @@ class SellerDashboardController extends BaseController
         $page ='products';
         $current_month_start = Carbon::now()->startOfMonth(); //Todo: This should the subscription start date ;
         $current_month_end = Carbon::now()->endOfMonth();
-        $uploads =  Product::where('store_id', $store_id)->whereBetween('created_at', [$current_month_start, $current_month_end])->count();
-        $remaining_uploads = 500 - $uploads;
+        //$uploads =  Product::where('store_id', $store_id)->whereBetween('created_at', [$current_month_start, $current_month_end])->count();
+        $uploads =  Product::where('store_id', $store_id)->count();
+        $subscription = $store->isSubscribed() ? $store->subscriptions()->latest()->first() : null;
+        $package = optional($subscription)->package;
+        $remaining_uploads = $package ? ($package->product_cap - $uploads) : 0;
 
 
         return view('vendor-products', compact('user', 'store', 'page', 'remaining_uploads'));
@@ -322,8 +326,10 @@ class SellerDashboardController extends BaseController
             $q->where('status', 'completed');
         })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->get();
 
+        $packages = Package::all();
 
-        return view('vendor-packages', compact('user', 'store', 'page', 'carts'));
+
+        return view('vendor-packages', compact('user', 'store', 'page', 'carts', 'packages'));
     }
 
 }

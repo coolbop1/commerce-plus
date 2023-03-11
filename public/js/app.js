@@ -431,6 +431,62 @@ const switchStore = (store_id) => {
 }
 
 
+const paymentForm = document.getElementById('paymentForm');
+paymentForm.addEventListener("submit", payWithPaystack, false);
+function payWithPaystack() {
+  //e.preventDefault();
+
+  let handler = PaystackPop.setup({
+    key: 'pk_test_f2f63bc5ba861e1a3e55de8ea08352ac3dfac175', // Replace with your public key
+    email: document.getElementById("email-address").value,
+    amount: document.getElementById("amount").value * 100 ,
+    ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+    // label: "Optional string that replaces customer email"
+    onClose: function(){
+        showAlert('window closed', 'alert-warning', []);
+    },
+    callback: function(response){
+      //let message = 'Payment complete! Reference: ' + response.reference;
+      //alert(message);
+      console.log("response ",response);
+      subscribeStore(response.reference, 'paystack');
+    }
+  });
+
+  handler.openIframe();
+}
+
+function subscribeStore (paymentReference, paymentType) {
+    console.log('got here 0 ',paymentReference);
+    let package_id = document.getElementById('package_id').value;
+    let store_id = document.getElementById('store_id').value;
+    let params = new FormData();
+    params.append('package_id', package_id);
+    params.append('store_id', store_id);
+    params.append('payment_type', paymentType);
+    params.append('reference', paymentReference);
+    let http_f = new XMLHttpRequest();
+    http_f.open("POST", '/api/subscribe', true);
+    http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    console.log('got here too ',COMMERCE_PLUS_TOKEN);
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                showAlert(response.message, 'alert-success');
+                window.location.href = '/seller/dashboard';
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http_f.send(params);
+}
+
+
+
+
+
 
 
 

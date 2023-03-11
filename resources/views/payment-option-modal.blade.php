@@ -42,9 +42,7 @@
                  <h5 class="modal-title" id="exampleModalLabel">Purchase Your Package</h5>
                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
              </div>
-             <form class="" id="package_payment_form" action="https://demo.activeitzone.com/ecommerce/seller_packages/purchase"
-                 method="post">
-                 <input type="hidden" name="_token" value="4CBDYDg4cXafcWK6JXKJu7UEcXf89683XqmmXdke">                    
+             <div  id="package_payment_form">                  
                  <input type="hidden" name="seller_package_id" value="">
                  <div class="modal-body" style="overflow-y: unset;">
                      <div class="row">
@@ -53,38 +51,21 @@
                          </div>
                          <div class="col-md-10">
                              <div class="mb-3">
-                                 <select class="form-control aiz-selectpicker" data-live-search="true"
+                                 <select id="online_payment_option" class="form-control aiz-selectpicker" data-live-search="true"
                                      name="payment_option">
-                                                                                 <option value="paypal">Paypal</option>
-                                                                                                                         <option value="stripe">Stripe</option>
-                                                                                                                         <option value="mercadopago">Mercadopago</option>
-                                         <option value="paypal">Paypal</option>
-                                                                                                                         <option value="toyyibpay">ToyyibPay</option>
-                                                                                                                         <option value="sslcommerz">sslcommerz</option>
-                                                                                                                         <option value="instamojo">Instamojo</option>
-                                                                                                                         <option value="razorpay">Razorpay</option>
-                                                                                                                         <option value="paystack">Paystack</option>
-                                                                                                                         <option value="payhere">payhere</option>
-                                                                                                                         <option value="ngenius">ngenius</option>
-                                                                                                                         <option value="iyzico">Iyzico</option>
-                                                                                                                         <option value="nagad">Nagad</option>
-                                                                                                                         <option value="bkash">Bkash</option>
-                                                                                                                         <option value="aamarpay">Amarpay</option>
-                                                                                                                                                                                                                     <option value="flutterwave">flutterwave</option>
-                                                                                                                                     <option value="payfast">payfast</option>
-                                                                                                                                                                                                                     <option value="myfatoorah">MyFatoorah</option>
-                                                                                                                     </select>
+                                    <option value="paystack">Paystack</option>
+                                </select>
                              </div>
                          </div>
                      </div>
                      <div class="form-group text-right">
                          <button type="button" class="btn btn-sm btn-secondary transition-3d-hover mr-1"
                              data-dismiss="modal">Cancel</button>
-                         <button type="submit"
+                         <button type="submit" onclick="document.getElementById('online_payment_option').value == 'paystack' ? payWithPaystack() : ''"
                              class="btn btn-sm btn-primary transition-3d-hover mr-1">Confirm</button>
                      </div>
                  </div>
-             </form>
+                </div>
          </div>
      </div>
  </div>
@@ -149,6 +130,7 @@
 
  <script type="text/javascript">
     function select_payment_type(id) {
+        document.getElementById('amount').value = document.getElementById('package_selected_'+id).getAttribute('data-price')
         $('input[name=package_id]').val(id);
         $('#select_payment_type_modal').modal('show');
     }

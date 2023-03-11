@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,5 +35,18 @@ class Store extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function subscriptions() 
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function isSubscribed()
+    {
+        if ($this->subscriptions()->whereDate('expiry_date',  '>', Carbon::now())->first()) {
+            return true;
+        }
+        return false;
     }
 }

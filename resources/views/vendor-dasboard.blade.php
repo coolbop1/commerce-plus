@@ -369,22 +369,33 @@
                         <div class="card-title">
                             <h6 class="mb-0">Purchased Package</h6>
                         </div>
-                                                    <div class="d-flex">
+                        @php
+                            $subscription = $store->subscriptions()->latest()->first();
+                            $package = optional($subscription)->package;
+                        @endphp
+                            <div class="d-flex">
                                 <div class="col-3">
-                                    <img src="https://demo.activeitzone.com/ecommerce/public/uploads/all/Sc9fsDKcoJQX4qqizGA9XiP4UtvOVfFvnZQxUmQ4.png"
-                                        class="img-fluid mb-4 w-64px">
+                                    @if ($package)
+                                    @php
+                                        $image_slug = Str::lower($package->name);
+                                    @endphp
+                                    <img src="{{ asset("assets/img/$image_slug.png") }}"
+                                    class="img-fluid mb-4 w-64px">
+                                    @endif
                                 </div>
                                 <div class="col-9">
+                                    @if ($package)
                                     <a class="fw-600 mb-3 text-primary">Current Package:</a>
-                                    <h6 class="text-primary">
-                                        Platinum
+                                        <h6 class="text-primary">
+                                        {{ $package->name }}
                                         </h3>
                                         <p class="mb-1 text-muted">Product Upload Limit:
-                                            500 times
+                                            {{ $package->product_cap }} times
                                         </p>
-                                        <p class="text-muted mb-4">Package Expires at:
-                                            2023-03-02
+                                        <p class="text-muted mb-4">Package Expires at: {{ Carbon\Carbon::parse($subscription->expiry_date)->format('Y-m-d')}}
                                         </p>
+                                    @endif
+                                    
                                         <div class="">
                                             <a href="https://demo.activeitzone.com/ecommerce/seller/seller-packages"
                                                 class="btn btn-soft-primary">Upgrade Package</a>

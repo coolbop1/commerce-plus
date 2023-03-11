@@ -81,6 +81,8 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     
         return response()->json(['message' => 'File saved', 'data' => $temp_file, 'file_path' => $destinationPath.'/'.$fileName], 200);
     });
+    Route::post('subscribe', [StoreController::class, 'subscribe']);
+    
 });
 Route::get('list-products', [ProductController::class, 'listProducts']);
 Route::get('list-categories', [CategoryController::class, 'listCategories']);

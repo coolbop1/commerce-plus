@@ -102,7 +102,9 @@
     </div>
 </div><!-- /.modal -->
 @include('aiz-uploader');
+@if (isset($packages))
 @include('payment-option-modal');
+@endif
 
     <script type="text/javascript">
     AIZ.plugins.chart('#graph-1', {

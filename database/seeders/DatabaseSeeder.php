@@ -111,5 +111,12 @@ class DatabaseSeeder extends Seeder
             \App\Models\Brand::updateOrCreate($brand_array);
         }
 
+
+        $packages = config('packages');
+        foreach ($packages as $key => $package) {
+            $package['name'] = $key;
+            \App\Models\Package::updateOrCreate($package);
+        }
+
     }
 }
