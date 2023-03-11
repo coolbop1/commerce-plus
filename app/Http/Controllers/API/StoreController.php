@@ -8,9 +8,12 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use App\Models\Package;
 use App\Models\Store;
+use App\Models\Subscription;
 use App\Models\TemporaryFiles;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class StoreController extends BaseController
@@ -123,5 +126,66 @@ class StoreController extends BaseController
         }
 
         return $this->sendResponse($store, 'Store retrieved successfully.');
+    }
+
+    public function subscribe(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'package_id' => 'required|integer',
+            'store_id' => 'required|integer',
+            'payment_type' => 'required|string',
+            'reference' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $user_id = $request->user()->id;
+        $package = Package::find($request->package_id);
+        $curl = curl_init();
+  
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.paystack.co/transaction/verify/".$request->reference,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+            "Authorization: Bearer ".env('PAYSTACK_SECRET_KEY'),
+            "Cache-Control: no-cache",
+            ),
+        ));
+        
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+        
+        if ($err) {
+            //echo "cURL Error #:" . $err;
+            return $this->sendError('Validation Error.', $err, 400);
+        } else {
+            //echo $response;
+            info('reponse'.json_encode($response));
+            $response = json_decode($response) ;
+            if($response->status == true) {
+                $store = Store::find($request->store_id);
+                $existing_subscription = $store->subscriptions()
+                ->whereDate('expiry_date',  '>', Carbon::now())->latest()->first();
+                $subscribe = Subscription::create([
+                    "store_id" => $request->store_id,
+                    "package_id" => $request->package_id,
+                    "subscription_amount" => $package->price,
+                    "is_active" => in_array($request->payment_type, ['paystack', 'flutterwave']),
+                    "payment_type" => $request->payment_type,
+                    'reference' => $request->reference,
+                    'start_date' => optional($existing_subscription)->expiry_date ?? now(),
+                    'expiry_date' => Carbon::parse(optional($existing_subscription)->expiry_date ?? now())->addDays($package->days)
+                ]);
+                if($subscribe) {
+                    return $this->sendResponse($subscribe, 'Subscription successfull.');
+                }
+            }
+        }
     }
 }

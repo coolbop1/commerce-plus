@@ -12,12 +12,16 @@
             <div class="px-15px px-lg-25px">
 
                 <div class="aiz-titlebar mt-2 mb-4">
-                    <div class="row align-items-center">
-                      <div class="col-md-6">
-                          <h1 class="h3">Products</h1>
-                      </div>
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="h3">Products</h1>
                     </div>
-                  </div>
+                </div>
+                </div>
+                @php
+                    $subscription = $store->subscriptions()->latest()->first();
+                    $package = optional($subscription)->package;
+                @endphp
 
                   <div class="row gutters-10 justify-content-center">
                     <div class="col-md-4 mx-auto mb-3" >
@@ -33,7 +37,12 @@
                     </div>
         
                     <div class="col-md-4 mx-auto mb-3" >
-                        <a href="{{ $page == 'digitalproducts' ? '/seller/digitalproducts/create' : '/seller/product/create' }}">
+                        @if ($remaining_uploads == 0)
+                        <a onclick="showAlert('You need to subsribe to add new products', 'alert-warning');" >
+                        @else
+                        <a href="{{ $page == 'digitalproducts' ? '/seller/digitalproducts/create' : '/seller/product/create' }}"> 
+                        @endif
+                        
                         <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
                             <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
                                 <i class="las la-plus la-3x text-white"></i>
@@ -44,9 +53,14 @@
                     </div>
 
                     <div class="col-md-4">
-                        <a href="https://demo.activeitzone.com/ecommerce/seller/seller-packages" class="text-center bg-white shadow-sm hov-shadow-lg text-center d-block p-3 rounded">
-                            <img src="https://demo.activeitzone.com/ecommerce/public/uploads/all/Sc9fsDKcoJQX4qqizGA9XiP4UtvOVfFvnZQxUmQ4.png" height="44" class="mw-100 mx-auto">
-                            <span class="d-block sub-title mb-2">Current Package: Platinum</span>
+                        <a href="/seller/seller-packages" class="text-center bg-white shadow-sm hov-shadow-lg text-center d-block p-3 rounded">
+                            @if ( $package)
+                            @php
+                                $image_slug = Str::lower($package->name);
+                            @endphp
+                                <img src="{{ asset("assets/img/$image_slug.png") }}" height="44" class="mw-100 mx-auto">
+                                <span class="d-block sub-title mb-2">Current Package: {{ $package->name }}</span>
+                            @endif
                             <div class="btn btn-outline-primary py-1">Upgrade Package</div>
                         </a>
                     </div>

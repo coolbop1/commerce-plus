@@ -32,79 +32,57 @@
 <section class="py-4 py-lg-5">
     <div class="container">
         <div class="row row-cols-xxl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 gutters-10 justify-content-center">
-                                <div class="col">
+            @foreach ($packages as $package)
+                @php
+                    $image_slug = Str::lower($package->name);
+                    $price = number_format($package->price, 2);
+                @endphp
+                <div id="package_selected_{{ $package->id }}" data-price="{{ $package->price }}" class="col">
                     <div class="card overflow-hidden">
                         <div class="card-body">
                             <div class="text-center mb-4 mt-3">
-                                <img class="mw-100 mx-auto mb-4" src="{{ asset('assets/img/silver.png') }}" height="100">
-                                <h5 class="mb-3 h5 fw-600">Silver</h5>
+                                <img class="mw-100 mx-auto mb-4" src="{{ asset("assets/img/$image_slug.png") }}" height="100">
+                                <h5 class="mb-3 h5 fw-600">{{ $package->name }}</h5>
                             </div>
                             <ul class="list-group list-group-raw fs-15 mb-5">
                                 <li class="list-group-item py-2">
                                     <i class="las la-check text-success mr-2"></i>
-                                    100 Product Upload Limit
+                                    {{ $package->product_cap }} Product Upload Limit
                                 </li>
                             </ul>
                             <div class="mb-5 d-flex align-items-center justify-content-center">
-                                                                        <span class="fs-30 fw-600 lh-1 mb-0">₦5,000.000</span>
-                                                                    <span class="text-secondary border-left ml-2 pl-2">90<br>Days</span>
+                                <span class="fs-30 fw-600 lh-1 mb-0">₦{{ $price }}</span>
+                                <span class="text-secondary border-left ml-2 pl-2">{{ $package->day }}<br>Days</span>
                             </div>
 
                             <div class="text-center">
-                                                                                                                    <button class="btn btn-primary fw-600" onclick="select_payment_type(4)">Purchase Package</button>
-                                                                                                        </div>
+                                <button class="btn btn-primary fw-600" onclick="select_payment_type({{ $package->id }})">Purchase Package</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                                <div class="col">
-                    <div class="card overflow-hidden">
-                        <div class="card-body">
-                            <div class="text-center mb-4 mt-3">
-                                <img class="mw-100 mx-auto mb-4" src="{{ asset('assets/img/gold.png') }}" height="100">
-                                <h5 class="mb-3 h5 fw-600">Gold</h5>
-                            </div>
-                            <ul class="list-group list-group-raw fs-15 mb-5">
-                                <li class="list-group-item py-2">
-                                    <i class="las la-check text-success mr-2"></i>
-                                    200 Product Upload Limit
-                                </li>
-                            </ul>
-                            <div class="mb-5 d-flex align-items-center justify-content-center">
-                                                                        <span class="fs-30 fw-600 lh-1 mb-0">₦10,000.000</span>
-                                                                    <span class="text-secondary border-left ml-2 pl-2">240<br>Days</span>
-                            </div>
-
-                            <div class="text-center">
-                                                                                                                    <button class="btn btn-primary fw-600" onclick="select_payment_type(5)">Purchase Package</button>
-                                                                                                        </div>
-                        </div>
-                    </div>
-                </div>
-                                <div class="col">
-                    <div class="card overflow-hidden">
-                        <div class="card-body">
-                            <div class="text-center mb-4 mt-3">
-                                <img class="mw-100 mx-auto mb-4" src="{{ asset('assets/img/platinum.png') }}" height="100">
-                                <h5 class="mb-3 h5 fw-600">Platinum</h5>
-                            </div>
-                            <ul class="list-group list-group-raw fs-15 mb-5">
-                                <li class="list-group-item py-2">
-                                    <i class="las la-check text-success mr-2"></i>
-                                    500 Product Upload Limit
-                                </li>
-                            </ul>
-                            <div class="mb-5 d-flex align-items-center justify-content-center">
-                                                                        <span class="fs-30 fw-600 lh-1 mb-0">₦15,000.000</span>
-                                                                    <span class="text-secondary border-left ml-2 pl-2">365<br>Days</span>
-                            </div>
-
-                            <div class="text-center">
-                                                                                                                    <button class="btn btn-primary fw-600" onclick="select_payment_type(6)">Purchase Package</button>
-                                                                                                        </div>
-                        </div>
-                    </div>
-                </div>
-                        </div>
+            @endforeach
+        </div>
+        <form style="display: none" id="paymentForm">
+            <div class="form-group">
+              <input value="{{ $user->email }}" type="email" id="email-address" required />
+              <input id="store_id" value="{{ $store->id }}" />
+            </div>
+            <div class="form-group">
+              <input type="tel" id="amount" required />
+            </div>
+            <div class="form-group">
+              <input value="{{ $user->name }}" type="text" id="first-name" />
+            </div>
+            <div class="form-group">
+              <input value="{{ $user->name }}" type="text" id="last-name" />
+            </div>
+            <div class="form-submit">
+              {{-- <button type="submit" onclick="payWithPaystack()"> Pay </button> --}}
+            </div>
+          </form>
+          
+          <script src="https://js.paystack.co/v1/inline.js"></script>
     </div>
 </section>
 
