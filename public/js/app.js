@@ -651,4 +651,191 @@ const copyUrl = element => {
     navigator.clipboard.writeText(element.getAttribute('data-url'));
 }
 
+function addToCart (product, ele = null, type = 'pos'){
+    let cart_storage = type == 'pos' ? 'COMMERCE_PLUS_CART_'+product.store_id : 'COMMERCE_PLUS_CART';
+    let cart = localStorage.getItem(cart_storage) ?? '[]';
+    cart = JSON.parse(cart);
+    let new_add = cart.find(item => item.id == product.id)
+    if(new_add) {
+        let cart_quantity = ele?.value || ((new_add.quantity_added ?? 1) + 1);
+        if(cart_quantity <= product.quantity) {
+            new_add.quantity_added = cart_quantity;
+            let index_of_new_add = cart.findIndex(item => item.id == product.id)
+            cart[index_of_new_add] = new_add
+        } else {
+            if(ele){
+                ele.value =  product.quantity;
+            }
+            showAlert("Opps!! . you cant add more than the number of products in stock", 'alert-warning', []);
+        }
+        
+    } else {
+        cart.push(product);
+    }
+
+    localStorage.setItem(cart_storage, JSON.stringify(cart));
+    if(type == 'pos'){
+        populateCartDetails(product.store_id);
+    }
+}
+
+function removeFromCartTwo (product_id, store_id, del = false, type = 'pos'){
+    console.log("got here");
+    let cart_storage = type == 'pos' ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
+    let cart = localStorage.getItem(cart_storage) ?? '[]';
+    cart = JSON.parse(cart);
+    let new_add = cart.find(item => item.id == product_id)
+    if(!del && new_add?.quantity_added && new_add?.quantity_added > 1) {
+        new_add.quantity_added = new_add.quantity_added - 1;
+        let index_of_new_add = cart.findIndex(item => item.id == product_id)
+        cart[index_of_new_add] = new_add
+    } else if(new_add) {
+        let index_of_new_add = cart.findIndex(item => item.id == product_id)
+        cart.splice(index_of_new_add, 1);
+    }
+    localStorage.setItem(cart_storage, JSON.stringify(cart));
+    if(type == 'pos'){
+        populateCartDetails(store_id);
+    }
+}
+
+function populateCartDetails(store_id = null) {
+    let cart_storage = store_id ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
+    let cartItems = JSON.parse(localStorage.getItem(cart_storage));
+    let cart_total = cartItems?.reduce((a, b) => a + (((b.new_price || b.price) * (b.quantity_added || 1)) || 0), 0) ?? 0.00;
+    document.getElementById('cart-details').innerHTML = `
+    <div class="aiz-pos-cart-list mb-4 mt-3 c-scrollbar-light">
+    `+(cartItems?.length > 0 ? '<ul id="cart-item-list" class="list-group list-group-flush"></ul>' : '<div class="text-center"><i class="las la-frown la-3x opacity-50"></i><p>No Product Added</p></div>')+`
+       
+        
+    </div>
+    <div>
+            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                <span>Sub Total</span>
+                <span>₦`+cart_total+`</span>
+            </div>
+            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                <span>Tax</span>
+                <span>₦0.000</span>
+            </div>
+            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                <span>Shipping</span>
+                <span>₦0.000</span>
+            </div>
+            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                <span>Discount</span>
+                <span>₦0.000</span>
+            </div>
+            <div class="d-flex justify-content-between fw-600 fs-18 border-top pt-2">
+                <span>Total</span>
+                <span>₦`+cart_total+`</span>
+            </div>
+        </div>
+    `;
+    cartItems.forEach(item => {
+        document.getElementById('cart-item-list').innerHTML += `
+            <li class="list-group-item py-0 pl-2">
+                <div class="row gutters-5 align-items-center">
+                    <div class="col-auto w-60px">
+                        <div class="row no-gutters align-items-center flex-column aiz-plus-minus">
+                            <button onClick='addToCart(`+JSON.stringify(item)+`)' class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="plus" data-field="qty-0">
+                                <i class="las la-plus"></i>
+                            </button>
+                            <input type="number" name="qty-0" id="qty-0" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="`+(item.quantity_added ?? 1) +`" min="`+item.min_quantity+`" max="`+item.quantity+`" onchange='addToCart(`+JSON.stringify(item)+`, this)'>
+                            <button onClick="removeFromCartTwo(`+item.id+`, `+item.store_id+`)" class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="minus" data-field="qty-0">
+                                <i class="las la-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-truncate-2">`+item.name+`</div>
+                        <span class="span badge badge-inline fs-12 badge-soft-secondary"></span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="fs-12 opacity-60">₦`+(item.new_price || item.price)+` x `+(item.quantity_added ?? 1)+`</div>
+                        <div class="fs-15 fw-600">₦`+((item.new_price || item.price) * (item.quantity_added ?? 1))+`</div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-circle btn-icon btn-sm btn-soft-danger ml-2 mr-0" onclick="removeFromCartTwo(`+item.id+`, `+item.store_id+`, true)">
+                            <i class="las la-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </li>
+        `;
+
+    })
+}
+
+function orderConfirmationList(ele_id, store_id) {
+    let cart_storage = store_id ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
+    let cartItems = JSON.parse(localStorage.getItem(cart_storage));
+    let cart_total = cartItems?.reduce((a, b) => a + (((b.new_price || b.price) * (b.quantity_added || 1)) || 0), 0) ?? 0.00;
+    document.getElementById(ele_id).innerHTML = `
+    <div class="row">
+        <div class="col-xl-6">
+            <ul id="o_confirmation_list" class="list-group list-group-flush">
+                
+            </ul>
+        </div>
+        <div class="col-xl-6">
+            <div class="pl-xl-4">
+                <div class="card mb-4">
+                    <div class="card-header"><span class="fs-16">Customer Info</span></div>
+                    <div class="card-body">
+                        <div class="text-center p-4">
+                            No customer information selected.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                    <span>Total</span>
+                    <span>₦`+cart_total+`</span>
+                </div>
+                <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                    <span>Tax</span>
+                    <span>₦0.000</span>
+                </div>
+                <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                    <span>Shipping</span>
+                    <span>₦0.000</span>
+                </div>
+                <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+                    <span>Discount</span>
+                    <span>₦0.000</span>
+                </div>
+                <div class="d-flex justify-content-between fw-600 fs-18 border-top pt-2">
+                    <span>Total</span>
+                    <span>₦`+cart_total+`</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    cartItems.forEach(item => {
+        document.getElementById('o_confirmation_list').innerHTML += `
+        <li class="list-group-item px-0">
+                <div class="row gutters-10 align-items-center">
+                    <div class="col">
+                        <div class="d-flex">
+                            <img src="/`+item.thumbnail_img+`" class="img-fit size-60px">
+                            <span class="flex-grow-1 ml-3 mr-0">
+                                <div class="text-truncate-2">`+item.name+`</div>
+                                <span class="span badge badge-inline fs-12 badge-soft-secondary"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="fs-14 fw-600 text-right">₦`+(item.new_price || item.price)+`</div>
+                        <div class="fs-14 text-right">Qty: `+(item.quantity_added ?? 1)+`</div>
+                    </div>
+                </div>
+            </li>
+        `;
+    });
+    
+}
+
 // 

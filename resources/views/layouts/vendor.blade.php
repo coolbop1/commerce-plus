@@ -105,6 +105,7 @@
 @if (isset($packages))
 @include('payment-option-modal');
 @endif
+@include('confirm-order-modal');
 
     <script type="text/javascript">
     AIZ.plugins.chart('#graph-1', {
