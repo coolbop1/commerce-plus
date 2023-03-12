@@ -97,7 +97,7 @@
                             </li>
 
                             <li class="aiz-side-nav-item">
-                                <a href="https://demo.activeitzone.com/ecommerce/seller/packages-payment-list" class="aiz-side-nav-link">
+                                <a href="/seller/packages-payment-list" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">Purchase Packages</span>
                                 </a>
                             </li>
