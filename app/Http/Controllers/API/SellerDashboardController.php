@@ -330,6 +330,29 @@ class SellerDashboardController extends BaseController
 
 
         return view('vendor-packages', compact('user', 'store', 'page', 'carts', 'packages'));
+    } 
+
+    public function packagesList() 
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $products_id = $store->products->pluck('id')->toArray();
+        $page = 'packages';
+        $carts = Cart::with('user', 'product')->whereHas('checkout', function($q) {
+            $q->where('status', 'completed');
+        })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->get();
+
+        $packages = Package::all();
+
+
+        return view('vendor-package-list', compact('user', 'store', 'page', 'carts', 'packages'));
     }
 
 }

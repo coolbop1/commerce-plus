@@ -59,5 +59,6 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/uploads/destroy/{id}', [SellerDashboardController::class, 'deleteFile']);
     Route::get('/seller/uploads/delete-multiple', [SellerDashboardController::class, 'deleteMultiple']);
     Route::get('/seller/seller-packages', [SellerDashboardController::class, 'packages']);
+    Route::get('/seller/packages-payment-list', [SellerDashboardController::class, 'packagesList']);
 });
 
