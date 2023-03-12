@@ -60,5 +60,6 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/uploads/delete-multiple', [SellerDashboardController::class, 'deleteMultiple']);
     Route::get('/seller/seller-packages', [SellerDashboardController::class, 'packages']);
     Route::get('/seller/packages-payment-list', [SellerDashboardController::class, 'packagesList']);
+    Route::get('/seller/pos', [SellerDashboardController::class, 'pos']);
 });
 

@@ -141,7 +141,7 @@
                         </ul>
                     </li> --}}
                                                                             <li class="aiz-side-nav-item">
-                            <a href="https://demo.activeitzone.com/ecommerce/seller/pos"
+                            <a href="/seller/pos"
                                 class="aiz-side-nav-link ">
                                 <i class="las la-fax aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">POS Manager</span>
