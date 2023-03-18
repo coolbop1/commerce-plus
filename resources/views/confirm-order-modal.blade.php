@@ -79,6 +79,94 @@
 
 
 
+    <div id="new-customer" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header bord-btm">
+                    <h4 class="modal-title h6">Shipping address</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <form id="shipping_form">
+                    <div class="modal-body" id="shipping_address">
+
+
+                    </div>
+                </form>
+                <div class="" onclick="add_new_address()">
+                    <div class="border p-3 rounded mb-3 bord-all pad-all c-pointer text-center bg-white">
+                        <i class="fa fa-plus fa-2x"></i>
+                        <div class="alpha-7">Add New Address</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-styled btn-base-3" data-dismiss="modal" id="close-button">Close</button>
+                    <button type="button" class="btn btn-primary btn-styled btn-base-1" id="confirm-address" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- new address modal -->
+    <div id="new-address-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header bord-btm">
+                    <h4 class="modal-title h6">Shipping address</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <form class="form-horizontal" action="https://demo.activeitzone.com/ecommerce/addresses" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" value="Zlh1896KvLZkIbAyqG22Nu4ATWHdHBzS9TI0pllk">                    <div class="modal-body">
+                        <input type="hidden" name="customer_id" id="set_customer_id" value="">
+                        <div class="form-group">
+                            <div class=" row">
+                                <label class="col-sm-2 control-label" for="postal_code">Customer Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" placeholder="Customer Name" id="customer_name" name="customer_name" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class=" row">
+                                <label class="col-sm-2 control-label" for="address">Address</label>
+                                <div class="col-sm-10">
+                                    <textarea placeholder="Address" id="address" name="address" class="form-control" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-2 control-label"">
+                                    <label>State</label>
+                                </div>
+                                <div class="col-sm-10">
+                                    <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
+                                        @foreach ($states as $state)
+                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class=" row">
+                                <label class="col-sm-2 control-label" for="phone">Phone</label>
+                                <div class="col-sm-10">
+                                    <input type="number" min="0" placeholder="Phone" id="phone" name="phone" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-styled btn-base-3" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-styled btn-base-1">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <script type="text/javascript">
 
@@ -101,6 +189,7 @@
         //     getShippingAddress();
         // });
         
+        //
         $("#confirm-address").click(function (){
             var data = new FormData($('#shipping_form')[0]);
             
@@ -149,48 +238,48 @@
         //     }
         // }
 
-        function setProductList(data){
-            for (var i = 0; i < data.data.length; i++) {
-                $('#product-list').append(
-                    `<div class="w-140px w-xl-180px w-xxl-210px mx-2">
-                        <div class="card bg-white c-pointer product-card hov-container">
-                            <div class="position-relative">
-                                <span class="absolute-top-left mt-1 ml-1 mr-0">
-                                    ${data.data[i].qty > 0
-                                        ? `<span class="badge badge-inline badge-success fs-13">In stock`
-                                        : `<span class="badge badge-inline badge-danger fs-13">Out of Stock` }
-                                    : ${data.data[i].qty}</span>
-                                </span>
-                                ${data.data[i].variant != null
-                                    ? `<span class="badge badge-inline badge-warning absolute-bottom-left mb-1 ml-1 mr-0 fs-13 text-truncate">${data.data[i].variant}</span>`
-                                    : '' }
-                                <img src="${data.data[i].thumbnail_image }" class="card-img-top img-fit h-120px h-xl-180px h-xxl-210px mw-100 mx-auto" >
-                            </div>
-                            <div class="card-body p-2 p-xl-3">
-                                <div class="text-truncate fw-600 fs-14 mb-2">${data.data[i].name}</div>
-                                <div class="">
-                                    ${data.data[i].price != data.data[i].base_price
-                                        ? `<del class="mr-2 ml-0">${data.data[i].base_price}</del><span>${data.data[i].price}</span>`
-                                        : `<span>${data.data[i].base_price}</span>`
-                                    }
-                                </div>
-                            </div>
-                            <div class="add-plus absolute-full rounded overflow-hidden hov-box ${data.data[i].qty <= 0 ? 'c-not-allowed' : '' }" data-stock-id="${data.data[i].stock_id}">
-                                <div class="absolute-full bg-dark opacity-50">
-                                </div>
-                                <i class="las la-plus absolute-center la-6x text-white"></i>
-                            </div>
-                        </div>
-                    </div>`
-                );
-            }
-            if (data.links.next != null) {
-                $('#load-more').find('.btn').html('Load More.');
-            }
-            else {
-                $('#load-more').find('.btn').html('Nothing more found.');
-            }
-        }
+        // function setProductList(data){
+        //     for (var i = 0; i < data.data.length; i++) {
+        //         $('#product-list').append(
+        //             `<div class="w-140px w-xl-180px w-xxl-210px mx-2">
+        //                 <div class="card bg-white c-pointer product-card hov-container">
+        //                     <div class="position-relative">
+        //                         <span class="absolute-top-left mt-1 ml-1 mr-0">
+        //                             ${data.data[i].qty > 0
+        //                                 ? `<span class="badge badge-inline badge-success fs-13">In stock`
+        //                                 : `<span class="badge badge-inline badge-danger fs-13">Out of Stock` }
+        //                             : ${data.data[i].qty}</span>
+        //                         </span>
+        //                         ${data.data[i].variant != null
+        //                             ? `<span class="badge badge-inline badge-warning absolute-bottom-left mb-1 ml-1 mr-0 fs-13 text-truncate">${data.data[i].variant}</span>`
+        //                             : '' }
+        //                         <img src="${data.data[i].thumbnail_image }" class="card-img-top img-fit h-120px h-xl-180px h-xxl-210px mw-100 mx-auto" >
+        //                     </div>
+        //                     <div class="card-body p-2 p-xl-3">
+        //                         <div class="text-truncate fw-600 fs-14 mb-2">${data.data[i].name}</div>
+        //                         <div class="">
+        //                             ${data.data[i].price != data.data[i].base_price
+        //                                 ? `<del class="mr-2 ml-0">${data.data[i].base_price}</del><span>${data.data[i].price}</span>`
+        //                                 : `<span>${data.data[i].base_price}</span>`
+        //                             }
+        //                         </div>
+        //                     </div>
+        //                     <div class="add-plus absolute-full rounded overflow-hidden hov-box ${data.data[i].qty <= 0 ? 'c-not-allowed' : '' }" data-stock-id="${data.data[i].stock_id}">
+        //                         <div class="absolute-full bg-dark opacity-50">
+        //                         </div>
+        //                         <i class="las la-plus absolute-center la-6x text-white"></i>
+        //                     </div>
+        //                 </div>
+        //             </div>`
+        //         );
+        //     }
+        //     if (data.links.next != null) {
+        //         $('#load-more').find('.btn').html('Load More.');
+        //     }
+        //     else {
+        //         $('#load-more').find('.btn').html('Nothing more found.');
+        //     }
+        // }
 
         // function removeFromCart(key){
         //     $.post('https://demo.activeitzone.com/ecommerce/remove-from-cart-pos', {_token:AIZ.data.csrf, key:key}, function(data){
@@ -230,9 +319,11 @@
         }
 
         function getShippingAddress(){
-            $.post('https://demo.activeitzone.com/ecommerce/get_shipping_address',{_token:AIZ.data.csrf, id:$('select[name=user_id]').val()}, function(data){
-                $('#shipping_address').html(data);
-            });
+            //
+            //$('#address-modal').modal('show');
+            // $.post('https://demo.activeitzone.com/ecommerce/get_shipping_address',{_token:AIZ.data.csrf, id:$('select[name=user_id]').val()}, function(data){
+            //     $('#shipping_address').html(data);
+            // });
         }
 
         function add_new_address(){

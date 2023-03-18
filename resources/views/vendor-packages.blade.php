@@ -52,7 +52,7 @@
                             </ul>
                             <div class="mb-5 d-flex align-items-center justify-content-center">
                                 <span class="fs-30 fw-600 lh-1 mb-0">₦{{ $price }}</span>
-                                <span class="text-secondary border-left ml-2 pl-2">{{ $package->day }}<br>Days</span>
+                                <span class="text-secondary border-left ml-2 pl-2">{{ $package->days }}<br>Days</span>
                             </div>
 
                             <div class="text-center">

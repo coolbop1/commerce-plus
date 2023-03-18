@@ -1,5 +1,5 @@
 const COMMERCE_PLUS_TOKEN = localStorage.getItem('COMMERCE_PLUS_TOKEN');
-const setAccessss = () => {
+function setAccessss () {
     if(COMMERCE_PLUS_TOKEN) {
         let http_f = new XMLHttpRequest();
         http_f.open("GET", 'api/user?session', true);
@@ -102,7 +102,7 @@ function register() {
     
 }
 
-const upload = (element, input_id) => {
+function upload  (element, input_id) {
     console.log('got to this place');
     if(input_id == 'uploading_loader_page' || input_id == 'all_uploded_file') {
         document.getElementById('uploading_loader_page').innerHTML = `<i class="las la-spinner la-spin la-3x opacity-70"></i>`;
@@ -217,7 +217,7 @@ const upload = (element, input_id) => {
 
 }
 
-const importData = (element, button_id) => {
+function importData (element, button_id) {
     let clickedButton = document.getElementById(button_id);
     let buttonText = clickedButton.innerText;
     clickedButton.innerHTML = `<i class="las la-spinner la-spin la-3x opacity-70"></i>`;
@@ -255,7 +255,7 @@ const importData = (element, button_id) => {
     return false;
 }
 
-const toggleProductColumn = (element, column) => {
+function toggleProductColumn (element, column)  {
     let product_id = element.value;
     let params = new FormData();
     params.append('product_id', product_id);
@@ -285,7 +285,7 @@ const toggleProductColumn = (element, column) => {
     return false;
 }
 
-const getCurrentLocation = () => {
+function getCurrentLocation () {
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             let lat = position.coords.latitude;
@@ -322,8 +322,8 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
         console.log("url "+url);
         console.log("COMMERCE_PLUS_TOKEN "+COMMERCE_PLUS_TOKEN);
         http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
-        http.setRequestHeader("Content-type", "application/json;");
     }
+    http.setRequestHeader("Content-type", "application/json;");
     http.onreadystatechange = function() {
         if(http.readyState == 4) {
             let response = JSON.parse(this?.responseText);
@@ -366,7 +366,7 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
     return false;
 }
 
-const logout = () => {
+function logout () {
     localStorage.removeItem('COMMERCE_PLUS_TOKEN');
     let http_f = new XMLHttpRequest();
     http_f.open("GET", 'api/logout', true);
@@ -414,7 +414,7 @@ function expandStoreList() {
     }
 }
 
-const switchStore = (store_id) => {
+function switchStore  (store_id)  {
     expandStoreList();
     let http_f = new XMLHttpRequest();
     http_f.open("GET", '/api/switch-store?id='+store_id, true);
@@ -509,7 +509,7 @@ function subscribeStore (paymentReference, paymentType) {
 //  file selector js
 
 
-const openFileModal = (element, inputFieldId) => {
+function openFileModal  (element, inputFieldId)  {
     clearSelected();
     selectAlreadyPicked(inputFieldId);
     let select_type = element.getAttribute("data-multiple") ?? 'false';
@@ -524,14 +524,14 @@ const openFileModal = (element, inputFieldId) => {
     document.getElementsByTagName('body')[0].classList.add('modal-open');
 }
 
-const clearSelected = () => {
+function clearSelected () {
     document.querySelectorAll("[data-selected=true]").forEach(ele => {
         ele.setAttribute('data-selected', 'false');
     })
     document.getElementById('file-select-counter').innerText =  document.querySelectorAll("[data-selected=true]").length;
 }
 
-const selectAlreadyPicked = input_field_id => {
+function selectAlreadyPicked (input_field_id) {
     let value = document.getElementById(input_field_id).value;
     let value_array = value == '' ? [] : value.split(',');
     value_array.forEach(val => {
@@ -546,7 +546,7 @@ const selectAlreadyPicked = input_field_id => {
 
 }
 
-const closeFileselctor = () => {
+function closeFileselctor () {
     clearSelected();
     document.getElementById('modal-backdrop').style="";
     document.getElementById('modal-backdrop').className = "";
@@ -559,7 +559,7 @@ const closeFileselctor = () => {
     document.getElementsByTagName('body')[0].classList.remove('modal-open');
 }
 
-const imagePicked = element => {
+function imagePicked (element) {
     let select_type = document.getElementById('aizUploaderModal').getAttribute("data-multiple") ?? 'false';
     if (select_type == 'false') {
         document.querySelectorAll("[data-selected=true]").forEach(ele => {
@@ -574,7 +574,7 @@ const imagePicked = element => {
     //console.log("elementId ",elementId);
 }
 
-const addSelectedFiles = () => {
+function addSelectedFiles () {
     let select_type = document.getElementById('aizUploaderModal').getAttribute("data-multiple") ?? 'false';
     let input_field_id = document.getElementById('aizUploaderModal').getAttribute("input-field");
     if (select_type == 'false') {
@@ -611,7 +611,7 @@ const addSelectedFiles = () => {
     closeFileselctor();
 }
 
-const selectAllFile = element => {
+function selectAllFile (element) {
     let checked = element.checked;
     if (checked) {
         document.querySelectorAll("[type='checkbox']").forEach(e => {
@@ -627,7 +627,7 @@ const selectAllFile = element => {
     checkOne();
 }
 
-const checkOne = (element = null) => {
+function checkOne (element = null) {
     let ids_array = [];
     if(element) {
         if(element.getAttribute('data-checked') == 'true') {
@@ -647,7 +647,7 @@ const checkOne = (element = null) => {
     document.getElementById('bulk-delete-button').setAttribute('data-href', "/seller/uploads/delete-multiple?ids="+id_string );
 }
 
-const copyUrl = element => {
+function copyUrl (element) {
     navigator.clipboard.writeText(element.getAttribute('data-url'));
 }
 
@@ -657,7 +657,7 @@ function addToCart (product, ele = null, type = 'pos'){
     cart = JSON.parse(cart);
     let new_add = cart.find(item => item.id == product.id)
     if(new_add) {
-        let cart_quantity = ele?.value || ((new_add.quantity_added ?? 1) + 1);
+        let cart_quantity = ele?.value || (parseInt((new_add.quantity_added ?? '1')) + 1);
         if(cart_quantity <= product.quantity) {
             new_add.quantity_added = cart_quantity;
             let index_of_new_add = cart.findIndex(item => item.id == product.id)
@@ -686,7 +686,7 @@ function removeFromCartTwo (product_id, store_id, del = false, type = 'pos'){
     cart = JSON.parse(cart);
     let new_add = cart.find(item => item.id == product_id)
     if(!del && new_add?.quantity_added && new_add?.quantity_added > 1) {
-        new_add.quantity_added = new_add.quantity_added - 1;
+        new_add.quantity_added = parseInt(new_add.quantity_added) - 1;
         let index_of_new_add = cart.findIndex(item => item.id == product_id)
         cart[index_of_new_add] = new_add
     } else if(new_add) {
