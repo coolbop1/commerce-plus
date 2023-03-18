@@ -59,7 +59,7 @@
         <a href="https://demo.activeitzone.com/ecommerce/seller/bulk-upload/download/brand"><button class="btn btn-primary mt-2">Download Brand</button></a>
     </div>
 </div> --}}
-
+@if ($store->isSubscribed())
 <div class="card">
     <div class="card-header">
         <div class="col text-center text-md-left">
@@ -84,7 +84,8 @@
             </div>
         </form>
     </div>
-</div>
+</div> 
+@endif
 
 
 

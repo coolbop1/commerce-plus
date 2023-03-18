@@ -37,6 +37,11 @@ class Store extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+
     public function subscriptions() 
     {
         return $this->hasMany(Subscription::class);

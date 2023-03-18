@@ -12,7 +12,9 @@ use App\Imports\ProductsImport;
 use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Package;
+use App\Models\States;
 use App\Models\Store;
 use App\Models\SubCategory;
 use App\Models\TemporaryFiles;
@@ -103,8 +105,10 @@ class SellerDashboardController extends BaseController
         $page ='digitalproducts';
         $current_month_start = Carbon::now()->startOfMonth(); //Todo: This should the subscription start date ;
         $current_month_end = Carbon::now()->endOfMonth();
-        $uploads =  Product::where('store_id', $store_id)->whereBetween('created_at', [$current_month_start, $current_month_end])->count();
-        $remaining_uploads = 500 - $uploads;
+        $uploads =  Product::where('store_id', $store_id)->count();
+        $subscription = $store->isSubscribed() ? $store->subscriptions()->latest()->first() : null;
+        $package = optional($subscription)->package;
+        $remaining_uploads = $package ? ($package->product_cap - $uploads) : 0;
         
 
 
@@ -132,7 +136,12 @@ class SellerDashboardController extends BaseController
         }
         $files = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
-        return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product', 'files'));
+        if($store->isSubscribed()) {
+            return view('vendor-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product', 'files'));
+        } else {
+            return back();
+        }
+        
     }
 
     public function digitalProductCreate($product_id = null)
@@ -365,7 +374,7 @@ class SellerDashboardController extends BaseController
         } else {
             $store_id = $user->stores->first()->id;
         }
-        $store = Store::with('products.category', 'orders')->find($store_id);
+        $store = Store::with('products.category', 'orders', 'customers')->find($store_id);
         $products_id = $store->products->pluck('id')->toArray();
         $page = 'packages';
         $carts = Cart::with('user', 'product')->whereHas('checkout', function($q) {
@@ -373,9 +382,10 @@ class SellerDashboardController extends BaseController
         })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->get();
         $categories = Category::with('subCategories.sections')->get();
         $brands = Brand::all();
+        $states = States::all();
 
 
-        return view('vendor-pos', compact('user', 'store', 'page', 'carts', 'categories', 'brands'));
+        return view('vendor-pos', compact('user', 'store', 'page', 'carts', 'categories', 'brands', 'states'));
     }
 
 }
