@@ -769,7 +769,8 @@ function populateCartDetails(store_id = null) {
 
 function orderConfirmationList(ele_id, store_id) {
     let cart_storage = store_id ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
-    let cartItems = JSON.parse(localStorage.getItem(cart_storage));
+    cart_storage = localStorage.getItem(cart_storage);
+    let cartItems = JSON.parse(cart_storage);
     let cart_total = cartItems?.reduce((a, b) => a + (((b.new_price || b.price) * (b.quantity_added || 1)) || 0), 0) ?? 0.00;
     document.getElementById(ele_id).innerHTML = `
     <div class="row">
@@ -782,7 +783,7 @@ function orderConfirmationList(ele_id, store_id) {
             <div class="pl-xl-4">
                 <div class="card mb-4">
                     <div class="card-header"><span class="fs-16">Customer Info</span></div>
-                    <div class="card-body">
+                    <div id="customer-info-card" class="card-body">
                         <div class="text-center p-4">
                             No customer information selected.
                         </div>
@@ -813,6 +814,39 @@ function orderConfirmationList(ele_id, store_id) {
         </div>
     </div>
     `;
+    let customer_address_string = document.getElementById('add_new_address_button').getAttribute('data-customer');
+    if (customer_address_string !== '' && cart_storage !== '') {
+        let customer = JSON.parse(customer_address_string);
+        document.getElementById('customer-info-card').innerHTML = ``;
+        document.getElementById('customer-info-card').innerHTML += `
+            <div class="d-flex justify-content-between  mb-2">
+                <span class="">Name:</span>
+                <span class="fw-600">`+customer.customer_name+`</span>
+            </div>
+        `;
+        document.getElementById('customer-info-card').innerHTML += `
+            <div class="d-flex justify-content-between  mb-2">
+                <span class="">Phone:</span>
+                <span class="fw-600">`+customer.phone+`</span>
+            </div>
+        `;
+        document.getElementById('customer-info-card').innerHTML += `
+            <div class="d-flex justify-content-between  mb-2">
+                <span class="">Address:</span>
+                <span class="fw-600">`+customer.address+`</span>
+            </div>
+        `;
+        document.getElementById('customer-info-card').innerHTML += `
+            <div class="d-flex justify-content-between  mb-2">
+                <span class="">State:</span>
+                <span class="fw-600">`+customer.state.name+`</span>
+            </div>
+        `;
+        sessionStorage.setItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD', cart_storage+';;;'+customer_address_string);
+    } else {
+        sessionStorage.removeItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD');
+    }
+    //setAttribute('data-customer', element.value);
 
     cartItems.forEach(item => {
         document.getElementById('o_confirmation_list').innerHTML += `
@@ -836,6 +870,40 @@ function orderConfirmationList(ele_id, store_id) {
         `;
     });
     
+}
+
+function addCustomer() {
+    let params = new FormData();
+    let customer_id = document.getElementById('customer_id').value;
+    let customer_name = document.getElementById('customer_name').value;
+    let customer_address = document.getElementById('customer_address').value;
+    let customer_state_id = document.getElementById('customer_state_id').value;
+    let customer_phone = document.getElementById('customer_phone').value;
+    let store_id = document.getElementById('customer_store_id').value;
+ 
+
+    params.append('customer_id',  customer_id);
+    params.append('customer_name',  customer_name);
+    params.append('address',  customer_address);
+    params.append('store_id', store_id);
+    params.append('state_id', customer_state_id);
+    params.append('phone', customer_phone);
+
+    let http_f = new XMLHttpRequest();
+    http_f.open("POST", '/api/create-customer', true);
+    http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                showAlert(response.message, 'alert-success');
+                window.location.href = '/seller/pos';
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http_f.send(params);
 }
 
 // 

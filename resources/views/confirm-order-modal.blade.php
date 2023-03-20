@@ -92,7 +92,7 @@
 
                     </div>
                 </form>
-                <div class="" onclick="add_new_address()">
+                <div id="add_new_address_button" data-customer-set="" data-customer="" class="" onclick="add_new_address(this)">
                     <div class="border p-3 rounded mb-3 bord-all pad-all c-pointer text-center bg-white">
                         <i class="fa fa-plus fa-2x"></i>
                         <div class="alpha-7">Add New Address</div>
@@ -114,9 +114,9 @@
                     <h4 class="modal-title h6">Shipping address</h4>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <form class="form-horizontal" action="https://demo.activeitzone.com/ecommerce/addresses" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="_token" value="Zlh1896KvLZkIbAyqG22Nu4ATWHdHBzS9TI0pllk">                    <div class="modal-body">
-                        <input type="hidden" name="customer_id" id="set_customer_id" value="">
+                <form class="form-horizontal">                   <div class="modal-body">
+                    <input type="hidden" name="customer_store_id" id="customer_store_id" value="{{ $store->id }}">
+                        <input type="hidden" name="customer_id" id="customer_id" value="">
                         <div class="form-group">
                             <div class=" row">
                                 <label class="col-sm-2 control-label" for="postal_code">Customer Name</label>
@@ -129,7 +129,7 @@
                             <div class=" row">
                                 <label class="col-sm-2 control-label" for="address">Address</label>
                                 <div class="col-sm-10">
-                                    <textarea placeholder="Address" id="address" name="address" class="form-control" required></textarea>
+                                    <textarea placeholder="Address" id="customer_address" name="address" class="form-control" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                                     <label>State</label>
                                 </div>
                                 <div class="col-sm-10">
-                                    <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
+                                    <select class="form-control mb-3 aiz-selectpicker" id="customer_state_id" data-live-search="true" name="state_id" required>
                                         @foreach ($states as $state)
                                             <option value="{{ $state->id }}">{{ $state->name }}</option>
                                         @endforeach
@@ -151,14 +151,14 @@
                             <div class=" row">
                                 <label class="col-sm-2 control-label" for="phone">Phone</label>
                                 <div class="col-sm-10">
-                                    <input type="number" min="0" placeholder="Phone" id="phone" name="phone" class="form-control" required>
+                                    <input type="number" min="0" placeholder="Phone" id="customer_phone" name="phone" class="form-control" required>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-styled btn-base-3" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-styled btn-base-1">Save</button>
+                        <button onclick="addCustomer()" type="submit" class="btn btn-primary btn-styled btn-base-1">Save</button>
                     </div>
                 </form>
             </div>
@@ -191,21 +191,7 @@
         
         //
         $("#confirm-address").click(function (){
-            var data = new FormData($('#shipping_form')[0]);
-            
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': AIZ.data.csrf
-                },
-                method: "POST",
-                url: "https://demo.activeitzone.com/ecommerce/set-shipping-address",
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data, textStatus, jqXHR) {
-                }
-            })
+            document.getElementById('add_new_address_button').setAttribute('data-customer', document.getElementById('add_new_address_button').getAttribute('data-customer-set')) 
         });
 
         // function updateCart(data){
@@ -305,20 +291,70 @@
         // }
 
         function setDiscount(){
-            var discount = $('input[name=discount]').val();
-            $.post('https://demo.activeitzone.com/ecommerce/setDiscount',{_token:AIZ.data.csrf, discount:discount}, function(data){
-                updateCart(data);
-            });
+            // var discount = $('input[name=discount]').val();
+            // $.post('https://demo.activeitzone.com/ecommerce/setDiscount',{_token:AIZ.data.csrf, discount:discount}, function(data){
+            //     updateCart(data);
+            // });
         }
 
         function setShipping(){
-            var shipping = $('input[name=shipping]').val();
-            $.post('https://demo.activeitzone.com/ecommerce/setShipping',{_token:AIZ.data.csrf, shipping:shipping}, function(data){
-                updateCart(data);
-            });
+            // var shipping = $('input[name=shipping]').val();
+            // $.post('https://demo.activeitzone.com/ecommerce/setShipping',{_token:AIZ.data.csrf, shipping:shipping}, function(data){
+            //     updateCart(data);
+            // });
         }
 
-        function getShippingAddress(){
+        function getShippingAddress(element){
+            let element_value = element.value;
+            let shipping_address_button = document.getElementById('address-button-icon');
+            if (element_value != '') {
+                let customer = JSON.parse(element.value);
+                document.getElementById('add_new_address_button').setAttribute('data-customer-set', element.value);
+                document.getElementById('shipping_address').innerHTML = `
+                    <label class="aiz-megabox d-block bg-white" style="display:block">
+                            <input type="radio" name="address_id" value="9" checked="" required="">
+                            <span class="d-flex p-3 pad-all aiz-megabox-elem">
+                                <span class="aiz-rounded-check flex-shrink-0 mt-1"></span>
+                                <span class="flex-grow-1 pl-3 pad-lft">
+                                    <div>
+                                        <span class="alpha-6">Address:</span>
+                                        <span class="strong-600 ml-2">`+customer.address+`</span>
+                                    </div>
+                                    <div>
+                                        <span class="alpha-6">State:</span>
+                                        <span class="strong-600 ml-2">`+customer.state.name+`</span>
+                                    </div>
+                                    <div>
+                                        <span class="alpha-6">Country:</span>
+                                        <span class="strong-600 ml-2">Nigeria</span>
+                                    </div>
+                                    <div>
+                                        <span class="alpha-6">Phone:</span>
+                                        <span class="strong-600 ml-2">`+customer.phone+`</span>
+                                    </div>
+                                </span>
+                            </span>
+                        </label>
+
+                `;
+                
+                shipping_address_button.setAttribute('data-target', '#new-customer');
+                document.getElementById('customer_id').value = customer.id;
+                document.getElementById('customer_name').value = customer.customer_name; 
+                document.getElementById('customer_address').value = customer.address;
+                document.getElementById('customer_state_id').value = customer.state_id;
+                document.getElementById('customer_phone').value = customer.phone;
+ 
+            } else {
+                document.getElementById('add_new_address_button').setAttribute('data-customer', '');
+                shipping_address_button.setAttribute('data-target', '#new-address-modal');
+                document.getElementById('customer_id').value = '';
+                document.getElementById('customer_name').value = ''; 
+                document.getElementById('customer_address').value = '';
+                document.getElementById('customer_state_id').value = '';
+                document.getElementById('customer_phone').value = '';
+            }
+
             //
             //$('#address-modal').modal('show');
             // $.post('https://demo.activeitzone.com/ecommerce/get_shipping_address',{_token:AIZ.data.csrf, id:$('select[name=user_id]').val()}, function(data){
@@ -347,36 +383,38 @@
         }
 
         function submitOrder(payment_type){
-            var user_id = $('select[name=user_id]').val();
-            var shipping = $('input[name=shipping]:checked').val();
-            var discount = $('input[name=discount]').val();
-            var shipping_address = $('input[name=address_id]:checked').val();
-            var offline_payment_method = $('input[name=offline_payment_method]').val();
-            var offline_payment_amount = $('input[name=offline_payment_amount]').val();
-            var offline_trx_id = $('input[name=trx_id]').val();
-            var offline_payment_proof = $('input[name=payment_proof]').val();
+            // var user_id = $('select[name=user_id]').val();
+            // var shipping = $('input[name=shipping]:checked').val();
+            // var discount = $('input[name=discount]').val();
+            // var shipping_address = $('input[name=address_id]:checked').val();
+            // var offline_payment_method = $('input[name=offline_payment_method]').val();
+            // var offline_payment_amount = $('input[name=offline_payment_amount]').val();
+            // var offline_trx_id = $('input[name=trx_id]').val();
+            // var offline_payment_proof = $('input[name=payment_proof]').val();
             
-            $.post('https://demo.activeitzone.com/ecommerce/pos-order',{
-                _token                  : AIZ.data.csrf, 
-                user_id                 : user_id,
-                shipping_address        : shipping_address, 
-                payment_type            : payment_type,
-                shipping                : shipping, 
-                discount                : discount,
-                offline_payment_method  : offline_payment_method,
-                offline_payment_amount  : offline_payment_amount,
-                offline_trx_id          : offline_trx_id,
-                offline_payment_proof   : offline_payment_proof
+            // $.post('https://demo.activeitzone.com/ecommerce/pos-order',{
+            //     _token                  : AIZ.data.csrf, 
+            //     user_id                 : user_id,
+            //     shipping_address        : shipping_address, 
+            //     payment_type            : payment_type,
+            //     shipping                : shipping, 
+            //     discount                : discount,
+            //     offline_payment_method  : offline_payment_method,
+            //     offline_payment_amount  : offline_payment_amount,
+            //     offline_trx_id          : offline_trx_id,
+            //     offline_payment_proof   : offline_payment_proof
 
-            }, function(data){
-                if(data.success == 1){
-                    AIZ.plugins.notify('success', data.message );
-                    location.reload();
-                }
-                else{
-                    AIZ.plugins.notify('danger', data.message );
-                }
-            });
+            // }, function(data){
+            //     if(data.success == 1){
+            //         AIZ.plugins.notify('success', data.message );
+            //         location.reload();
+            //     }
+            //     else{
+            //         AIZ.plugins.notify('danger', data.message );
+            //     }
+            // });
+            console.log('payment_type ',payment_type);
+            console.log('Order payload ', sessionStorage.getItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD'));
         }
 
         //address

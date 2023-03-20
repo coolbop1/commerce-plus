@@ -374,7 +374,7 @@ class SellerDashboardController extends BaseController
         } else {
             $store_id = $user->stores->first()->id;
         }
-        $store = Store::with('products.category', 'orders', 'customers')->find($store_id);
+        $store = Store::with('products.category', 'orders', 'customers.state')->find($store_id);
         $products_id = $store->products->pluck('id')->toArray();
         $page = 'packages';
         $carts = Cart::with('user', 'product')->whereHas('checkout', function($q) {
