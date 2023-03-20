@@ -176,14 +176,14 @@
                         <div class="card-body">
                             <div class="d-flex border-bottom pb-3">
                                 <div class="flex-grow-1">
-                                    <select name="user_id" class="form-control aiz-selectpicker pos-customer" data-live-search="true" onchange="getShippingAddress()">
-                                        <option value="">Walk In Customer</option>
+                                    <select name="user_id" class="form-control aiz-selectpicker pos-customer" data-live-search="true" onchange="getShippingAddress(this)">
+                                        <option value="">New Customer</option>
                                         @foreach ($store->customers as $customer)
-                                        <option value="{{ $customer->id }}">{{ $customer->customer_name ?? optional(optional($customer)->user)->name }}</option>
+                                        <option value="{{ json_encode($customer) }}">{{ $customer->customer_name ?? optional(optional($customer)->user)->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <button type="button" class="btn btn-icon btn-soft-dark ml-3 mr-0" data-target="#new-customer" data-toggle="modal">
+                                <button id="address-button-icon" type="button" class="btn btn-icon btn-soft-dark ml-3 mr-0" data-target="#new-address-modal" data-toggle="modal">
                                     <i class="las la-truck"></i>
                                 </button>
                             </div>
@@ -196,7 +196,7 @@
                     <div class="pos-footer mar-btm">
                         <div class="d-flex flex-column flex-md-row justify-content-between">
                             <div class="d-flex">
-                                <div class="dropdown mr-3 ml-0 dropup">
+                                {{-- <div class="dropdown mr-3 ml-0 dropup">
                                     <button class="btn btn-outline-dark btn-styled dropdown-toggle" type="button" data-toggle="dropdown">
                                         Shipping
                                     </button>
@@ -208,7 +208,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="dropdown dropup">
                                     <button class="btn btn-outline-dark btn-styled dropdown-toggle" type="button" data-toggle="dropdown">
                                         Discount

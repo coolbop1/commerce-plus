@@ -50,6 +50,9 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('create-store', [StoreController::class, 'create']);
         Route::post('edit-store/{store_id}', [StoreController::class, 'updateStore']);
         Route::get('delete-store/{store_id}', [StoreController::class, 'deleteStore']);
+        Route::post('import-products', [SellerDashboardController::class, 'productImport']);
+        Route::post('toggle-product-column', [SellerDashboardController::class, 'toggleProductColumn']);
+        Route::post('create-customer', [StoreController::class, 'createCustomer']);
     });
 
     //Cart Route
@@ -61,8 +64,6 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     Route::post('save-item', [ProductController::class, 'addItemToWishList']);
     Route::post('remove-saved-item', [ProductController::class, 'removeItemFromWishList']);
     Route::get('get-my-wish-list', [ProductController::class, 'getMyWishList']);
-    Route::post('import-products', [SellerDashboardController::class, 'productImport']);
-    Route::post('toggle-product-column', [SellerDashboardController::class, 'toggleProductColumn']);
     Route::resource('products', ProductController::class);
     Route::post('/file-upload', function (Request $request) {
         $file = $request->file('file');

@@ -8,6 +8,7 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Package;
 use App\Models\Store;
 use App\Models\Subscription;
@@ -187,5 +188,41 @@ class StoreController extends BaseController
                 }
             }
         }
+    }
+
+    public function createCustomer(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'customer_name' => 'nullable|string', 
+            'customer_id' => 'nullable|integer', 
+            'user_id' => 'nullable|integer', 
+            'address' => 'required', 
+            'state_id' => 'required|integer', 
+            'store_id' => 'required|integer', 
+            'phone' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        if($request->has('customer_id') && is_numeric($request->customer_id)) {
+            $customer = Customer::where('id', $request->customer_id)->update([
+                'customer_name' => $request->customer_name, 
+                'user_id' => $request->user_id, 
+                'address' => $request->address, 
+                'state_id' => $request->state_id, 
+                'store_id' => $request->store_id, 
+                'phone' => $request->phone
+            ]);
+        } else {
+            $customer = Customer::create([
+                'customer_name' => $request->customer_name, 
+                'user_id' => $request->user_id, 
+                'address' => $request->address, 
+                'state_id' => $request->state_id, 
+                'store_id' => $request->store_id, 
+                'phone' => $request->phone
+            ]);
+        }
+       
+        return $this->sendResponse($customer, 'Customer added successfully.');
     }
 }
