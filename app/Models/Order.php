@@ -10,7 +10,7 @@ class Order extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'store_id', 'checkout_id', 'cart_id', 'amount', 'status'
+        'store_id', 'checkout_id', 'cart_id', 'amount', 'status', 'order_code', 'payment_status'
     ];
 
     public function cart()

@@ -1,7 +1,8 @@
 <?php
   
 namespace App\Models;
-  
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
   
@@ -81,5 +82,29 @@ class Product extends Model
     public function section()
     {
         return $this->belongsTo(Section::class);
+    }
+
+    public function hasDiscount() {
+        $date_range = $this->date_range;
+        $within_range = true;
+        if($date_range) {
+            $dates = explode(' to ', $date_range);
+            $from_date = $dates[0];
+            $to_date = $dates[1];
+            $within_range =  Carbon::parse($from_date)->lte(now()) && Carbon::parse($to_date)->gte(now());
+        }  
+        return $this->discount > 0 && $within_range;
+    }
+
+    public function newPrice()
+    {
+        
+        if($this->hasDiscount()) {
+            $perc = $this->discount_type == 'percent' ? $this->discount : ((100 * $this->discount)/$this->price);
+            $new_price = $this->price - (($perc/100) * $this->price);
+            return $new_price;
+        }
+        return $this->price;
+            
     }
 }

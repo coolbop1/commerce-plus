@@ -10,7 +10,7 @@ class Checkout extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'user_id', 'total_amount', 'status', 'phone', 'address', 'order_type', 'payment_refrence', 'coupon', 'state_id', 'lat', 'long'
+        'user_id', 'customer_id', 'total_amount', 'status', 'phone', 'address', 'order_type', 'payment_refrence', 'coupon', 'state_id', 'lat', 'long', 'checkout_type'
     ];
 
     public function orders()
