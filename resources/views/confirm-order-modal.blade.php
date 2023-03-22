@@ -13,8 +13,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-base-3" data-dismiss="modal">Close</button>
                     <button type="button" onclick="oflinePayment()" class="btn btn-base-1 btn-warning">Offline payment</button>
-                    <button type="button" onclick="submitOrder('cash_on_delivery')" class="btn btn-base-1 btn-info">Confirm with COD</button>
-                    <button type="button" onclick="submitOrder('cash')" class="btn btn-base-1 btn-success">Confirm with Cash</button>
+                    <button type="button" onclick="submitOrder('cod')" class="btn btn-base-1 btn-info">Confirm with COD</button>
+                    <button type="button" onclick="submitOrder('card')" class="btn btn-base-1 btn-success">Confirm with Cash</button>
                 </div>
             </div>
         </div>
@@ -413,8 +413,8 @@
             //         AIZ.plugins.notify('danger', data.message );
             //     }
             // });
-            console.log('payment_type ',payment_type);
-            console.log('Order payload ', sessionStorage.getItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD'));
+            let payload = sessionStorage.getItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD');
+            submitPosOrder(payment_type, payload, <?php echo $store->id; ?>);
         }
 
         //address

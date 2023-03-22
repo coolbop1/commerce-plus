@@ -906,4 +906,52 @@ function addCustomer() {
     http_f.send(params);
 }
 
+function submitPosOrder(payment_type, payload, store_id) {
+    if(payload == null) {
+        showAlert('Please pick a customer address before submiting the order', 'alert-warning', []);
+    } else {
+       let data = payload.split(';;;');
+       let products = JSON.parse(data[0]);
+       let customer = JSON.parse(data[1]);
+    //    const cart = product => element => product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
+    let payload_ = {};
+       const carts = () => element => {
+        let object= {}; 
+        object['product_id'] = element['id'];
+        object['price'] = element['new_price'] ?? element['price'];
+        object['quantity_added'] = element['quantity_added'] == undefined ? 1 : element['quantity_added'];
+        return object;
+       }
+       //product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
+    //    let cart_items = products.map(cart('id'));
+    //    let cart_items_quantity = products.map(cart('quantity_added'));
+       let all_cart_items = products.map(carts());
+       let params = new FormData();
+       payload_['customer_id'] = customer.id;
+       payload_['all_cart_items'] = all_cart_items;
+       payload_['order_type'] = payment_type;
+       payload_['store_id'] = store_id;
+
+        let http_f = new XMLHttpRequest();
+        http_f.open("POST", '/api/pos-order', true);
+        http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+        http_f.setRequestHeader("Content-type", "application/json;");
+        http_f.onreadystatechange = function() {
+            if(http_f.readyState == 4) {
+                let response = JSON.parse(this?.responseText);
+                if(http_f.status == 200) {
+                    showAlert(response.message, 'alert-success');
+                    window.location.href = '/seller/pos';
+                    sessionStorage.removeItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD');
+                    localStorage.removeItem('COMMERCE_PLUS_CART_'+store_id);
+                } else {
+                    showAlert(response.message, 'alert-warning', []);
+                }
+            }
+        }
+        http_f.send(JSON.stringify(payload_));
+    }
+
+}
+
 // 
