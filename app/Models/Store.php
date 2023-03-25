@@ -42,6 +42,11 @@ class Store extends Model
         return $this->hasMany(Customer::class);
     }
 
+    public function refundRequests()
+    {
+        return $this->hasMany(RefundRequest::class);
+    }
+
     public function subscriptions() 
     {
         return $this->hasMany(Subscription::class);

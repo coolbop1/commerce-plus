@@ -147,15 +147,15 @@
                                 <span class="aiz-side-nav-text">POS Manager</span>
                             </a>
                         </li>
-                                                    <li class="aiz-side-nav-item">
+                                                    <li class="aiz-side-nav-item {{ $page == 'orders' ? 'active' : '' }}">
                     <a href="/seller/orders"
                         class="aiz-side-nav-link ">
                         <i class="las la-money-bill aiz-side-nav-icon"></i>
-                        <span class="aiz-side-nav-text">Orders</span>
+                        <span class="aiz-side-nav-text {{ $page == 'orders' ? 'active' : '' }}">Orders</span>
                     </a>
                 </li>
                                     <li class="aiz-side-nav-item">
-                        <a href="https://demo.activeitzone.com/ecommerce/seller/refund-request"
+                        <a href="/seller/refund-request"
                             class="aiz-side-nav-link ">
                             <i class="las la-backward aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">Received Refund Request</span>

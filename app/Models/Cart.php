@@ -43,4 +43,9 @@ class Cart extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function refundRequest()
+    {
+        return $this->hasOne(RefundRequest::class);
+    }
+
 }

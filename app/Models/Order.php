@@ -36,4 +36,9 @@ class Order extends Model
     {
         return $this->belongsTo(Checkout::class);
     }
+
+    public function refundRequests()
+    {
+        return $this->hasMany(RefundRequest::class);
+    }
 }

@@ -13,6 +13,7 @@ use App\Models\Checkout;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Package;
+use App\Models\RefundRequest;
 use App\Models\Store;
 use App\Models\Subscription;
 use App\Models\TemporaryFiles;
@@ -304,5 +305,22 @@ class StoreController extends BaseController
         
         return $this->sendResponse($order, 'Order added successfully.');
 
+    }
+
+    public function toggleRefundApproval(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'refund_request_id' => 'required|integer',
+            'status' => 'required|in:accepted,pending,rejected'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+
+        $refund_request = RefundRequest::find($request->refund_request_id);
+        if(!$refund_request) {
+            return $this->sendError('Refun request not found', $validator->errors(), 404); 
+        }
+        $refund_request->update(['status' => $request->status]);
+        return $this->sendResponse($refund_request, 'Refund request updated successfully.');
     }
 }

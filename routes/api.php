@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('toggle-product-column', [SellerDashboardController::class, 'toggleProductColumn']);
         Route::post('create-customer', [StoreController::class, 'createCustomer']);
         Route::post('pos-order', [StoreController::class, 'posOrder']);
+        Route::post('toggle-refund-request-approval', [StoreController::class, 'toggleRefundApproval']);
     });
 
     //Cart Route
