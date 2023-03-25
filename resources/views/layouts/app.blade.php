@@ -26,6 +26,7 @@
     <meta name="robots" content="index, follow">
     <meta name="description" content="Demo of Active eCommerce CMS" />
     <meta name="keywords" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     
             <!-- Schema.org markup for Google+ -->

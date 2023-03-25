@@ -318,11 +318,14 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
     })
     let http = new XMLHttpRequest();
     http.open(method, url, true);
+    console.log("url "+url);
     if(COMMERCE_PLUS_TOKEN) {
         console.log("url "+url);
         console.log("COMMERCE_PLUS_TOKEN "+COMMERCE_PLUS_TOKEN);
         http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
     }
+    let cfr = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //http.setRequestHeader("X-CSRF-TOKEN", cfr);
     http.setRequestHeader("Content-type", "application/json;");
     http.onreadystatechange = function() {
         if(http.readyState == 4) {

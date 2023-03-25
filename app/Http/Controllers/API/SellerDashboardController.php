@@ -13,6 +13,7 @@ use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\Package;
 use App\Models\States;
 use App\Models\Store;
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class SellerDashboardController extends BaseController
 {
@@ -362,6 +364,69 @@ class SellerDashboardController extends BaseController
 
 
         return view('vendor-package-list', compact('user', 'store', 'page', 'carts', 'packages'));
+    }
+
+    public function orders()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $page = 'orders';
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $orders = Order::with('checkout.user', 'checkout.customer')->where('store_id', $store_id)->get();
+
+        return view('vendor-orders', compact('user', 'store', 'page', 'orders'));
+    }
+
+    public function order($code)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $page = 'orders';
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $order = Order::with('checkout.user', 'checkout.customer.state')->where('store_id', $store_id)->where('order_code', $code)->first();
+        if(is_null($order)) {
+            return back();
+        }
+        return view('vendor-order', compact('user', 'store', 'page', 'order'));
+    }
+
+    public function downloadInvoice($id)
+    {
+        $config = [];
+        $font_family = "'Baloo Bhaijaan 2','sans-serif'";
+        $direction = 'ltr';
+        $text_align = 'left';
+        $not_text_align = 'right';   
+
+        $order= Order::with('store', 'checkout.customer.state')->where('id', $id)->first();
+        // return PDF::loadView('backend.invoices.invoice',[
+        //     'order' => $order,
+        //     'font_family' => $font_family,
+        //     'direction' => $direction,
+        //     'text_align' => $text_align,
+        //     'not_text_align' => $not_text_align
+        // ], [], $config)->download('order-'.$order->order_code.'.pdf');
+        $data = [
+            'order' => $order,
+            'font_family' => $font_family,
+            'direction' => $direction,
+            'text_align' => $text_align,
+            'not_text_align' => $not_text_align
+        ];
+        view()->share('data',$data);
+        return PDF::loadView('invoices.invoice', $data)->download('order-'.$order->order_code.'.pdf');
     }
 
     public function pos() 
