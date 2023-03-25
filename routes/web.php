@@ -37,13 +37,15 @@ Route::get('/create-shop', function () {
     $show_user_form = !isset($_SESSION['logged_in']);
     return view('create-shop', compact('show_user_form'));
 });
+Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
+    Route::get('/admin', [AdminController::class, 'index']);
+});
 
-Route::get('/admin', [AdminController::class, 'index']);
 
 Route::get('/superadmin', 'SuperAdminController@index');
 Route::get('/categories', [CategoryWebController::class, 'index']);
 Route::get('/shop/{shop_name}', [ShopWebController::class, 'index']);
-Route::middleware(['session'])->group( function () {
+Route::middleware(['session','webrole:ROLE_VENDOR' ])->group( function () {
     Route::get('/seller/dashboard', [SellerDashboardController::class, 'index']);
     Route::get('/seller/shop', [SellerDashboardController::class, 'shop']);
     Route::get('/seller/products', [SellerDashboardController::class, 'products']);

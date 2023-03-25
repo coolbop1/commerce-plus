@@ -375,7 +375,7 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
 function logout () {
     localStorage.removeItem('COMMERCE_PLUS_TOKEN');
     let http_f = new XMLHttpRequest();
-    http_f.open("GET", 'api/logout', true);
+    http_f.open("GET", '/api/logout', true);
     http_f.onreadystatechange = function() {
         if(http_f.readyState == 4) {
             if(http_f.status == 200) {

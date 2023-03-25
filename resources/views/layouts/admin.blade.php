@@ -11,7 +11,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- Favicon -->
-	<link rel="icon" href="https://demo.activeitzone.com/ecommerce/public/uploads/all/4xnLnzEeu3dFKDGSBMlvLXPLGXFdHEkvqBSZREmO.png">
+	<link rel="icon" href="/uploads/icon.png">
 	<title>Active eCommerce | Demo of Active eCommerce CMS</title>
 
 	<!-- google font -->
@@ -20,6 +20,8 @@
 	<!-- aiz core css -->
 	<link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
     	<link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css">
+        <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
+    <script src="/js/app.js"></script>
 
     <style>
         body {

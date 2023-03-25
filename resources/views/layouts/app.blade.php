@@ -175,6 +175,11 @@
                                 <a href="/seller/dashboard" class="text-reset d-inline-block opacity-60 py-2">My Dashboard</a>
                             </li>   
                         @endif
+                        @if ($role == 'ROLE_SUPERADMIN')
+                            <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+                                <a href="/admin" class="text-reset d-inline-block opacity-60 py-2">Admin Dashboard</a>
+                            </li>
+                        @endif
                         <li class="list-inline-item">
                             <a style="cursor: pointer;" onclick="return logout()" class="text-reset d-inline-block opacity-60 py-2">Logout</a>
                         </li>
