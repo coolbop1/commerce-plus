@@ -18,6 +18,7 @@ use App\Models\Store;
 use App\Models\Subscription;
 use App\Models\TemporaryFiles;
 use App\Models\User;
+use App\Models\VendorPaymentRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
@@ -322,5 +323,30 @@ class StoreController extends BaseController
         }
         $refund_request->update(['status' => $request->status]);
         return $this->sendResponse($refund_request, 'Refund request updated successfully.');
+    }
+
+    public function withdrawalRequest(Request $request, $store_id) {
+        $store = Store::find($store_id);
+        if(is_null($store)){
+            return $this->sendError('Store not found', [], 404);
+        }
+        if(!($request->user()->isStoreAdmin($store_id))) {
+            return $this->sendError('Unathorized', [], 401);
+        }
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric|gt:0|lte:'.$store->balance,
+            'message' => 'nullable'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+
+        $withdrawalRequest = VendorPaymentRequest::create([
+            'store_id' => $store_id,
+            'amount' => $request->amount,
+            'message' => $request->message ?? null,
+        ]);
+
+        return $this->sendResponse($withdrawalRequest, 'Withdrawal request placed successfully.');
     }
 }

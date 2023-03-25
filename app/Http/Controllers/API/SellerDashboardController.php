@@ -21,6 +21,7 @@ use App\Models\Store;
 use App\Models\SubCategory;
 use App\Models\TemporaryFiles;
 use App\Models\User;
+use App\Models\VendorPaymentRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -469,6 +470,40 @@ class SellerDashboardController extends BaseController
 
 
         return view('vendor-pos', compact('user', 'store', 'page', 'carts', 'categories', 'brands', 'states'));
+    }
+
+    public function vendorPaymentHistory() {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $page = 'pay_history';
+        $store = Store::with('products.category', 'orders')->find($store_id);
+
+        $payement_requests = VendorPaymentRequest::where('store_id', $store_id)->where('status', 'paid')->get();
+
+        return view('vendor-payment-history', compact('user', 'store', 'page', 'payement_requests'));
+    }
+
+    public function moneyWithdrawRequest() {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $page = 'pay_history';
+        $store = Store::with('products.category', 'orders')->find($store_id);
+
+        $payement_requests = VendorPaymentRequest::where('store_id', $store_id)->get();
+
+        return view('vendor-withdraw-request', compact('user', 'store', 'page', 'payement_requests'));
     }
 
 }

@@ -69,7 +69,7 @@
                                 @break
                         
                             @default
-                            <span class="badge badge-inline badge-primary"><strong>Pending</strong></span>
+                            <span class="badge badge-inline badge-info"><strong>Pending</strong></span>
                         @endswitch
                         </td>
                         <td>
