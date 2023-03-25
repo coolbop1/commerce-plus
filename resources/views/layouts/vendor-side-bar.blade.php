@@ -172,7 +172,7 @@
                 </li>
 
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/seller/payments"
+                    <a href="/seller/payments"
                         class="aiz-side-nav-link ">
                         <i class="las la-history aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">Payment History</span>
@@ -180,7 +180,7 @@
                 </li>
 
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/seller/money-withdraw-requests"
+                    <a href="/seller/money-withdraw-requests"
                         class="aiz-side-nav-link ">
                         <i class="las la-money-bill-wave-alt aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">Money Withdraw</span>
@@ -188,9 +188,9 @@
                 </li>
 
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/seller/commission-history" class="aiz-side-nav-link">
+                    <a href="#" class="aiz-side-nav-link">
                         <i class="las la-file-alt aiz-side-nav-icon"></i>
-                        <span class="aiz-side-nav-text">Commission History</span>
+                        <span class="aiz-side-nav-text">Manage Admins</span>
                     </a>
                 </li>
 
@@ -212,7 +212,7 @@
                     </li>
                  --}}
                                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/seller/support_ticket"
+                    <a href="#"ß
                         class="aiz-side-nav-link ">
                         <i class="las la-atom aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">Support Ticket</span>

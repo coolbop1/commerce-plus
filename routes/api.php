@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('create-customer', [StoreController::class, 'createCustomer']);
         Route::post('pos-order', [StoreController::class, 'posOrder']);
         Route::post('toggle-refund-request-approval', [StoreController::class, 'toggleRefundApproval']);
+        Route::post('store-withdrawal-request/{store_id}', [StoreController::class, 'withdrawalRequest']);
     });
 
     //Cart Route

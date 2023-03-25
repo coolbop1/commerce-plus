@@ -12,7 +12,7 @@ class Store extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'name', 'warehoused','shop_logo','shop_phone','shop_address','meta_title','meta_description', 'lat', 'long',
-        'banner','facebook', 'instagram', 'twitter','google','youtube'
+        'banner','facebook', 'instagram', 'twitter','google','youtube', 'balance'
     ];
 
     protected $casts = [
@@ -58,5 +58,10 @@ class Store extends Model
             return true;
         }
         return false;
+    }
+
+    public function paymentRequest()
+    {
+        return $this->hasMany(VendorPaymentRequest::class);
     }
 }

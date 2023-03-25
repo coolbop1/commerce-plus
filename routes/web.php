@@ -65,5 +65,7 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/invoice/{id}', [SellerDashboardController::class, 'downloadInvoice']);
     Route::get('/seller/orders/{code}', [SellerDashboardController::class, 'order']);
     Route::get('/seller/refund-request', [SellerDashboardController::class, 'refundRequest']);
+    Route::get('/seller/payments', [SellerDashboardController::class, 'vendorPaymentHistory']);
+    Route::get('/seller/money-withdraw-requests', [SellerDashboardController::class, 'moneyWithdrawRequest']);
 });
 
