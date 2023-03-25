@@ -15,6 +15,7 @@ use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Package;
+use App\Models\RefundRequest;
 use App\Models\States;
 use App\Models\Store;
 use App\Models\SubCategory;
@@ -400,6 +401,23 @@ class SellerDashboardController extends BaseController
             return back();
         }
         return view('vendor-order', compact('user', 'store', 'page', 'order'));
+    }
+
+    public function refundRequest()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $page = 'refund_request';
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $refund_requests = RefundRequest::with('cart.product', 'order')->where('store_id', $store_id)->get();
+
+        return view('vendor-refund-request', compact('user', 'store', 'page', 'refund_requests'));
     }
 
     public function downloadInvoice($id)

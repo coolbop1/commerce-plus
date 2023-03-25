@@ -957,4 +957,41 @@ function submitPosOrder(payment_type, payload, store_id) {
 
 }
 
+function update_refund_approval(ele, id) {
+    let status = 'pending'
+    switch (ele.checked == true) {
+        case true:
+            status = 'accepted'
+            break;
+    
+        default:
+            break;
+    }
+    let payload_ = {};
+    payload_['refund_request_id'] = id;
+    payload_['status'] = status;
+
+    let http = new XMLHttpRequest();
+    http.open("POST", '/api/toggle-refund-request-approval', true);
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.setRequestHeader("Content-type", "application/json;");
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http.status == 200) {
+                showAlert(response.message, 'alert-success');
+            } else {
+                if(status = 'pending') {
+                    ele.setAttribute('checked');
+                } else {
+                    ele.removeAttribute('checked');
+                }
+                showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http.send(JSON.stringify(payload_));
+
+}
+
 // 
