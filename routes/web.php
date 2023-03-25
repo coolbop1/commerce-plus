@@ -61,5 +61,8 @@ Route::middleware(['session'])->group( function () {
     Route::get('/seller/seller-packages', [SellerDashboardController::class, 'packages']);
     Route::get('/seller/packages-payment-list', [SellerDashboardController::class, 'packagesList']);
     Route::get('/seller/pos', [SellerDashboardController::class, 'pos']);
+    Route::get('/seller/orders', [SellerDashboardController::class, 'orders']);
+    Route::get('/seller/invoice/{id}', [SellerDashboardController::class, 'downloadInvoice']);
+    Route::get('/seller/orders/{code}', [SellerDashboardController::class, 'order']);
 });
 

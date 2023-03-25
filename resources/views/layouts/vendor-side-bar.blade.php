@@ -148,7 +148,7 @@
                             </a>
                         </li>
                                                     <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/seller/orders"
+                    <a href="/seller/orders"
                         class="aiz-side-nav-link ">
                         <i class="las la-money-bill aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">Orders</span>
