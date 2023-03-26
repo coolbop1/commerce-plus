@@ -5,6 +5,7 @@ use App\Http\Controllers\API\CategoryWebController;
 use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\SellerDashboardController;
 use App\Http\Controllers\API\ShopWebController;
+use App\Http\Controllers\DeliveryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +45,10 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/delivery-boys/{delivery_boy_id}/edit', [AdminController::class, 'deliveryBoyForm']);
     Route::get('/admin/delivery-boy/ban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
     Route::get('/admin/delivery-boy/unban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
+});
+
+Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {
+    Route::get('/delivery/dashboard', [DeliveryController::class, 'index']);
 });
 
 

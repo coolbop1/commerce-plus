@@ -62,7 +62,8 @@
         <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css"> --}}
     <link rel="stylesheet" href="/css/vendors.css">
     <link rel="stylesheet" href="/css/temp.css">
-    <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/custom-style.css">
+    <link rel="stylesheet" href="/assets/css/custom-style.css">
+    {{-- <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/custom-style.css"> --}}
 
     {{-- <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"> --}}
     <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
@@ -178,6 +179,11 @@
                         @if ($role == 'ROLE_SUPERADMIN')
                             <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
                                 <a href="/admin" class="text-reset d-inline-block opacity-60 py-2">Admin Dashboard</a>
+                            </li>
+                        @endif
+                        @if ($role == 'ROLE_DELIVERY')
+                            <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+                                <a href="/delivery/dashboard" class="text-reset d-inline-block opacity-60 py-2">Delivery Dashboard</a>
                             </li>
                         @endif
                         <li class="list-inline-item">
