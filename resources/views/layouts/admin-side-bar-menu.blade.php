@@ -8,15 +8,18 @@
         </div>
         <div class="aiz-side-nav-wrap">
             <div class="px-20px mb-3">
-                <input class="form-control bg-soft-secondary border-0 form-control-sm text-white" type="text" name="" placeholder="Search in menu" id="menu-search" onkeyup="menuSearch()">
+                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
+                    <option value="">Pick a store</option>
+                    @foreach ($stores as $store)
+                        <option value="{{ $store->id }}">{{ $store->name }}</option>
+                    @endforeach
+                </select>
             </div>
-            <ul class="aiz-side-nav-list" id="search-menu">
-            </ul>
             <ul class="aiz-side-nav-list" id="main-menu" data-toggle="aiz-side-menu">
                 
                 
                                     <li class="aiz-side-nav-item">
-                        <a href="https://demo.activeitzone.com/ecommerce/admin" class="aiz-side-nav-link">
+                        <a href="/admin" class="aiz-side-nav-link">
                             <i class="las la-home aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">Dashboard</span>
                         </a>
@@ -27,7 +30,7 @@
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-tasks aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">POS System</span>
-                                                            <span class="badge badge-inline badge-danger">Addon</span>
+                                                            {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                         <span class="aiz-side-nav-arrow"></span>
                         </a>
                         <ul class="aiz-side-nav-list level-2">
@@ -121,7 +124,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-gavel aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">Auction Products</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <!--Submenu-->
@@ -159,7 +162,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-luggage-cart aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">Wholesale Products</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
@@ -225,17 +228,17 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-truck aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">Delivery Boy</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
                                                                     <li class="aiz-side-nav-item">
-                                        <a href="https://demo.activeitzone.com/ecommerce/admin/delivery-boys" class="aiz-side-nav-link">
+                                        <a href="/admin/delivery-boys" class="aiz-side-nav-link">
                                             <span class="aiz-side-nav-text">All Delivery Boy</span>
                                         </a>
                                     </li>
                                                                                                     <li class="aiz-side-nav-item">
-                                        <a href="https://demo.activeitzone.com/ecommerce/admin/delivery-boys/create" class="aiz-side-nav-link">
+                                        <a href="/admin/delivery-boys/create" class="aiz-side-nav-link">
                                             <span class="aiz-side-nav-text">Add Delivery Boy</span>
                                         </a>
                                     </li>
@@ -267,7 +270,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-backward aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">Refunds</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
@@ -352,7 +355,7 @@
                                                                                                                             <li class="aiz-side-nav-item">
                                         <a href="https://demo.activeitzone.com/ecommerce/admin/seller_packages" class="aiz-side-nav-link ">
                                             <span class="aiz-side-nav-text">Seller Packages</span>
-                                                                                            <span class="badge badge-inline badge-danger">Addon</span>
+                                                                                            {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                                     </a>
                                     </li>
                                                                                                                         <li class="aiz-side-nav-item">
@@ -459,7 +462,7 @@
                                                                                         <li class="aiz-side-nav-item">
                                     <a href="https://demo.activeitzone.com/ecommerce/admin/sms" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">Bulk SMS</span>
-                                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                             </a>
                                 </li>
                                                                                         <li class="aiz-side-nav-item">
@@ -508,7 +511,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-link aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">Affiliate System</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
@@ -550,7 +553,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-money-check-alt aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">Offline Payment System</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
@@ -573,7 +576,7 @@
                                                                                                     <li class="aiz-side-nav-item">
                                         <a href="https://demo.activeitzone.com/ecommerce/admin/offline-seller-package-payment-requests" class="aiz-side-nav-link">
                                             <span class="aiz-side-nav-text">Offline Seller Package Payments</span>
-                                                                                            <span class="badge badge-inline badge-danger">Addon</span>
+                                                                                            {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                                     </a>
                                     </li>
                                                             </ul>
@@ -584,7 +587,7 @@
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-mobile-alt aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">Asian Payment Gateway</span>
-                                                            <span class="badge badge-inline badge-danger">Addon</span>
+                                                            {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                         <span class="aiz-side-nav-arrow"></span>
                         </a>
                         <ul class="aiz-side-nav-list level-2">
@@ -601,7 +604,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="lab la-btc aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">Club Point System</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
@@ -628,7 +631,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-phone aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">OTP System</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
@@ -654,7 +657,7 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-phone aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">African Payment Gateway Addon</span>
-                                                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                                                    {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">

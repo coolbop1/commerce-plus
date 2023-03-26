@@ -18,9 +18,9 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
 
 	<!-- aiz core css -->
-	<link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
-    	<link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css">
-        <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
+	<link rel="stylesheet" href="/css/vendors.css">
+    <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{{ asset('/assets/css/aiz-core.css') }}">
     <script src="/js/app.js"></script>
 
     <style>
@@ -57,5 +57,6 @@
 </head>
 <body class="">
     @yield('content')
+    @include('aiz-uploader');
 </body>
 </html>

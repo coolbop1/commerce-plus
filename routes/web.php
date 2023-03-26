@@ -39,6 +39,11 @@ Route::get('/create-shop', function () {
 });
 Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin', [AdminController::class, 'index']);
+    Route::get('/admin/delivery-boys', [AdminController::class, 'deliveryBoys']);
+    Route::get('/admin/delivery-boys/create', [AdminController::class, 'deliveryBoyForm']);
+    Route::get('/admin/delivery-boys/{delivery_boy_id}/edit', [AdminController::class, 'deliveryBoyForm']);
+    Route::get('/admin/delivery-boy/ban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
+    Route::get('/admin/delivery-boy/unban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
 });
 
 

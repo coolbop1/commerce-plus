@@ -351,6 +351,10 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                     case 'withdrawal-request-button':
                         window.location.href = '/seller/money-withdraw-requests';
                         break;
+                    case 'create-delivery-boy-button': 
+                    case 'update-delivery-boy-button':
+                        window.location.href = '/admin/delivery-boys';
+                        break;
                 
                     default:
                         window.location.href = '/';
