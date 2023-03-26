@@ -41,11 +41,11 @@ class RegisterController extends BaseController
             switch ($request->account_type) {
                 case 'vendor':
                     $role = Role::where('name', 'ROLE_VENDOR')->first();
-                    $new_user->roles()->sync(['role_id' => $role->id]);
+                    $new_user->roles()->attach($role->id);
                     break;
                 case 'delivery':
                     $role = Role::where('name', 'ROLE_DELIVERY')->first();
-                    $new_user->roles()->sync(['role_id' => $role->id]);
+                    $new_user->roles()->attach($role->id);
                     break;
                 
                 default:

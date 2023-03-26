@@ -50,7 +50,9 @@
 							</div>
 						</div>
 						<div id="all_uploded_file" class="aiz-uploader-all clearfix c-scrollbar-light">
-                            
+                            @php
+								$files = $user->uploads;
+							@endphp
 							@if (!isset($files) || $files->count() == 0)
                                 <div class="align-items-center d-flex h-100 justify-content-center w-100">
                                     <div class="text-center">

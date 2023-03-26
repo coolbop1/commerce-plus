@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\DeliveryBoyController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
@@ -43,6 +44,8 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('create-category', [CategoryController::class, 'create']);
         Route::post('edit-category', [CategoryController::class, 'updateCategory']);
         Route::get('delete-category', [CategoryController::class, 'deleteCategory']);
+        Route::post('create-delivery-boy', [DeliveryBoyController::class, 'create']);
+        Route::post('update-delivery-boy', [DeliveryBoyController::class, 'update']);
     });
 
     //Store endpoints

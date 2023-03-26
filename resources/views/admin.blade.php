@@ -6,6 +6,7 @@
 @section('content')
 
 	<div class="aiz-main-wrapper">
+        <div id="alert-modal" class="alert hide" role="alert"></div>
         @yield('admin-side-bar-menu')
 		<div class="aiz-content-wrapper">
             @yield('admin-top-bar')
@@ -25,7 +26,7 @@
 
 				</div>
 				<div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto">
-					<p class="mb-0">&copy;  v6.5.0</p>
+					<p class="mb-0">&copy; Commerce Plus <script> document.write((new Date).getFullYear()) </script></p>
 				</div>
 			</div><!-- .aiz-main-content -->
 		</div><!-- .aiz-content-wrapper -->
@@ -33,8 +34,8 @@
 
     
 
-	<script src="https://demo.activeitzone.com/ecommerce/public/assets/js/vendors.js" ></script>
-	<script src="https://demo.activeitzone.com/ecommerce/public/assets/js/aiz-core.js" ></script>
+    <script src="{{ asset('assets/js/vendors.js') }}" ></script>
+    <script src="{{ asset('assets/js/aiz-core.js') }}" ></script>
 
     <script type="text/javascript">
     AIZ.plugins.chart('#pie-1',{
