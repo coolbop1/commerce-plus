@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DeliveryBoy extends Model
+class Delivery extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function user()
+    public function delivery_boy()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(DeliveryBoy::class);
     }
 
-    public function deliveries()
+    public function order()
     {
-        return $this->hasMany(Delivery::class);
+        return $this->belongsTo(Order::class);
     }
 }

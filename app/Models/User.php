@@ -128,4 +128,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(TemporaryFiles::class);
     }
+
+    public function is_rider()
+    {
+        $delivery_boy = DeliveryBoy::where('user_id', $this->id)->where('is_banned', 0)->first();
+        return $delivery_boy;
+    }
 }
