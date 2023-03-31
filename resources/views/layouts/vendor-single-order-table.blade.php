@@ -1,14 +1,14 @@
 @section('order-table')
 <div class="card">
     <div class="card-header">
-        <h1 class="h2 fs-16 mb-0">Order Details</h1>
+        <h1 class="h2 fs-16 mb-0">Order Details <small>(Accept  order to alert dilivery guys)</small></h1>
     </div>
 
     <div class="card-body">
         <div class="row gutters-5">
             <div class="col text-md-left text-center">
                 @php
-                    $delivery_status = $order->status;
+                    $order_status = $order->status;
                     $payment_status = $order->payment_status;
                 @endphp
             </div>
@@ -27,24 +27,32 @@
                 @endif
             </div>
             <div class="col-md-3 ml-auto">
-                <label for="update_delivery_status">Delivery Status</label>
-                @if ($delivery_status != 'delivered' && $delivery_status != 'cancelled')
-                    <select class="form-control aiz-selectpicker" data-minimum-results-for-search="Infinity" id="update_delivery_status">
-                        <option value="pending" @if ($delivery_status == 'pending') selected @endif>
+                <label for="update_payment_status">Delivery Status</label>
+                    <input type="text" class="form-control" value="{{ $order->delivery->status == 'pending' && $order->isAssignedForDelivery() ? ' Assigned For Delivery' : $order->delivery->status }}" disabled>
+            </div>
+            <div class="col-md-3 ml-auto">
+                <label for="update_delivery_status">Order Status</label>
+                @if ($order_status != 'delivered' && $order_status != 'cancelled')
+                    <select data-code="{{ $order->order_code }}" onchange="return update_order_status(this, {{ $order->id }})" class="form-control aiz-selectpicker" data-minimum-results-for-search="Infinity" id="update_delivery_status">
+                        <option value="pending" @if ($order_status == 'pending') selected @endif>
                             Pending</option>
-                        <option value="confirmed" @if ($delivery_status == 'confirmed') selected @endif>
-                            Confirmed</option>
-                        <option value="picked_up" @if ($delivery_status == 'picked_up') selected @endif>
+                        <option value="accepted" @if ($order_status == 'accepted') selected @endif>
+                            Accepted</option>
+                        <option value="declined" @if ($order_status == 'declined') selected @endif>
+                            Declined</option>
+                        <option value="out_for_delivery" @if ($order_status == 'out_for_delivery') selected @endif>
+                            Out for delivery</option>
+                        {{-- <option value="picked_up" @if ($order_status == 'picked_up') selected @endif>
                             Picked Up</option>
-                        <option value="on_the_way" @if ($delivery_status == 'on_the_way') selected @endif>
+                        <option value="on_the_way" @if ($order_status == 'on_the_way') selected @endif>
                             On The Way</option>
-                        <option value="delivered" @if ($delivery_status == 'delivered') selected @endif>
-                            Delivered</option>
-                        <option value="cancelled" @if ($delivery_status == 'cancelled') selected @endif>
-                            Cancel</option>
+                        <option value="delivered" @if ($order_status == 'delivered') selected @endif>
+                            Delivered</option> --}}
+                        {{-- <option value="cancelled" @if ($order_status == 'cancelled') selected @endif>
+                            Cancel</option> --}}
                     </select>
                 @else
-                    <input type="text" class="form-control" value="{{ $delivery_status }}" disabled>
+                    <input type="text" class="form-control" value="{{ $order_status }}" disabled>
                 @endif
             </div>
         </div>

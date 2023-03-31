@@ -7,12 +7,16 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\CategoryResource;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use App\Models\CancelledDelivery;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Checkout;
 use App\Models\Customer;
+use App\Models\Delivery;
+use App\Models\DeliveryBoy;
 use App\Models\Order;
 use App\Models\Package;
+use App\Models\PodRecord;
 use App\Models\RefundRequest;
 use App\Models\Store;
 use App\Models\Subscription;
@@ -348,5 +352,112 @@ class StoreController extends BaseController
         ]);
 
         return $this->sendResponse($withdrawalRequest, 'Withdrawal request placed successfully.');
+    }
+
+    public function updateOrderStatus(Request $request, $order_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:pending,accepted,declined,out_for_delivery'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $order = Order::find($order_id);
+        $order->status = $request->status;
+        if($order->status == 'accepted') {
+            $delivery = Delivery::firstOrCreate([
+                'order_id' => $order->id,
+            ]);
+            $order->delivery_id = $delivery->id;
+            $delivery_string = $this->randomStrings(10);
+            $order->pod = $delivery_string;
+            $pod_record = PodRecord::create([
+                'customer_id' => $order->checkout->customer->id,
+                'delivery_id' => $delivery->id,
+                'pod' => bcrypt($delivery_string)
+            ]);
+
+            $delivery->pod_record_id = $pod_record->id;
+            $delivery->save();
+        } 
+        if($order->status == 'out_for_delivery') {
+            Delivery::where('order_id', $order->id)->update(['status' => 'picked_up']);
+        }
+
+
+        $order->save();
+        
+        
+        
+        return $this->sendResponse($order, 'Order status updated successfully.');
+    }
+
+    public function updateDeliveryStatus(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:pending,picked_up,on_the_way,delivered,assigned',
+            'pod' => 'required_if:status,delivered'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $delivery_boy = DeliveryBoy::where('user_id', $request->user()->id)->first();
+        if(is_null($delivery_boy)) {
+            return $this->sendError('Unathorized', [], 401);
+        }
+
+        $delivery = Delivery::where('id', $id)->where(function($query) use($delivery_boy){
+            $query->whereNull('delivery_boy_id')->orWhere('delivery_boy_id', $delivery_boy->id);
+        })->first();
+        if(is_null($delivery)) {
+            return $this->sendError('Delivery not found', [], 404);
+        }
+        switch ($request->status) {
+            case 'delivered':
+                $customer = $delivery->order->checkout->customer;
+                $podRecord = PodRecord::where('expired', 0)->where('customer_id', $customer->id)->where('delivery_id', $delivery->id)->first();
+                if(is_null($podRecord)) {
+                    return $this->sendError('Delivery Proof not found', [], 404);
+                }
+                if(password_verify($request->pod, $podRecord->pod)) {
+                    $podRecord->update(['expired' => true]);
+                    $delivery->status = $request->status;
+                    $delivery->pod = $request->pod;
+                    $delivery->save();
+                    $delivery->order()->update(['status' => 'delivered']);
+                    if($delivery->order->checkout->order_type == 'cod') {
+                        //Do something
+                    }
+                } else {
+                    return $this->sendError('Incorrect delivery code. Unauthorized', [], 401);
+                }
+                break;
+            case 'assigned':
+                CancelledDelivery::where('delivery_id', $delivery->id)->where('delivery_boy_id', $delivery_boy->id)->delete();
+                $delivery->delivery_boy_id = $delivery_boy->id;
+                $delivery->save();
+                break;
+            
+            default:
+            $delivery->status = $request->status;
+            $delivery->save();
+                break;
+        }
+
+        
+
+        return $this->sendResponse($delivery, 'Delivery status updated successfully.');
+    }
+
+    public function randomStrings($length_of_string)
+    {
+     
+        // String of all alphanumeric character
+        $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+     
+        // Shuffle the $str_result and returns substring
+        // of specified length
+        return substr(str_shuffle($str_result),
+                           0, $length_of_string);
     }
 }

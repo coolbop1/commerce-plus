@@ -355,6 +355,9 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                     case 'update-delivery-boy-button':
                         window.location.href = '/admin/delivery-boys';
                         break;
+                    case 'update-delivery-boy-button-d':
+                        window.location.href = '/delivery/dashboard';
+                        break;
                 
                     default:
                         window.location.href = '/';
@@ -1000,5 +1003,56 @@ function update_refund_approval(ele, id) {
     http.send(JSON.stringify(payload_));
 
 }
+
+function update_order_status(ele, order_id, url = null) {
+    let status = ele.value;
+    let payload_ = {};
+    payload_['status'] = status;
+
+    let http = new XMLHttpRequest();
+    http.open("PUT", '/api/update-order-status/'+order_id, true);
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.setRequestHeader("Content-type", "application/json;");
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http.status == 200) {
+                showAlert(response.message, 'alert-success');
+                window.location.href = url ?? '/seller/orders/'+ele.getAttribute('data-code');
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http.send(JSON.stringify(payload_));
+}
+
+function update_delivery_status(ele, id, url = null) {
+    let status = ele.value;
+    let payload_ = {};
+    payload_['status'] = status;
+    if(status == 'delivered') {
+        payload_['pod'] = document.getElementById('pod_input').value; 
+    }
+
+    let http = new XMLHttpRequest();
+    http.open("PUT", '/api/update-delivery-status/'+id, true);
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.setRequestHeader("Content-type", "application/json;");
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http.status == 200) {
+                showAlert(response.message, 'alert-success');
+                window.location.href = url;
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+                ele.checked = false;
+            }
+        }
+    }
+    http.send(JSON.stringify(payload_));
+}
+
 
 // 

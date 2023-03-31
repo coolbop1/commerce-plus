@@ -29,7 +29,7 @@
                 
                 <!-- Dashboard -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/dashboard" class="aiz-side-nav-link active">
+                    <a href="/delivery/dashboard" class="aiz-side-nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_24768" data-name="Group 24768" transform="translate(3495.144 -602)">
                               <path id="Path_2916" data-name="Path 2916" d="M15.3,5.4,9.561.481A2,2,0,0,0,8.26,0H7.74a2,2,0,0,0-1.3.481L.7,5.4A2,2,0,0,0,0,6.92V14a2,2,0,0,0,2,2H14a2,2,0,0,0,2-2V6.92A2,2,0,0,0,15.3,5.4M10,15H6V9A1,1,0,0,1,7,8H9a1,1,0,0,1,1,1Zm5-1a1,1,0,0,1-1,1H11V9A2,2,0,0,0,9,7H7A2,2,0,0,0,5,9v6H2a1,1,0,0,1-1-1V6.92a1,1,0,0,1,.349-.76l5.74-4.92A1,1,0,0,1,7.74,1h.52a1,1,0,0,1,.651.24l5.74,4.92A1,1,0,0,1,15,6.92Z" transform="translate(-3495.144 602)" fill="#b5b5bf"/>
@@ -40,7 +40,7 @@
                 </li>
                 <!-- Assigned Delivery -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/assigned-deliveries"
+                    <a href="/delivery/assigned-deliveries"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_8109" data-name="Group 8109" transform="translate(-27.466 -542.963)">
@@ -57,7 +57,7 @@
                 </li>
                 <!-- Pickup Delivery -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/pickup-deliveries"
+                    <a href="/delivery/pickup-deliveries"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16.002" height="16.002" viewBox="0 0 16.002 16.002">
                             <g id="Group_25713" data-name="Group 25713" transform="translate(-322 -432)">
@@ -74,7 +74,7 @@
                 </li>
                 <!-- On The Way Delivery -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/on-the-way-deliveries"
+                    <a href="/delivery/on-the-way-deliveries"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16.002" height="16" viewBox="0 0 16.002 16">
                             <g id="Group_25718" data-name="Group 25718" transform="translate(-238 -476)">
@@ -101,7 +101,7 @@
                 </li>
                 <!-- Pending Delivery -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/pending-deliveries"
+                    <a href="/delivery/pending-deliveries"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25705" data-name="Group 25705" transform="translate(-215.999 -752)">
@@ -116,7 +116,7 @@
                 </li>
                 <!-- Completed Delivery -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/completed-deliveries"
+                    <a href="/delivery/completed-deliveries"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25708" data-name="Group 25708" transform="translate(-216.001 -824)">
@@ -132,7 +132,7 @@
                 </li>
                 <!-- Cancelled Delivery -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/cancelled-deliveries"
+                    <a href="/delivery/cancelled-deliveries"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25707" data-name="Group 25707" transform="translate(-216.001 -799)">
@@ -144,9 +144,9 @@
                         <span class="aiz-side-nav-text ml-3">Cancelled Delivery</span>
                     </a>
                 </li>
-                <!-- Request to Cancel -->
+                {{-- <!-- Request to Cancel -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/cancel-request-list"
+                    <a href="/delivery/cancel-request-list"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25714" data-name="Group 25714" transform="translate(-216.001 -799)">
@@ -159,10 +159,10 @@
                         </svg>
                         <span class="aiz-side-nav-text ml-3">Request to Cancel</span>
                     </a>
-                </li>
+                </li> --}}
                 <!-- Total Collections -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/total-collections"
+                    <a href="/delivery/total-collections"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25711" data-name="Group 25711" transform="translate(-218 -680)">
@@ -181,7 +181,7 @@
                 </li>
                 <!-- Total Earnings -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/total-earnings"
+                    <a href="/delivery/total-earnings"
                         class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25706" data-name="Group 25706" transform="translate(-216.001 -775)">
@@ -194,7 +194,7 @@
                 </li>
                 <!-- Manage Profile -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/profile" class="aiz-side-nav-link ">
+                    <a href="/delivery/profile" class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_8094" data-name="Group 8094" transform="translate(3176 -602)">
                               <path id="Path_2924" data-name="Path 2924" d="M331.144,0a4,4,0,1,0,4,4,4,4,0,0,0-4-4m0,7a3,3,0,1,1,3-3,3,3,0,0,1-3,3" transform="translate(-3499.144 602)" fill="#b5b5bf"/>

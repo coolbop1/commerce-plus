@@ -65,6 +65,8 @@ class DeliveryBoyController extends BaseController
             'phone' => 'nullable|unique:users,phone,'.$delivery_boy->user->id,
             'email' => 'nullable|email|unique:users,email,'.$delivery_boy->user->id,
             'state_id' => 'nullable|integer',
+            'new_password"' => 'nullable',
+            'c_password' => 'required_if:new_password,<>,null|same:new_password',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
@@ -78,6 +80,9 @@ class DeliveryBoyController extends BaseController
         }
         if($request->email) {
             $user_input['email'] = $request->email;
+        }
+        if($request->new_password) {
+            $user_input['password'] = bcrypt($request->new_password);
         }
         
         if(count($user_input) > 0) {

@@ -397,7 +397,7 @@ class SellerDashboardController extends BaseController
         }
         $page = 'orders';
         $store = Store::with('products.category', 'orders')->find($store_id);
-        $order = Order::with('checkout.user', 'checkout.customer.state')->where('store_id', $store_id)->where('order_code', $code)->first();
+        $order = Order::with('checkout.user', 'checkout.customer.state', 'delivery')->where('store_id', $store_id)->where('order_code', $code)->first();
         if(is_null($order)) {
             return back();
         }
