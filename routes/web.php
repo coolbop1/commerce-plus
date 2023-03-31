@@ -49,6 +49,18 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
 
 Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {
     Route::get('/delivery/dashboard', [DeliveryController::class, 'index']);
+    Route::get('/delivery/assigned-deliveries', [DeliveryController::class, 'asigned']);
+    Route::get('/delivery/pickup-deliveries', [DeliveryController::class, 'picked']);
+    Route::get('/delivery/on-the-way-deliveries', [DeliveryController::class, 'onTheWay']);
+    Route::get('/delivery/cancel-request/{delivery_id}', [DeliveryController::class, 'cancelRequest']);
+    Route::get('/delivery/invoice/{id}', [SellerDashboardController::class, 'downloadInvoice']);
+    Route::get('/delivery/order-detail/{order_code}', [DeliveryController::class, 'orderDetails']);
+    Route::get('/delivery/completed-deliveries', [DeliveryController::class, 'delivered']);
+    Route::get('/delivery/pending-deliveries', [DeliveryController::class, 'pending']);
+    Route::get('/delivery/cancelled-deliveries', [DeliveryController::class, 'cancelled']);
+    Route::get('/delivery/total-collections', [DeliveryController::class, 'collection']);
+    Route::get('/delivery/total-earnings', [DeliveryController::class, 'earnings']);
+    Route::get('/delivery/profile', [DeliveryController::class, 'profile']);
 });
 
 

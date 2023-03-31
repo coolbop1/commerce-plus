@@ -53,6 +53,8 @@
     <link rel="stylesheet" href="/css/vendors.css">
     <link rel="stylesheet" href="/assets/css/aiz-core-v2.css">
     <link rel="stylesheet" href="/assets/css/custom-style.css">
+    <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
+    <script src="/js/app.js"></script>
 
 
     <script>
@@ -148,7 +150,8 @@
 
 </head>
 <body>
+    <div id="alert-modal" class="alert hide" role="alert"></div>
     @yield('content')
-    
+    @include('aiz-uploader');
 </body>
 </html>

@@ -60,6 +60,14 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('toggle-refund-request-approval', [StoreController::class, 'toggleRefundApproval']);
         Route::post('store-withdrawal-request/{store_id}', [StoreController::class, 'withdrawalRequest']);
     });
+    Route::middleware('roles:ROLE_VENDOR|ROLE_DELIVERY')->group( function () {
+        Route::put('update-order-status/{order_id}', [StoreController::class, 'updateOrderStatus']);
+    });
+
+    Route::middleware('role:ROLE_DELIVERY')->group( function () {
+        Route::put('update-delivery-status/{id}', [StoreController::class, 'updateDeliveryStatus']);
+        Route::post('update-delivery-profile', [DeliveryBoyController::class, 'update']);
+    });
 
     //Cart Route
     Route::post('add-item-to-cart', [CartController::class, 'addItemToCart']);

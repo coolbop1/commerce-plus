@@ -10,6 +10,10 @@ class DeliveryBoy extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'is_busy' => 'boolean'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -18,5 +22,10 @@ class DeliveryBoy extends Model
     public function deliveries()
     {
         return $this->hasMany(Delivery::class);
+    }
+
+    public function cancelledDeliveries()
+    {
+        return $this->hasMany(CancelledDelivery::class);
     }
 }

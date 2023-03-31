@@ -1,6 +1,30 @@
 @section('delivery-panel-modal')
-
+<!-- Cancel Request Modal -->
+<div class="modal fade" id="cancel-request">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h6">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to send request to cancel?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-0 mt-2" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary rounded-0 mt-2" id="confirmation">Request Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    function confirm_cancel_request(url)
+    {
+        $('#cancel-request').modal('show', {backdrop: 'static'});
+        document.getElementById('confirmation').setAttribute('href' , url);
+    }
+
     function confirm_modal(delete_url)
     {
         jQuery('#confirm-delete').modal('show', {backdrop: 'static'});
@@ -173,8 +197,8 @@
     
     
     <!-- SCRIPTS -->
-    <script src="https://demo.activeitzone.com/ecommerce/public/assets/js/vendors.js"></script>
-    <script src="https://demo.activeitzone.com/ecommerce/public/assets/js/aiz-core.js"></script>
+    <script src="/assets/js/vendors.js"></script>
+    <script src="/assets/js/aiz-core.js"></script>
     
     <script>
             </script>

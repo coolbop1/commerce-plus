@@ -35,7 +35,7 @@
             </svg>
             <div class="text-white ml-3">
                 <p class="mb-2 fs-14 fw-400">Completed Delivery ({{ Carbon\Carbon::parse(now())->format('M') }})</p>
-                <h4 class="mb-0 fs-24 fw-700">{{ $delivery_boy->deliveries()->whereHas('order', function($q) { $q->where('status', 'completed'); })->whereBetween('created_at',[$current_month_start, $current_month_end])->count() }}</h4>
+                <h4 class="mb-0 fs-24 fw-700">{{ $delivery_boy->deliveries()->where('status', 'delivered')->whereBetween('created_at',[$current_month_start, $current_month_end])->count() }}</h4>
             </div>
         </div>
     </div>
@@ -147,8 +147,8 @@
                   <rect id="Rectangle_19542" data-name="Rectangle 19542" width="1" height="5.641" rx="0.5" transform="translate(1370.08 569)" fill="#d43533"/>
                 </g>
             </svg>
-            <a href="/delivery/cancel-request-list" class="fs-14 fw-400 text-primary hov-text-primary ml-3 d-flex align-items-center animate-underline-primary">
-                <span class="text-primary mr-3">Request to Cancel</span>
+            <a href="/delivery/total-collections" class="fs-14 fw-400 text-primary hov-text-primary ml-3 d-flex align-items-center animate-underline-primary">
+                <span class="text-primary mr-3">Collections</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="6.364" height="11.314" viewBox="0 0 6.364 11.314">
                     <g id="Group_25722" data-name="Group 25722" transform="translate(-1478.293 -554.343)">
                       <rect id="Rectangle_19574" data-name="Rectangle 19574" width="8" height="1" rx="0.5" transform="translate(1478.293 564.95) rotate(-45)" fill="#d43533"/>
