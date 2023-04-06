@@ -1,7 +1,7 @@
 
 @php
     if(isset($_SESSION['logged_in'])) {
-        $user = $_SESSION['logged_in'];
+        $user = $user ?? $_SESSION['logged_in'];
         $cart = $user->carts->count();
         $role = optional($user->roles->first())->name;
     } else {
@@ -138,7 +138,7 @@
 
 
 </head>
-<body>
+<body onload="populateCartCount();  populateCartPage(); ">
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 
@@ -146,7 +146,7 @@
         <!-- Header -->
         <div class="position-relative top-banner removable-session z-1035 d-none" data-key="top-banner" data-value="removed">
     <a href="#" class="d-block text-reset">
-        <img src="https://demo.activeitzone.com/ecommerce/public/uploads/all/9iuA7035EikPi8gg5FSLyg8kcUIAzHs2pLAfuiSF.png" class="w-100 mw-100 h-50px h-lg-auto img-fit">
+        <img src="/assets/img/Group-1255.png" class="w-100 mw-100 h-50px h-lg-auto img-fit">
     </a>
     <button class="btn text-white absolute-top-right set-session" data-key="top-banner" data-value="removed" data-toggle="remove-parent" data-parent=".top-banner">
         <i class="la la-close la-2x"></i>
@@ -280,13 +280,13 @@
                         <a href="javascript:void(0)" class="d-flex align-items-center text-reset h-100" data-toggle="dropdown" data-display="static">
                             <i class="la la-shopping-cart la-2x opacity-80"></i>
                             <span class="flex-grow-1 ml-1">
-                                <span class="badge badge-primary badge-inline badge-pill cart-count">{{ $cart ?? 0 }}</span>
+                                <span id="cart-count-top" class="badge badge-primary badge-inline badge-pill cart-count">{{ $cart ?? 0 }}</span>
                                 <span class="nav-box-text d-none d-xl-block opacity-70">Cart</span>
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg p-0 stop-propagation">
 
-                                <div class="text-center p-3">
+                                <div id="cart-list-top" class="text-center p-3">
                                     <i class="las la-frown la-3x opacity-60 mb-3"></i>
                                     <h3 class="h6 fw-700">Your Cart is empty</h3>
                                 </div>
@@ -331,11 +331,11 @@
                             All Sellers
                         </a>
                     </li>
-                    <li class="list-inline-item mr-0">
+                    {{-- <li class="list-inline-item mr-0">
                         <a href="coupons" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             Coupons
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>
@@ -400,13 +400,13 @@
             </a>
         </div>
                 <div class="col-auto">
-            <a href="https://demo.activeitzone.com/ecommerce/cart" class="text-reset d-block text-center pb-2 pt-3">
+            <a href="/cart" class="text-reset d-block text-center pb-2 pt-3">
                 <span class="align-items-center bg-primary border border-white border-width-4 d-flex justify-content-center position-relative rounded-circle size-50px" style="margin-top: -33px;box-shadow: 0px -5px 10px rgb(0 0 0 / 15%);border-color: #fff !important;">
                     <i class="las la-shopping-bag la-2x text-white"></i>
                 </span>
                 <span class="d-block mt-1 fs-10 fw-600 opacity-60 ">
                     Cart
-                                        (<span class="cart-count">0</span>)
+                                        (<span id="cart-count-bottom" class="cart-count">0</span>)
                 </span>
             </a>
         </div>
@@ -502,6 +502,9 @@
         document.getElementById('account_delete_link').setAttribute('href' , delete_url);
     }
 </script>
+@if (isset($states))
+@include('layouts.add-new-address-modal');
+@endif
 
 <div class="modal fade" id="account_delete_confirm" tabindex="-1" role="dialog" aria-labelledby="account_delete_confirmModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -603,6 +606,7 @@
                 $(el).on('mouseover', function(){
                     if(!$(el).find('.sub-cat-menu').hasClass('loaded')){
                         $.post('https://demo.activeitzone.com/ecommerce/category/nav-element-list', {_token: AIZ.data.csrf, id:$(el).data('id')}, function(data){
+                            //
                             $(el).find('.sub-cat-menu').addClass('loaded').html(data);
                         });
                     }
@@ -775,33 +779,33 @@
             return false;
         }
 
-        function addToCart(){
-                            AIZ.plugins.notify('warning', "Please Login as a customer to add products to the Cart.");
-                return false;
+        // function addToCartff(){
+        //                     AIZ.plugins.notify('warning', "Please Login as a customer to add products to the Cart.");
+        //         return false;
             
-            if(checkAddToCartValidity()) {
-                $('#addToCart').modal();
-                $('.c-preloader').show();
-                $.ajax({
-                    type:"POST",
-                    url: 'https://demo.activeitzone.com/ecommerce/cart/addtocart',
-                    data: $('#option-choice-form').serializeArray(),
-                    success: function(data){
+        //     if(checkAddToCartValidity()) {
+        //         $('#addToCart').modal();
+        //         $('.c-preloader').show();
+        //         $.ajax({
+        //             type:"POST",
+        //             url: 'https://demo.activeitzone.com/ecommerce/cart/addtocart',
+        //             data: $('#option-choice-form').serializeArray(),
+        //             success: function(data){
 
-                       $('#addToCart-modal-body').html(null);
-                       $('.c-preloader').hide();
-                       $('#modal-size').removeClass('modal-lg');
-                       $('#addToCart-modal-body').html(data.modal_view);
-                       AIZ.extra.plusMinus();
-                       AIZ.plugins.slickCarousel();
-                       updateNavCart(data.nav_cart_view,data.cart_count);
-                    }
-                });
-            }
-            else{
-                AIZ.plugins.notify('warning', "Please choose all the options");
-            }
-        }
+        //                $('#addToCart-modal-body').html(null);
+        //                $('.c-preloader').hide();
+        //                $('#modal-size').removeClass('modal-lg');
+        //                $('#addToCart-modal-body').html(data.modal_view);
+        //                AIZ.extra.plusMinus();
+        //                AIZ.plugins.slickCarousel();
+        //                updateNavCart(data.nav_cart_view,data.cart_count);
+        //             }
+        //         });
+        //     }
+        //     else{
+        //         AIZ.plugins.notify('warning', "Please choose all the options");
+        //     }
+        // }
 
         function buyNow(){
                             AIZ.plugins.notify('warning', "Please Login as a customer to add products to the Cart.");

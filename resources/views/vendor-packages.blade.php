@@ -4,6 +4,10 @@
 @include('layouts.vendor-products-review-card')
 {{-- @include('layouts.vendor-product-form')  --}}
 @section('body')
+<script>
+const paymentForm = document.getElementById('paymentForm');
+paymentForm.addEventListener("submit", payWithPaystack, false);
+</script>
 	<div class="aiz-main-wrapper">
         <div id="alert-modal" class="alert hide" role="alert"></div>
         @yield('vendor-side-bar-menu')

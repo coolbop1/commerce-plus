@@ -21,7 +21,7 @@
 	<link rel="stylesheet" href="/css/vendors.css">
     <link rel="stylesheet" href="/css/temp.css">
     <link rel="stylesheet" href="/1.3.0/css/line-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('/assets/css/aiz-seller.css') }}">
+    <link rel="stylesheet" href="/assets/css/aiz-seller.css">
     <script src="/js/app.js"></script>
 
     <style>
@@ -83,8 +83,8 @@
 <body class="">
     @yield('body')
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script src="{{ asset('assets/js/vendors.js') }}" ></script>
-<script src="{{ asset('assets/js/aiz-core.js') }}" ></script>
+<script src="/assets/js/vendors.js" ></script>
+<script src="/assets/js/aiz-core.js" ></script>
 <!-- delete Modal -->
 <div id="delete-modal" class="modal fade">
     <div class="modal-dialog modal-sm modal-dialog-centered">

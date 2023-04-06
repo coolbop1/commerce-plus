@@ -28,8 +28,14 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('create-shop', 'createShop');
     Route::post('login', 'login');
 });
+
+Route::post('user-customer', [RegisterController::class, 'register']);
         
 Route::middleware(['auth:sanctum', 'permission'])->group( function () {
+    Route::post('user-customer-auth', [RegisterController::class, 'register']);
+    Route::post('validate-cart', [StoreController::class, 'validateCart']);
+    Route::post('submit-order', [StoreController::class, 'submitOrder']);
+    
     
     Route::get('switch-store', function (Request $request) {
         if($request->id) {

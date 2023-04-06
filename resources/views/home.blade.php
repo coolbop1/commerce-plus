@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('temp')
+@include('frontend')
 @section('content')
 @yield('body')
 @endsection

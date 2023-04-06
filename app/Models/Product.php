@@ -59,6 +59,13 @@ class Product extends Model
         'is_digital' => 'boolean',
     ];
 
+    protected $appends = array('new_price');
+
+    public function getNewpriceAttribute()
+    {
+        return $this->newPrice();  
+    }
+
     public function store()
     {
         return $this->belongsTo(Store::class);
@@ -94,6 +101,23 @@ class Product extends Model
             $within_range =  Carbon::parse($from_date)->lte(now()) && Carbon::parse($to_date)->gte(now());
         }  
         return $this->discount > 0 && $within_range;
+    }
+
+    public function rating()
+    {
+        $product_purchase = Cart::whereHas('checkout', function($q) {
+            $q->where('status', 'completed');
+        })->where('product_id', $this->id)->get();
+
+        $product_purchase_count = $product_purchase->count();
+        $rating_sum = $product_purchase->sum('ratings');
+        if($product_purchase_count > 0){
+            $product_rating = $rating_sum / $product_purchase_count;
+            $product_rating = intval($product_rating);
+            return $product_rating;
+        } else {
+            return 0;
+        }
     }
 
     public function newPrice()

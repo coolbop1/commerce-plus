@@ -20,6 +20,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/product/{product_name}', [HomeController::class, 'product']);
+Route::get('/cart', [HomeController::class, 'cart']);
+Route::get('/checkout', [HomeController::class, 'checkout']);
+Route::get('/checkout/delivery_info', [HomeController::class, 'checkoutDeliveryInfo']);
+Route::get('/checkout/payment_select', [HomeController::class, 'checkoutPaymentSelect']);
+Route::get('/checkout/order-confirmed', [HomeController::class, 'checkoutOrderConfirmed']);
+
 
 Route::middleware(['checksession'])->group( function () {
     Route::get('/login', function () {
@@ -73,6 +80,7 @@ Route::middleware(['session','webrole:ROLE_VENDOR' ])->group( function () {
     Route::get('/seller/products', [SellerDashboardController::class, 'products']);
     Route::get('/seller/digitalproducts', [SellerDashboardController::class, 'digitalProducts']);
     Route::get('/seller/product/create', [SellerDashboardController::class, 'productCreate']);
+    Route::get('/products/destroy/{product_id}', [SellerDashboardController::class, 'productDelete']);
     Route::get('/seller/digitalproducts/create', [SellerDashboardController::class, 'digitalProductCreate']);
     Route::get('/seller/product/{product_id}/edit', [SellerDashboardController::class, 'productCreate']);
     Route::get('/seller/digitalproducts/{product_id}/edit', [SellerDashboardController::class, 'digitalProductCreate']);

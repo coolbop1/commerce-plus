@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone'
+        'phone',
+        'balance'
     ];
 
     /**
@@ -133,5 +134,10 @@ class User extends Authenticatable
     {
         $delivery_boy = DeliveryBoy::where('user_id', $this->id)->where('is_banned', 0)->first();
         return $delivery_boy;
+    }
+
+    public function customer()
+    {
+        return $this->hasMany(Customer::class);
     }
 }

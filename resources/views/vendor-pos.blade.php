@@ -4,6 +4,7 @@
 @include('layouts.vendor-pos-products')
 {{-- @include('layouts.vendor-product-form')  --}}
 @section('body')
+<input id="pos-cart-store-id" value="{{ $store->id }}" >
 	<div class="aiz-main-wrapper">
         <div id="alert-modal" class="alert hide" role="alert"></div>
         @yield('vendor-side-bar-menu')

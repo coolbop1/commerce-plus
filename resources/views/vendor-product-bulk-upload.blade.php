@@ -41,7 +41,7 @@
                 <td>4. After uploading products you need to edit them and set products images and choices.</td>
             </tr>
         </table>
-        <a href="/download/product_bulk_demo.xlsx" download><button class="btn btn-primary mt-2">Download CSV</button></a>
+        <a href="/download/Bulk_Product_Template.xlsx" download><button class="btn btn-primary mt-2">Download Bulk Upload Template</button></a>
     </div>
 </div>
 
