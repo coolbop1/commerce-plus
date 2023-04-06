@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="aiz-side-nav-item">
-                    <a href="#" class="aiz-side-nav-link">
+                    <a class="aiz-side-nav-link">
                         <i class="las la-shopping-cart aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text {{ $page == 'products' ? 'active' : '' }}">Products</span>
                         <span class="aiz-side-nav-arrow"></span>

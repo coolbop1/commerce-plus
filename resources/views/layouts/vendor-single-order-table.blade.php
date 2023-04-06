@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-3 ml-auto">
                 <label for="update_payment_status">Delivery Status</label>
-                    <input type="text" class="form-control" value="{{ $order->delivery->status == 'pending' && $order->isAssignedForDelivery() ? ' Assigned For Delivery' : $order->delivery->status }}" disabled>
+                    <input type="text" class="form-control" value="{{ optional(optional($order)->delivery)->status == 'pending' && $order->isAssignedForDelivery() ? ' Assigned For Delivery' : (optional(optional($order)->delivery)->status ?? 'pending') }}" disabled>
             </div>
             <div class="col-md-3 ml-auto">
                 <label for="update_delivery_status">Order Status</label>

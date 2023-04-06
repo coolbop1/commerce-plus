@@ -41,6 +41,7 @@ class SellerDashboardController extends BaseController
         } else {
             $store_id = $user->stores->first()->id;
         }
+        $_SESSION['vendor_current_store_id'] = $store_id ;
         $store = Store::with('products.category', 'orders')->find($store_id);
         $products_id = $store->products->pluck('id')->toArray();
         $ratings_data = Cart::whereHas('checkout', function($q) {
@@ -93,6 +94,21 @@ class SellerDashboardController extends BaseController
 
 
         return view('vendor-products', compact('user', 'store', 'page', 'remaining_uploads'));
+    }
+
+    public function productDelete($product_id)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $store->products()->where('id', $product_id)->delete();
+        return redirect('/seller/products');
     }
 
     public function digitalProducts()

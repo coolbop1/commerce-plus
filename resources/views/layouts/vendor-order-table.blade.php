@@ -64,7 +64,7 @@
                             ₦{{ $order->amount }}
                         </td>
                         <td>
-                            {{ $order->delivery->status }}
+                            {{ optional(optional($order)->delivery)->status ?? 'pending' }}
                         </td>
                         <td>
                             @if ($order->payment_status == 'paid')

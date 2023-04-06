@@ -289,7 +289,6 @@ class StoreController extends BaseController
 
         $checkout = Checkout::create([
             'customer_id' => $request->customer_id, 
-            'total_amount' => 10, 
             'phone' => $customer->phone, 
             'address' => $customer->address, 
             'order_type' => $request->order_type, 
@@ -304,12 +303,163 @@ class StoreController extends BaseController
             'store_id' => $request->store_id, 
             'checkout_id' => $checkout->id, 
             'amount' => $total_amount,
+            'status' => 'accepted',
             'order_code' => $request->store_id.'-'.Carbon::parse(now())->format("Ymd").'-'.time(),
             'payment_status' => $request->order_type == 'cod' ? 'unpaid' : 'paid'
         ]);
         
         return $this->sendResponse($order, 'Order added successfully.');
 
+    }
+
+    public function submitOrder(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'customer_id' => 'required|integer', 
+            'all_cart_items' => 'required', 
+            'customer_id' => 'required|integer',
+            'order_type' => 'required|in:cod,card,cash,offline,wallet',
+            'payment_refrence' => 'required_if:order_type,card',
+            'delivery_type' => 'required|in:home_delivery,pickup_point',
+            'pick_point_id' => 'required_if:delivery_type,pickup_point',
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $customer = Customer::find($request->customer_id);
+        if(!$customer) {
+            return $this->sendError('Customer not found.', $validator->errors(), 404); 
+        }
+        $cart_products = collect(json_decode($request->all_cart_items));
+        $cart_products_ = $cart_products;
+        $unique_product_ids = $cart_products->pluck('product_id')->unique()->toArray();
+        $products_picked = Product::whereIn('id',  $unique_product_ids)->get();
+        if(count($unique_product_ids) != $products_picked->count()) {
+            return $this->sendError('Products not found.', $validator->errors(), 404); 
+        }
+        $products_grouped_by_store = $products_picked->groupBy('store_id');
+
+        $checkout = Checkout::create([
+            'customer_id' => $request->customer_id, 
+            'user_id' => $request->user()->id,
+            'phone' => $customer->phone, 
+            'address' => $customer->address, 
+            'order_type' => $request->order_type, 
+            'payment_refrence' => $request->payment_refrence ?? null,
+            'state_id' =>  $customer->state_id,
+            'checkout_type' => 'online',
+            'total_amount' => 10,
+        ]);
+
+
+        foreach ($products_grouped_by_store as $store_id => $products) {
+            $product_ids = collect($products)->pluck('id')->toArray();
+            $cart_products = $cart_products_ ->whereIn('product_id', $product_ids);
+            $total_amount = 0;
+            
+            $order_cart = [];
+            $input['user_id'] = $request->user()->id;
+            $input['customer_id'] = $request->customer_id;
+            $input['cart_type'] = 'online';
+            $input['checkout_id'] = 1;
+            foreach ($cart_products as $key => $cart_item) {
+                $product = $products_picked->where('id', $cart_item->product_id)->first();
+                $input['checkout_id'] = $checkout->id;
+                $input['product_id'] = $product->id;
+                $input['qty'] = $cart_item->quantity_added;
+                $hasError = $cart_item->quantity_added > $product->quantity;
+                if($hasError) {
+                    return $this->sendError('A selected Product has invalid quantity selected, please refresh and try again.', $validator->errors(), 404); 
+                }
+                $hasError = $cart_item->quantity_added < $product->min_qty; 
+                if($hasError) {
+                    return $this->sendError('A selected Product has invalid quantity selected, please refresh and try again.', $validator->errors(), 404); 
+                }
+                $hasInvalidPrice = $cart_item->price < $product->newPrice();
+                if($hasInvalidPrice) {
+                    return $this->sendError('A selected Product has wrong Price, please refresh and try again.'.$product->newPrice(), $validator->errors(), 404); 
+                }
+                $order_cart[] = $input;
+                $total_amount += $cart_item->quantity_added * $product->newPrice();
+                $product->quantity -= $cart_item->quantity_added;
+                $product->save();
+            }
+            
+            Cart::insert($order_cart);
+            $order = Order::create([
+                'store_id' => $store_id, 
+                'checkout_id' => $checkout->id, 
+                'amount' => $total_amount,
+                'status' => 'pending',
+                'order_code' => $store_id.'-'.Carbon::parse(now())->format("Ymd").'-'.time(),
+                'payment_status' => $request->order_type == 'cod' ? 'unpaid' : 'paid'
+            ]);
+        }
+        $all_total =  Order::where('checkout_id', $checkout->id)->sum('amount');
+        $checkout->total_amount = $all_total;
+        $checkout->save();
+        if($request->order_type == 'wallet') {
+            $remaining_balance = $request->user()->balance - $all_total;
+            User::where('id', $request->user()->id)->update(['balance' => $remaining_balance]);
+        }
+        return $this->sendResponse($checkout, 'Order added successfully.');
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public function validateCart(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'customer_id' => 'required|integer', 
+            'all_cart_items' => 'required|array',
+            'payment_type' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+
+        $cart_products = collect(json_decode(json_encode($request->all_cart_items)));
+        $unique_product_ids = $cart_products->pluck('product_id')->unique()->toArray();
+        $products_picked = Product::whereIn('id',  $unique_product_ids)->get();
+        if(count($unique_product_ids) != $products_picked->count()) {
+            return $this->sendError('Products not found.', $validator->errors(), 404); 
+        }
+        $total_amount = 0;
+        //$temp_checkout_id = $request->store_id.'_'.time();
+        $order_cart = [];
+        $input['customer_id'] = $request->customer_id;
+        $input['cart_type'] = 'online';
+        $input['checkout_id'] = 1;
+        foreach ($cart_products as $key => $cart_item) {
+            $product = $products_picked->where('id', $cart_item->product_id)->first();
+            //$input['review_comment'] = $temp_checkout_id;
+            $input['product_id'] = $product->id;
+            $input['qty'] = $cart_item->quantity_added;
+            $hasError = $cart_item->quantity_added > $product->quantity;
+            if($hasError) {
+                return $this->sendError('A selected Product has invalid quantity selected, please refresh and try again.', $validator->errors(), 404); 
+            }
+            $hasError = $cart_item->quantity_added < $product->min_qty; 
+            if($hasError) {
+                return $this->sendError('A selected Product has invalid quantity selected, please refresh and try again.', $validator->errors(), 404); 
+            }
+            $hasInvalidPrice = $cart_item->price < $product->newPrice();
+            if($hasInvalidPrice) {
+                return $this->sendError('A selected Product has wrong Price, please refresh and try again.'.$product->newPrice(), $validator->errors(), 404); 
+            }
+            $order_cart[] = $input;
+            $total_amount += $cart_item->quantity_added * $product->newPrice();
+        }
+        if ($request->payment_type =='wallet' && $request->user()->balance < $total_amount) {
+            return $this->sendError('Yo have Insufficient balance in your wallet to place this order, Please recharge', $validator->errors(), 400);
+        }
+        return $this->sendResponse(["subtotal" => $total_amount, "cart" => $request->all_cart_items], 'Refund request updated successfully.');
     }
 
     public function toggleRefundApproval(Request $request) {

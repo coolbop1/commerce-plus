@@ -5,6 +5,7 @@ session_start();
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Customer;
 use App\Models\Role;
 use App\Models\Store;
 use App\Models\User;
@@ -28,6 +29,24 @@ class RegisterController extends BaseController
             'c_password' => 'required|same:password',
         ]);
    
+        if($request->user() && $request->has('customer_id') && $request->has('address') && !empty($request->customer_id)) { 
+            $request->user()->customer()->where('id', $request->customer_id)->update([
+                    'address' => $request->address, 
+                    'state_id' => $request->state_id,
+                    'phone' => $request->phone
+                ]);
+            return $this->sendResponse([], $message = "Address Updated succesfully");
+        }
+        if($request->user() && empty($request->customer_id) && $request->has('address') && !empty($request->address)) { 
+            Customer::create([
+                'user_id' => $request->user()->id,
+                'address' => $request->address, 
+                'state_id' => $request->state_id,
+                'store_id' => 0, 
+                'phone' => $request->phone
+            ]);
+            return $this->sendResponse([], $message = "Address added succesfully");
+        }
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
@@ -52,6 +71,19 @@ class RegisterController extends BaseController
                     # code...
                     break;
             }
+        }
+        if($request->has('address')) {
+            
+            Customer::create([
+                'customer_name' => $request->name, 
+                'user_id' => $user->id, 
+                'address' => $request->address, 
+                'state_id' => $request->state_id, 
+                'store_id' => 0, 
+                'phone' => $request->phone
+            ]);
+            return $this->login($request, $message = "New customer account created succesfully");
+            
         }
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
@@ -105,7 +137,7 @@ class RegisterController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request)
+    public function login(Request $request, $message = null)
     {
         info("got to login here ");
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
@@ -114,7 +146,7 @@ class RegisterController extends BaseController
             $success['name'] =  $user->name;
    
             $_SESSION['logged_in'] = User::with(['roles', 'carts'])->find($user->id);
-            return $this->sendResponse($success, 'User login successfully.');
+            return $this->sendResponse($success, $message ?? 'User login successfully.');
         } 
         else{ 
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'], 401);
