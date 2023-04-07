@@ -592,7 +592,7 @@
                                         </div>
                                                                  <!-- khalti -->
                                                                     <!-- Cash Payment -->
-                                        <div class="col-6 col-xl-3 col-md-4">
+                                        <div id="use_cod" class="col-6 col-xl-3 col-md-4">
                                             <label class="aiz-megabox d-block mb-3">
                                                 <input value="cod" class="online_payment"
                                                     type="radio" name="payment_option" >
@@ -887,10 +887,12 @@
                                     <td class="w-50 fw-600">Email:</td>
                                     <td>{{ json_decode($first_order->user)->email }}</td>
                                 </tr>
+                                @if (optional($first_order->customer)->address)
                                 <tr>
                                     <td class="w-50 fw-600">Shipping address:</td>
                                     <td>{{ json_decode($first_order->customer)->address }}, {{ json_decode($first_order->customer->state)->name }}, Nigeria</td>
                                 </tr>
+                                @endif
                             </table>
                         </div>
                         <div class="col-md-6">
@@ -903,10 +905,12 @@
                                     <td class="w-50 fw-600">Total order amount:</td>
                                     <td>₦{{ number_format($orders->sum('amount'), 2) }}</td>
                                 </tr>
+                                @if (optional($first_order->customer)->address)
                                 <tr>
                                     <td class="w-50 fw-600">Shipping:</td>
                                     <td>Flat shipping rate</td>
                                 </tr>
+                                @endif
                                 <tr>
                                     <td class="w-50 fw-600">Payment method:</td>
                                     <td>{{ ucfirst(str_replace('_', ' ', $checkout->order_type)) }}</td>
@@ -932,7 +936,11 @@
                                                 <th width="30%">Product</th>
                                                 <th>Variation</th>
                                                 <th>Quantity</th>
-                                                <th>Delivery Type</th>
+                                                @if(optional(optional($order->orderCarts()->first())->product)->is_digital)
+                                                <th>File</th>
+                                                @else
+                                                    <th>Delivery Type</th>
+                                                @endif
                                                 <th class="text-right">Price</th>
                                             </tr>
                                         </thead>
@@ -955,6 +963,13 @@
                                                     <td>
                                                         {{ $orderDetail->qty }}
                                                     </td>
+                                                    @if($orderDetail->product->is_digital)
+                                                    <td>
+                                                        <a href="/{{ $orderDetail->product->files }}">
+                                                            Download
+                                                        </a>
+                                                    </td>
+                                                    @else
                                                     <td>
                                                         @if ($checkout->shipping_type && $checkout->shipping_type == 'home_delivery')
                                                             Home Delivery
@@ -967,6 +982,8 @@
                                                             Pickip Point
                                                         @endif
                                                     </td>
+                                                    @endif
+
                                                     <td class="text-right">₦{{ number_format($orderDetail->product->newPrice(), 2) }}</td>
                                                 </tr>
                                             @endforeach

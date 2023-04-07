@@ -119,6 +119,9 @@ class HomeController extends BaseController
         $pickup_stations = PickupStation::all();
 
         $checkout = Checkout::with('carts')->where('user_id', $user->id)->where('status', 'pending')->latest()->first();
+        if(is_null($checkout)) {
+            return redirect('/');
+        }
         $orders =  Order::where('checkout_id', $checkout->id)->get();
         
         return view('orderconfirmed', compact('user', 'states', 'customers', 'pickup_stations', 'checkout', 'orders'));

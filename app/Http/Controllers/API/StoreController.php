@@ -314,19 +314,19 @@ class StoreController extends BaseController
 
     public function submitOrder(Request $request) {
         $validator = Validator::make($request->all(), [
-            'customer_id' => 'required|integer', 
+            'cart_type' => 'required',
+            'customer_id' => 'required_unless:cart_type,digital|integer', 
             'all_cart_items' => 'required', 
-            'customer_id' => 'required|integer',
             'order_type' => 'required|in:cod,card,cash,offline,wallet',
             'payment_refrence' => 'required_if:order_type,card',
-            'delivery_type' => 'required|in:home_delivery,pickup_point',
+            'delivery_type' => 'required_unless:cart_type,digital|in:home_delivery,pickup_point',
             'pick_point_id' => 'required_if:delivery_type,pickup_point',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
         $customer = Customer::find($request->customer_id);
-        if(!$customer) {
+        if(!$customer && $request->cart_type == 'physical') {
             return $this->sendError('Customer not found.', $validator->errors(), 404); 
         }
         $cart_products = collect(json_decode($request->all_cart_items));
@@ -341,11 +341,11 @@ class StoreController extends BaseController
         $checkout = Checkout::create([
             'customer_id' => $request->customer_id, 
             'user_id' => $request->user()->id,
-            'phone' => $customer->phone, 
-            'address' => $customer->address, 
+            'phone' => $customer->phone ?? $request->user()->phone, 
+            'address' => $customer->address ?? '', 
             'order_type' => $request->order_type, 
             'payment_refrence' => $request->payment_refrence ?? null,
-            'state_id' =>  $customer->state_id,
+            'state_id' =>  $customer->state_id ?? 1,
             'checkout_type' => 'online',
             'total_amount' => 10,
         ]);
@@ -389,7 +389,7 @@ class StoreController extends BaseController
                 'store_id' => $store_id, 
                 'checkout_id' => $checkout->id, 
                 'amount' => $total_amount,
-                'status' => 'pending',
+                'status' => $request->cart_type == 'digital' ? 'accepted' : 'pending',
                 'order_code' => $store_id.'-'.Carbon::parse(now())->format("Ymd").'-'.time(),
                 'payment_status' => $request->order_type == 'cod' ? 'unpaid' : 'paid'
             ]);
@@ -416,7 +416,8 @@ class StoreController extends BaseController
 
     public function validateCart(Request $request) {
         $validator = Validator::make($request->all(), [
-            'customer_id' => 'required|integer', 
+            'cart_type' => 'required',
+            'customer_id' => 'required_unless:cart_type,digital|integer', 
             'all_cart_items' => 'required|array',
             'payment_type' => 'required'
         ]);
@@ -440,7 +441,8 @@ class StoreController extends BaseController
             $product = $products_picked->where('id', $cart_item->product_id)->first();
             //$input['review_comment'] = $temp_checkout_id;
             $input['product_id'] = $product->id;
-            $input['qty'] = $cart_item->quantity_added;
+            $input['quantity_added'] = $cart_item->quantity_added;
+            $input['is_digital'] = $cart_item->is_digital;
             $hasError = $cart_item->quantity_added > $product->quantity;
             if($hasError) {
                 return $this->sendError('A selected Product has invalid quantity selected, please refresh and try again.', $validator->errors(), 404); 
