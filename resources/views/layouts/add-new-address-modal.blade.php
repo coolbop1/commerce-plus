@@ -359,6 +359,19 @@
     </div>
 </div>
 <script type="text/javascript">
+if(window.location.pathname == '/checkout' || window.location.pathname == '/checkout/delivery_info')
+{
+    let customer_address_string = '';
+    let cart_storage =  'COMMERCE_PLUS_CART';
+    cart_storage = localStorage.getItem(cart_storage);
+    let cartItems = JSON.parse(cart_storage);
+    if (cartItems.length == 0) {
+        window.location.href = '/';
+    } else if(cartItems[0].is_digital) {
+        sessionStorage.setItem('COMMERCE_PLUS_ORDER_PAYLOAD', cart_storage+';;;'+customer_address_string);
+        window.location.href = '/checkout/payment_select';
+    }
+}
 populateCartCount();
 populateCheckoutProductList();
 populatePaymentCartCard();
@@ -514,6 +527,10 @@ populatePaymentCartCard();
             let balance = document.getElementById('use_wallet_card').getAttribute('data-value');
             if(balance < cart_total){
                 document.getElementById('use_wallet_card').remove();
+            }
+            let use_cod_card = document.getElementById('use_cod');
+            if(cartItems.length > 0 && cartItems[0].is_digital == true) {
+                document.getElementById('use_cod').remove();
             }
 
         }

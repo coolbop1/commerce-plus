@@ -504,19 +504,32 @@ function submitOrder(paymentType, cart, paymentReference = null) {
     console.log('payment_type ', paymentType);
     // console.log('paymentReference ', paymentReference);
     let payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
+    console.log('payload payload payload ',payload);
     let data = payload.split(';;;');
-    let customer = JSON.parse(data[1]);
-    let delivery_type = JSON.parse(data[2]);
-    console.log('delivery_type ',delivery_type);
+    let customer = null;
+    let delivery_type = null;
+    console.log('cart-- ',cart)
+    if(!(cart[0].is_digital)) {
+        customer = JSON.parse(data[1]);
+        delivery_type = JSON.parse(data[2]);
+        console.log('delivery_type ',delivery_type);
+    }
+    console.log('out side here delivery_type ',delivery_type);
+    
     let params = new FormData();
     params.append('order_type', paymentType);
     if(paymentReference) {
         params.append('payment_refrence', paymentReference);
     }
     params.append('all_cart_items', JSON.stringify(cart));
-    params.append('customer_id', customer.id);
-    params.append('delivery_type', delivery_type.shipping_type);
-    if(delivery_type.shipping_type != 'home_delivery') {
+    if(customer?.id){
+        params.append('customer_id', customer.id);
+    }
+    if(delivery_type?.shipping_type) {
+        params.append('delivery_type', delivery_type.shipping_type);
+    }
+    params.append('cart_type', cart[0].is_digital ? 'digital' : 'physical');
+    if(delivery_type && delivery_type?.shipping_type != 'home_delivery') {
         params.append('pick_point_id', delivery_type.address);
     }
    
@@ -547,13 +560,18 @@ function pickPaymentType(formElement) {
 
     let payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
     if(payload == null) {
+        //
         showAlert("No order in progress please try again", 'alert-warning', []);
        return false
     }
     let data = payload.split(';;;');
     let products = JSON.parse(data[0]);
-    let customer = JSON.parse(data[1]);
-    let delivery_type = JSON.parse(data[2]);
+    let customer = null;
+    let delivery_type = null;
+    if (!(products[0].is_digital)) {
+        customer = JSON.parse(data[1]);
+        delivery_type = JSON.parse(data[2]);
+    }
  //    const cart = product => element => product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
     let payload_ = {};
     const carts = () => element => {
@@ -561,6 +579,7 @@ function pickPaymentType(formElement) {
      object['product_id'] = element['id'];
      object['price'] = element['new_price'] ?? element['price'];
      object['quantity_added'] = element['quantity_added'] == undefined ? 1 : element['quantity_added'];
+     object['is_digital'] = element['is_digital'];
      return object;
     }
     //product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
@@ -569,9 +588,10 @@ function pickPaymentType(formElement) {
     let all_cart_items = products.map(carts());
     let param = new FormData(formElement);
 
-    payload_['customer_id'] = customer.id;
+    payload_['customer_id'] = customer?.id;
     payload_['all_cart_items'] = all_cart_items;
     payload_['payment_type'] = param.get('payment_option');
+    payload_['cart_type'] = products[0].is_digital ? 'digital' : 'physical';
 
     let http_f = new XMLHttpRequest();
     http_f.open("POST", '/api/validate-cart', true);
@@ -865,8 +885,14 @@ function addToCart (product, ele = null, type = 'pos'){
         
     } else {
         let product = JSON.parse(((((((ele.getAttribute('data-value').replaceAll(`{'`, `{"`)).replaceAll(`}'`, `}"`)).replaceAll(`,'`, `,"`)).replaceAll(`',`, `",`)).replaceAll(`:'`, `:"`)).replaceAll(`':`, `":`)).replaceAll(`'}`, `"}`));
-        cart.push(product);
-        showAlert("Product added to cart sucessfully", 'alert-success', []);
+        if(cart.length == 0 || (cart.length > 0 && cart[0].is_digital == product.is_digital)) {
+            cart.push(product);
+            showAlert("Product added to cart sucessfully", 'alert-success', []);
+        } else {
+            showAlert("Opps!! . you cant add "+(product.is_digital ? 'digital items to physical item carts' : 'physical items to digital item carts')+" item ", 'alert-warning', []);
+            return false;
+        }
+        
     }
 
     localStorage.setItem(cart_storage, JSON.stringify(cart));

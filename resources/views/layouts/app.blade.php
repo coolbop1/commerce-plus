@@ -268,7 +268,7 @@
                         <a href="/wishlists" class="d-flex align-items-center text-reset">
                             <i class="la la-heart-o la-2x opacity-80"></i>
                             <span class="flex-grow-1 ml-1">
-                                <span id="wishlist-count-top" class="badge badge-primary badge-inline badge-pill">{{ $user->wishList->count() ?? 0 }}</span>
+                                <span id="wishlist-count-top" class="badge badge-primary badge-inline badge-pill">{{ optional(optional($user)->wishList)->count() ?? 0 }}</span>
                                 <span class="nav-box-text d-none d-xl-block opacity-70">Wishlist</span>
                             </span>
                         </a>
