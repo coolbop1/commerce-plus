@@ -59,11 +59,18 @@ class Product extends Model
         'is_digital' => 'boolean',
     ];
 
-    protected $appends = array('new_price');
+    protected $appends = ['new_price', 'slug'];
 
     public function getNewpriceAttribute()
     {
         return $this->newPrice();  
+    }
+
+    public function getSlugAttribute()
+    {
+        $name = str_replace('_', '-:::-', $this->name);
+        $slug = str_replace(' ', '_', $name);
+        return $slug;  
     }
 
     public function store()

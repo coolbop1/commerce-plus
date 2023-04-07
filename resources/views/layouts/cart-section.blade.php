@@ -942,7 +942,7 @@
                                                     <td>{{ $key+1 }}</td>
                                                     <td>
                                                         @if ($orderDetail->product != null)
-                                                            <a href="/{{ $orderDetail->product->name }}" target="_blank" class="text-reset">
+                                                            <a href="/product/{{ $orderDetail->product->slug }}" target="_blank" class="text-reset">
                                                                 {{ $orderDetail->product->name }}
                                                             </a>
                                                         @else

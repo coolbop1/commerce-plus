@@ -10,6 +10,9 @@
                 <a href="/flash-deal/falsh-sale" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md w-100 w-md-auto">View More</a>
             </div>
 
+            @php
+                $wishlist = $user ? $user->wishList->pluck('id')->toArray() : [];
+            @endphp
             <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true'>
                 @foreach ($flash_sales as $product)
                     <div class="carousel-box">
@@ -19,7 +22,7 @@
                             @endphp
                             <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $perc }}%</span></span>
                             <div class="position-relative">
-                                <a href="/product/{{ str_replace(' ', '_', $product->name) }}" class="d-block">
+                                <a href="/product/{{ $product->slug }}" class="d-block">
                                 <img
                                     class="img-fit lazyload mx-auto h-140px h-md-210px"
                                     src="/assets/img/placeholder.jpg"
@@ -29,8 +32,8 @@
                                 >
                                 </a>
                                 <div class="absolute-top-right aiz-p-hov-icon">
-                                    <a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left">
-                                        <i class="la la-heart-o"></i>
+                                    <a href="javascript:void(0)" onclick="addToWishListV2({{ $product->id }})" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left">
+                                        <i class="la la-heart-o {{ in_array($product->id, $wishlist) ? 'active' : '' }}"></i>
                                     </a>
                                     <a href="javascript:void(0)" data-value="{{ str_replace(`"`, `'`, json_encode($product)) }}" onclick="addToCart({{ $product->id }}, this, 'online' )" data-toggle="tooltip" data-title="Add to cart" data-placement="left">
                                         <i class="las la-shopping-cart"></i>
@@ -46,7 +49,7 @@
                                     <i class = 'las la-star {{ $product->rating() >= 1 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 2 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 3 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 4 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 5 ? 'active' : '' }}'></i>
                                 </div>
                                 <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
-                                    <a href="/product/{{ str_replace(' ', '_', $product->name) }}" class="d-block text-reset">{{ $product->name }}</a>
+                                    <a href="/product/{{ $product->slug }}" class="d-block text-reset">{{ $product->name }}</a>
                                 </h3>
                             </div>
                         </div>

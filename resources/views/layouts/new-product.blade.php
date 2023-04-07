@@ -16,7 +16,7 @@
                             <div class="carousel-box">
                                 <div class="aiz-card-box border border-light rounded hov-shadow-md mt-1 mb-2 has-transition bg-white">
                                     <div class="position-relative">
-                                        <a href="/product/{{ str_replace(' ', '_', $product->name) }}" class="d-block">
+                                        <a href="/product/{{ $product->slug }}" class="d-block">
                                             <img
                                             class="img-fit lazyload mx-auto h-140px h-md-210px"
                                             src="/assets/img/placeholder.jpg"
@@ -26,7 +26,7 @@
                                             >
                                         </a>
                                         <div class="absolute-top-right aiz-p-hov-icon">
-                                            <a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left">
+                                            <a href="javascript:void(0)" onclick="addToWishListV2({{ $product->id }})" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left">
                                             <i class="la la-heart-o"></i>
                                             </a>
                                             {{-- <a href="javascript:void(0)" onclick="showAddToCartModal({{ $product->id }})" data-toggle="tooltip" data-title="Add to cart" data-placement="left"> --}}
@@ -46,7 +46,7 @@
                                             <i class = 'las la-star {{ $product->rating() >= 1 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 2 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 3 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 4 ? 'active' : '' }}'></i><i class = 'las la-star {{ $product->rating() >= 5 ? 'active' : '' }}'></i>
                                         </div>
                                         <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
-                                            <a href="/product/{{ str_replace(' ', '_', $product->name) }}" class="d-block text-reset">{{ $product->name }}</a>
+                                            <a href="/product/{{ $product->slug }}" class="d-block text-reset">{{ $product->name }}</a>
                                         </h3>
                                             {{-- <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">
                                         Club Point:
