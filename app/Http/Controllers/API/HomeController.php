@@ -21,6 +21,10 @@ class HomeController extends BaseController
 {
     public function index()
     {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
         $categories = Category::with('subCategories.sections')->take(11)->get();
         $productsByStore = Product::orderBy('created_at', 'desc')->get()->groupBy('store_id');
         $current_month_start = Carbon::now()->startOfMonth();
@@ -28,12 +32,13 @@ class HomeController extends BaseController
         $customers = null;
         $states = States::all();
         $flash_sales = Product::where('discount', '>', 0)->take(10)->get();
-        return view('home', compact('categories', 'productsByStore', 'flash_sales', 'states', 'customers'));
+        return view('home', compact('categories', 'productsByStore', 'flash_sales', 'states', 'customers', 'user'));
     }
 
     public function product($product_slug)
     {
         $product_name = str_replace('_', ' ',$product_slug); 
+        $product_name = str_replace('-:::-', '_',$product_name);
         $product = Product::where('name', $product_name)->first();
         $states = States::all();
         $customers = null;

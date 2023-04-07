@@ -11,7 +11,7 @@
         <div class="row gutters-5 row-cols-xxl-5 row-cols-lg-4 row-cols-md-3 row-cols-2">
             @foreach ($store->products as $product)
                 @php
-                    $product_name_link = str_replace(' ', '-', $product->name);
+                    $product_name_link = $product->slug;
                     $product_hero_image = $product->thumbnail_img;
                     $date_range = $product->date_range;
                     $within_range = true;

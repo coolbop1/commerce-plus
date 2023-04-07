@@ -66,7 +66,7 @@
                             <div class="col mb-3">
                                 <div class="d-flex">
                                     <!-- Add to wishlist button -->
-                                    <a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})" class="mr-3 fs-14 text-dark opacity-60 has-transitiuon hov-opacity-100">
+                                    <a href="javascript:void(0)" onclick="addToWishListV2({{ $product->id }})" class="mr-3 fs-14 text-dark opacity-60 has-transitiuon hov-opacity-100">
                                         <i class="la la-heart-o mr-1"></i>
                                         Add to wishlist
                                     </a>

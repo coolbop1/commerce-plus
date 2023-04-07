@@ -808,6 +808,29 @@ function checkOne (element = null) {
 function copyUrl (element) {
     navigator.clipboard.writeText(element.getAttribute('data-url'));
 }
+function addToWishListV2 (product_id) {
+    if(COMMERCE_PLUS_TOKEN) {
+        let params = new FormData()
+        params.append('product_id', product_id);
+        let http_f = new XMLHttpRequest();
+        http_f.open("POST", '/api/save-item', true);
+        http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+        http_f.onreadystatechange = function() {
+            if(http_f.readyState == 4) {
+                let response = JSON.parse(this?.responseText);
+                if(http_f.status == 200) {
+                    showAlert(response.message, 'alert-success');
+                    document.getElementById('wishlist-count-top').innerText = response.data.length
+                } else {
+                    showAlert(response.message, 'alert-warning', []);
+                }
+            }
+        }
+        http_f.send(params);
+    } else {
+        showAlert("You have be logged in add product to wish list", 'alert-warning', []);
+    }
+}
 
 function addToCart (product, ele = null, type = 'pos'){
     let new_add = null;

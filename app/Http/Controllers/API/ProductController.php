@@ -307,8 +307,13 @@ class ProductController extends  BaseController
         }
         $input = $request->all();
         //$request->user()->wishList()->sync(['product_id' => $request->product_id]);
-        $request->user()->wishList()->detach($request->product_id);
-        $request->user()->wishList()->attach($request->product_id);
+        if($request->user()->wishList()->find($request->product_id)) {
+            $request->user()->wishList()->detach($request->product_id);
+        } else {
+            $request->user()->wishList()->attach($request->product_id);
+        }
+        
+        
 
         return $this->getMyWishList($request);
         //return $this->sendResponse([], 'Product added to wish list successfully.');
