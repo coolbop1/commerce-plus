@@ -26,6 +26,7 @@ Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/checkout/delivery_info', [HomeController::class, 'checkoutDeliveryInfo']);
 Route::get('/checkout/payment_select', [HomeController::class, 'checkoutPaymentSelect']);
 Route::get('/checkout/order-confirmed', [HomeController::class, 'checkoutOrderConfirmed']);
+Route::get('/flash-deals', [HomeController::class, 'flashDeal']);
 
 
 Route::middleware(['checksession'])->group( function () {

@@ -7,7 +7,9 @@
                     <span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">Flash Sale</span>
                 </h3>
                 {{-- <div class="aiz-count-down ml-auto ml-lg-3 align-items-center" data-date="2025/01/01 00:00:00"></div> --}}
-                <a href="/flash-deal/falsh-sale" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md w-100 w-md-auto">View More</a>
+                @if (!isset($page) || $page != 'flashdeal' )
+                <a href="/flash-deals" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md w-100 w-md-auto">View More</a>
+                @endif
             </div>
 
             @php
