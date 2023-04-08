@@ -307,7 +307,7 @@
                         </a>
                     </li>
                     <li class="list-inline-item mr-0">
-                        <a href="flash-deals" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="/flash-deals" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             Flash Sale
                         </a>
                     </li>
@@ -317,7 +317,7 @@
                         </a>
                     </li> --}}
                     <li class="list-inline-item mr-0">
-                        <a href="brands" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="/brands" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             All Brands
                         </a>
                     </li>
@@ -327,7 +327,7 @@
                         </a>
                     </li>
                     <li class="list-inline-item mr-0">
-                        <a href="sellers" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
+                        <a href="/sellers" class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset">
                             All Sellers
                         </a>
                     </li>
@@ -568,8 +568,8 @@
 
     
     <!-- SCRIPTS -->
-    <script src="https://demo.activeitzone.com/ecommerce/public/assets/js/vendors.js"></script>
-    <script src="https://demo.activeitzone.com/ecommerce/public/assets/js/aiz-core.js"></script>
+    <script src="/assets/js/vendors.js"></script>
+    <script src="/assets/js/aiz-core.js"></script>
 
 
 
@@ -604,12 +604,29 @@
         $(document).ready(function() {
             $('.category-nav-element').each(function(i, el) {
                 $(el).on('mouseover', function(){
-                    if(!$(el).find('.sub-cat-menu').hasClass('loaded')){
-                        $.post('https://demo.activeitzone.com/ecommerce/category/nav-element-list', {_token: AIZ.data.csrf, id:$(el).data('id')}, function(data){
-                            //
-                            $(el).find('.sub-cat-menu').addClass('loaded').html(data);
-                        });
-                    }
+                    // console.log('it is hovered here');
+                    // let sub_cat_id = 'sub-cat-menu-'+el.getAttribute('data-id');
+                    // document.getElementById(sub_cat_id).innerHTML = `<h1>Hiii `+sub_cat_id+`</h1>`;
+                    // let http_f = new XMLHttpRequest();
+                    // http_f.open("GET", '/api/sub-categories', true);
+                    // http_f.onreadystatechange = function() {
+                    //     if(http_f.readyState == 4) {
+                    //         let response = JSON.parse(this?.responseText);
+                    //         if(http_f.status == 200) {
+                                
+                                
+                    //             document.getElementById('wishlist-count-top').innerText = response.data.length
+                    //         } else {
+                    //             showAlert(response.message, 'alert-warning', []);
+                    //         }
+                    //     }
+                    // }
+                    // http_f.send();
+                    // if(!$(el).find('.sub-cat-menu').hasClass('loaded')){
+                    //     //$.post('https://demo.activeitzone.com/ecommerce/category/nav-element-list', {_token: AIZ.data.csrf, id:$(el).data('id')}, function(data){
+                    //         $(el).find('.sub-cat-menu').addClass('loaded').html(data);
+                    //     //});
+                    // }
                 });
             });
             if ($('#lang-change').length > 0) {

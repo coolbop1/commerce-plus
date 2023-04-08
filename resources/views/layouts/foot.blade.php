@@ -3,25 +3,25 @@
     <div class="container">
         <div class="row no-gutters">
             <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left text-center p-4 d-block" href="https://demo.activeitzone.com/ecommerce/terms">
+                <a class="text-reset border-left text-center p-4 d-block" href="/terms">
                     <i class="la la-file-text la-3x text-primary mb-2"></i>
                     <h4 class="h6">Terms &amp; conditions</h4>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left text-center p-4 d-block" href="https://demo.activeitzone.com/ecommerce/return-policy">
+                <a class="text-reset border-left text-center p-4 d-block" href="/return-policy">
                     <i class="la la-mail-reply la-3x text-primary mb-2"></i>
                     <h4 class="h6">Return Policy</h4>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left text-center p-4 d-block" href="https://demo.activeitzone.com/ecommerce/support-policy">
+                <a class="text-reset border-left text-center p-4 d-block" href="/support-policy">
                     <i class="la la-support la-3x text-primary mb-2"></i>
                     <h4 class="h6">Support Policy</h4>
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a class="text-reset border-left border-right text-center p-4 d-block" href="https://demo.activeitzone.com/ecommerce/privacy-policy">
+                <a class="text-reset border-left border-right text-center p-4 d-block" href="/privacy-policy">
                     <i class="las la-exclamation-circle la-3x text-primary mb-2"></i>
                     <h4 class="h6">Privacy Policy</h4>
                 </a>
@@ -42,7 +42,7 @@
                         <span style="color: rgb(242, 243, 248); font-family: "Open Sans", sans-serif; background-color: rgb(17, 23, 35);">Complete system for your eCommerce business</span>
                     </div>
                     <div class="d-inline-block d-md-block mb-4">
-                        <form class="form-inline" method="POST" action="https://demo.activeitzone.com/ecommerce/subscribers">
+                        <form class="form-inline" method="POST" action="/subscribers">
                             <input type="hidden" name="_token" value="P54hNJtbnPpNjyx9nY1tneWSGkmotlKPs4rLaJjl">                            <div class="form-group mb-0">
                                 <input type="email" class="form-control" placeholder="Your Email Address" name="email" required>
                             </div>
