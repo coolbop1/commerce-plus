@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\API\BuyerController;
 use App\Http\Controllers\API\CategoryWebController;
 use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\SellerDashboardController;
@@ -27,6 +28,15 @@ Route::get('/checkout/delivery_info', [HomeController::class, 'checkoutDeliveryI
 Route::get('/checkout/payment_select', [HomeController::class, 'checkoutPaymentSelect']);
 Route::get('/checkout/order-confirmed', [HomeController::class, 'checkoutOrderConfirmed']);
 Route::get('/flash-deals', [HomeController::class, 'flashDeal']);
+Route::get('/terms', [HomeController::class, 'terms']);
+Route::get('/return-policy', [HomeController::class, 'returnPolicy']);
+Route::get('/support-policy', [HomeController::class, 'supportPolicy']);
+Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy']);
+Route::get('/sellers', [HomeController::class, 'stores']);
+
+Route::middleware(['session'])->group( function () {
+    Route::get('/wishlists', [BuyerController::class, 'wishList']);
+});
 
 
 Route::middleware(['checksession'])->group( function () {

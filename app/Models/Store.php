@@ -19,6 +19,8 @@ class Store extends Model
         'warehoused' => 'boolean',
     ];
 
+    // protected $appends = ['ratings'];
+
     public function users()
     {
         //return $this->belongsTo(User::class);
@@ -26,6 +28,11 @@ class Store extends Model
             ->belongsToMany(User::class)
             ->withTimestamps();
     }
+
+    // public function getRatingsAttribute()
+    // {
+    //     return $this->newPrice();  
+    // }
 
     public function products()
     {

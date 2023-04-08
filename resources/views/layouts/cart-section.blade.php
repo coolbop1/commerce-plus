@@ -677,15 +677,15 @@
                                 <span class="aiz-square-check"></span>
                                 <span>I agree to the</span>
                             </label>
-                            <a href="https://demo.activeitzone.com/ecommerce/terms" class="fw-700">terms and conditions</a>,
-                            <a href="https://demo.activeitzone.com/ecommerce/return-policy" class="fw-700">Return Policy</a> &
-                            <a href="https://demo.activeitzone.com/ecommerce/privacy-policy" class="fw-700">Privacy Policy</a>
+                            <a href="/terms" class="fw-700">terms and conditions</a>,
+                            <a href="/return-policy" class="fw-700">Return Policy</a> &
+                            <a href="/privacy-policy" class="fw-700">Privacy Policy</a>
                         </div>
 
                         <div class="row align-items-center pt-3 px-4 mb-4">
                             <!-- Return to shop -->
                             <div class="col-6">
-                                <a href="https://demo.activeitzone.com/ecommerce" class="btn btn-link fs-14 fw-700 px-0">
+                                <a href="/" class="btn btn-link fs-14 fw-700 px-0">
                                     <i class="las la-arrow-left fs-16"></i>
                                     Return to shop
                                 </a>

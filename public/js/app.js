@@ -828,7 +828,7 @@ function checkOne (element = null) {
 function copyUrl (element) {
     navigator.clipboard.writeText(element.getAttribute('data-url'));
 }
-function addToWishListV2 (product_id) {
+function addToWishListV2 (product_id, ele = null) {
     if(COMMERCE_PLUS_TOKEN) {
         let params = new FormData()
         params.append('product_id', product_id);
@@ -839,7 +839,12 @@ function addToWishListV2 (product_id) {
             if(http_f.readyState == 4) {
                 let response = JSON.parse(this?.responseText);
                 if(http_f.status == 200) {
-                    showAlert(response.message, 'alert-success');
+                    if(ele) {
+                        ele.remove();
+                    } else {
+                        showAlert(response.message, 'alert-success');
+                    }
+                    
                     document.getElementById('wishlist-count-top').innerText = response.data.length
                 } else {
                     showAlert(response.message, 'alert-warning', []);

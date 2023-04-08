@@ -12,7 +12,9 @@ use App\Models\Order;
 use App\Models\PickupStation;
 use App\Models\Product;
 use App\Models\States;
+use App\Models\Store;
 use App\Models\User;
+use App\Models\Website;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +64,57 @@ class HomeController extends BaseController
         $page = 'flashdeal';
         return view('flash-deal', compact('user', 'flash_sales', 'page'));
     }
+
+    public function terms()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $website = Website::latest()->first();
+        return view('terms', compact('website', 'user'));
+    }
+
+    public function returnPolicy()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $website = Website::latest()->first();
+        return view('return-policy', compact('website', 'user'));
+    }
+
+    public function supportPolicy()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $website = Website::latest()->first();
+        return view('support-policy', compact('website', 'user'));
+    }
+
+    public function privacyPolicy()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $website = Website::latest()->first();
+        return view('privacy-policy', compact('website', 'user'));
+    }
+
+    public function stores()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $stores = Store::all();
+        return view('sellers', compact('user', 'stores'));
+    }
+    
 
     public function cart()
     {

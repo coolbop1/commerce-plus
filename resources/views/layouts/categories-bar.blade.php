@@ -26,11 +26,26 @@
                         >
                         <span class="cat-name">{{ $categoryName }}</span>
                     </a>
-                    <div class="sub-cat-menu c-scrollbar-light rounded shadow-lg p-4">
-                        <div class="c-preloader text-center absolute-center">
-                            <i class="las la-spinner la-spin la-3x opacity-70"></i>
+                    {{-- <div id="sub-cat-menu-{{ $list_number }}" class="sub-cat-menu c-scrollbar-light rounded shadow-lg p-4"> --}}
+                        <div class="sub-cat-menu c-scrollbar-light border p-4 shadow-none loaded">
+                            <div class="card-columns">
+                                @foreach ($category->subCategories as $subCategory)
+                                    <div class="card shadow-none border-0">
+                                        <ul class="list-unstyled mb-3">
+                                            <li class="fs-14 fw-700 mb-3">
+                                                <a class="text-reset hov-text-primary" href="/category/{{ $subCategory->name }}">{{ $subCategory->name }}</a>
+                                            </li>
+                                            @foreach ($subCategory->sections as $section)
+                                            <li class="mb-2 fs-14 pl-2">
+                                                <a class="text-reset hov-text-primary animate-underline-primary" href="/category/{{ $section->name }}">{{ $section->name }}</a>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>  
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
+                    {{-- </div> --}}
                 </li>
                 
             @endforeach
