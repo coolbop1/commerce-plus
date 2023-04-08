@@ -83,7 +83,12 @@
                         <div class="d-flex flex-wrap align-items-center">
                             <div class="d-flex align-items-center mr-4">
                                 <!-- Shop Name -->
+                                @if ($product->store->warehoused)
                                 <p class="mb-0 fs-14 fw-700">Inhouse product</p>
+                                @else
+                                <p class="mb-0 fs-14 fw-700">Store product</p>
+                                @endif
+                                
                             </div>
                         </div>
 
@@ -94,7 +99,7 @@
                             <!-- Color Options -->
                             
                             <!-- Quantity + Add to cart -->
-                            <div class="row no-gutters mb-3">
+                            {{-- <div class="row no-gutters mb-3">
                                 <div class="col-sm-2">
                                     <div class="text-secondary fs-14 fw-400 mt-2">Quantity</div>
                                 </div>
@@ -116,7 +121,7 @@
                                                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
             
                                     
                         <!-- Total Price -->

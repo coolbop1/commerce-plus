@@ -52,6 +52,17 @@ class HomeController extends BaseController
         return back();
     }
 
+    public function flashDeal()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $flash_sales = Product::where('discount', '>', 0)->take(20)->get();
+        $page = 'flashdeal';
+        return view('flash-deal', compact('user', 'flash_sales', 'page'));
+    }
+
     public function cart()
     {
         $user = null;
