@@ -8,6 +8,8 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use App\Models\Section;
+use App\Models\SubCategory;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends BaseController
@@ -80,5 +82,38 @@ class CategoryController extends BaseController
         $category->delete();
 
         return $this->sendResponse([], 'Category deleted successfully.');
+    }
+
+    public function listCategoryProduct(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'category_type' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        switch ($request->category_type) {
+            case 'category':
+                $category = Category::with('products')->find($request->id);
+                break;
+            case 'sub_category':
+                $category = SubCategory::with('products')->find($request->id);
+                break;
+            case 'section':
+                $category = Section::with('products')->find($request->id);
+                break;
+            
+            default:
+            $category = Category::with('products')->find($request->id);
+                break;
+        }
+
+        $products = $category->products()->when($request->min_price, function($q) use($request){
+            return $q->where('price', '>=', $request->min_price);
+        })->when($request->max_price, function($q) use($request){
+            return $q->where('price', '<=', $request->max_price);
+        })->get();
+        
+        return $this->sendResponse($products, 'Category Product retrieved successfully.');
     }
 }

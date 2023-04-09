@@ -59,11 +59,16 @@ class Product extends Model
         'is_digital' => 'boolean',
     ];
 
-    protected $appends = ['new_price', 'slug'];
+    protected $appends = ['new_price', 'slug', 'perc'];
 
     public function getNewpriceAttribute()
     {
         return $this->newPrice();  
+    }
+
+    public function getPercAttribute()
+    {
+        return $this->discountPercentage();  
     }
 
     public function getSlugAttribute()
@@ -125,6 +130,15 @@ class Product extends Model
         } else {
             return 0;
         }
+    }
+
+    public function discountPercentage()
+    {
+        $perc = null;
+        if($this->hasDiscount()) {
+            $perc = $this->discount_type == 'percent' ? $this->discount : ((100 * $this->discount)/$this->price);
+        }
+        return $perc;
     }
 
     public function newPrice()
