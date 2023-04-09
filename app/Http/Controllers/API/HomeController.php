@@ -11,8 +11,10 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\PickupStation;
 use App\Models\Product;
+use App\Models\Section;
 use App\Models\States;
 use App\Models\Store;
+use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Website;
 use Carbon\Carbon;
@@ -189,5 +191,28 @@ class HomeController extends BaseController
         $orders =  Order::where('checkout_id', $checkout->id)->get();
         
         return view('orderconfirmed', compact('user', 'states', 'customers', 'pickup_stations', 'checkout', 'orders'));
+    }
+
+    public function category($category_slug)
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $category_name = str_replace('-',' ', $category_slug);
+        $category_name = str_replace(':::', '-', $category_name);
+        $category = Category::with('products')->where('name', $category_name)->first() ?? SubCategory::with('products')->where('name', $category_name)->first() ?? Section::with('products')->where('name', $category_name)->first();
+        if(is_null($category->category_id) && is_null($category->sub_category_id)) {
+            $type = 'category';
+            $sibling_category = SubCategory::where('category_id', $category->id)->get();
+        } elseif ($category->category_id) {
+            $type = 'sub_category';
+            $sibling_category = Section::where('sub_category_id', $category->id)->get();
+        } else {
+            $type = 'section';
+            $sibling_category = [];
+        }
+
+        return view('category-product', compact('user', 'category', 'sibling_category', 'type'));
     }
 }

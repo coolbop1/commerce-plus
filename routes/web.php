@@ -33,6 +33,7 @@ Route::get('/return-policy', [HomeController::class, 'returnPolicy']);
 Route::get('/support-policy', [HomeController::class, 'supportPolicy']);
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy']);
 Route::get('/sellers', [HomeController::class, 'stores']);
+Route::get('/category/{caterogy_slug}', [HomeController::class, 'category']);
 
 Route::middleware(['session'])->group( function () {
     Route::get('/wishlists', [BuyerController::class, 'wishList']);

@@ -110,6 +110,7 @@ Route::get('list-categories', [CategoryController::class, 'listCategories']);
 Route::get('list-stores', [StoreController::class, 'listStores']);
 Route::get('view-store/{store_id}', [StoreController::class, 'viewStore']);
 Route::get('view-product/{product_id}', [ProductController::class, 'show']);
+Route::post('list_category_products', [CategoryController::class, 'listCategoryProduct']);
 
 
 
