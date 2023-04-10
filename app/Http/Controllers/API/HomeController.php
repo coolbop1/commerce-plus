@@ -37,7 +37,8 @@ class HomeController extends BaseController
         $customers = null;
         $states = States::all();
         $flash_sales = Product::where('discount', '>', 0)->take(10)->get();
-        return view('home', compact('categories', 'productsByStore', 'flash_sales', 'states', 'customers', 'user'));
+        $brands = Brand::take(20)->get();
+        return view('home', compact('categories', 'productsByStore', 'flash_sales', 'states', 'customers', 'user', 'brands'));
     }
 
     public function product($product_slug)
