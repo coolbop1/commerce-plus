@@ -193,10 +193,10 @@
                 @else
                     <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">    
                         <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                            <a href="login" class="text-reset d-inline-block opacity-60 py-2">Login</a>
+                            <a href="/login" class="text-reset d-inline-block opacity-60 py-2">Login</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="register" class="text-reset d-inline-block opacity-60 py-2">Registration</a>
+                            <a href="/register" class="text-reset d-inline-block opacity-60 py-2">Registration</a>
                         </li>
                     </ul>
                 @endif
