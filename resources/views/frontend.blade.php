@@ -45,7 +45,7 @@
 
     @yield('classified-ads')                                   
 
-    @yield('home-flash-deal-last')
+    {{-- @yield('home-flash-deal-last') --}}
 
     @yield('home-category-and-brand')
             

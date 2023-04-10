@@ -1,7 +1,7 @@
 @section('homepage-slider')
 <div class=" col-lg-7 ">
     <div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true">
-                                                <div class="carousel-box">
+                                                {{-- <div class="carousel-box">
 <a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
@@ -11,12 +11,12 @@
                                                 onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
 >
 </a>
-</div>
+</div> --}}
                     <div class="carousel-box">
 <a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
-    src="https://demo.activeitzone.com/ecommerce/public/uploads/all/0Bf6AZrON13NRpLxc7S6bua38uRBUuiwCH7fN3LG.png"
+    src="/assets/img/Slider banner   2.jpg"
     alt="Active eCommerce CMS promo"
                                                 height="315"
                                                 onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
@@ -27,7 +27,7 @@
 <a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
-    src="https://demo.activeitzone.com/ecommerce/public/uploads/all/HordtzBXzs1JUTTFpRyGLPYO26Z9J4IVt3jLeOsM.png"
+    src="/assets/img/Slider banner 1.jpg"
     alt="Active eCommerce CMS promo"
                                                 height="315"
                                                 onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
@@ -38,7 +38,7 @@
 <a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
-    src="https://demo.activeitzone.com/ecommerce/public/uploads/all/D336pBP0YKEHoa4NWUFCh1blXcGsYlTIjvdFnaGm.png"
+    src="/assets/img/Slider banner  – 3.jpg"
     alt="Active eCommerce CMS promo"
                                                 height="315"
                                                 onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
