@@ -2,65 +2,75 @@
 <div class=" col-lg-7 ">
     <div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true">
                                                 <div class="carousel-box">
-<a href="https://codecanyon.net/item/active-ecommerce-cms/23471405?s_rank=23">
+<a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
     src="https://demo.activeitzone.com/ecommerce/public/uploads/all/faEi771HIT7B9yPye5YqXip8EBMXa4VQBLhksq2g.png"
     alt="Active eCommerce CMS promo"
                                                 height="315"
-                                                onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder-rect.jpg';"
+                                                onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
 >
 </a>
 </div>
                     <div class="carousel-box">
-<a href="https://codecanyon.net/item/active-ecommerce-cms/23471405?s_rank=23">
+<a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
     src="https://demo.activeitzone.com/ecommerce/public/uploads/all/0Bf6AZrON13NRpLxc7S6bua38uRBUuiwCH7fN3LG.png"
     alt="Active eCommerce CMS promo"
                                                 height="315"
-                                                onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder-rect.jpg';"
+                                                onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
 >
 </a>
 </div>
                     <div class="carousel-box">
-<a href="https://codecanyon.net/item/active-ecommerce-cms/23471405?s_rank=23">
+<a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
     src="https://demo.activeitzone.com/ecommerce/public/uploads/all/HordtzBXzs1JUTTFpRyGLPYO26Z9J4IVt3jLeOsM.png"
     alt="Active eCommerce CMS promo"
                                                 height="315"
-                                                onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder-rect.jpg';"
+                                                onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
 >
 </a>
 </div>
                     <div class="carousel-box">
-<a href="https://codecanyon.net/item/active-ecommerce-cms/23471405?s_rank=23">
+<a href="/">
 <img
     class="d-block mw-100 img-fit rounded shadow-sm overflow-hidden"
     src="https://demo.activeitzone.com/ecommerce/public/uploads/all/D336pBP0YKEHoa4NWUFCh1blXcGsYlTIjvdFnaGm.png"
     alt="Active eCommerce CMS promo"
                                                 height="315"
-                                                onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder-rect.jpg';"
+                                                onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
 >
 </a>
 </div>
             </div>
                         <ul class="list-unstyled mb-0 row gutters-5">
-                    <li class="minw-0 col-4 col-md mt-3">
-<a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion" class="d-block rounded bg-white p-2 text-reset shadow-sm">
-<img
-    src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg"
-    data-src="https://demo.activeitzone.com/ecommerce/public/uploads/all/1MUCmFKsjx73ETkmjx2DYGo3XgKPBDpr36r1b4OY.png"
-    alt="Women Clothing &amp; Fashion"
-    class="lazyload img-fit"
-    height="78"
-    onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder-rect.jpg';"
->
-<div class="text-truncate fs-12 fw-600 mt-2 opacity-70">Women Clothing &amp; Fashion</div>
-</a>
-</li>
-                    <li class="minw-0 col-4 col-md mt-3">
+                            @foreach ($categories->take(6) as $key => $category)
+                                @php
+                                    $list_number = $key + 1;
+                                    $categoryName = $category->name;
+                                    $name_string = str_replace(' ', '-',$categoryName);
+                                    $cat_name = str_replace('-', ':::', $categoryName);
+                                    $cat_name_slug = str_replace(' ', '-', $cat_name);
+                                @endphp
+                                <li class="minw-0 col-4 col-md mt-3">
+                                    <a href="/category/{{ $cat_name_slug }}" class="d-block rounded bg-white p-2 text-reset shadow-sm">
+                                    <img
+                                        src="/assets/img/placeholder.jpg"
+                                        data-src="/download/{{ $name_string }}.jpeg"
+                                        alt="{{ $category->name }}"
+                                        class="lazyload img-fit"
+                                        height="78"
+                                        onerror="this.onerror=null;this.src='/assets/img/placeholder-rect.jpg';"
+                                    >
+                                    <div class="text-truncate fs-12 fw-600 mt-2 opacity-70">{{ $category->name }}</div>
+                                    </a>
+                                </li>
+                            @endforeach
+                    
+                    {{-- <li class="minw-0 col-4 col-md mt-3">
 <a href="https://demo.activeitzone.com/ecommerce/category/mobile-phones" class="d-block rounded bg-white p-2 text-reset shadow-sm">
 <img
     src="https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg"
@@ -124,7 +134,7 @@
 >
 <div class="text-truncate fs-12 fw-600 mt-2 opacity-70">Tools</div>
 </a>
-</li>
+</li> --}}
             </ul>
 </div>
 @endsection

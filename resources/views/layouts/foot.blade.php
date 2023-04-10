@@ -53,10 +53,10 @@
                     </div>
                     <div class="w-300px mw-100 mx-auto mx-md-0">
                             <a href="#" target="_blank" class="d-inline-block mr-3 ml-0">
-                                <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/play.png" class="mx-100 h-40px">
+                                <img src="/assets/img/play.png" class="mx-100 h-40px">
                             </a>
                             <a href="#" target="_blank" class="d-inline-block">
-                                <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/app.png" class="mx-100 h-40px">
+                                <img src="/assets/img/app.png" class="mx-100 h-40px">
                             </a>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                         <li class="mb-2">
                            <span class="d-block opacity-30">Email:</span>
                            <span class="d-block opacity-70">
-                               <a href="/cdn-cgi/l/email-protection#ff9b9a9290d19a879e928f939abf98929e9693d19c9092" class="text-reset"><span class="__cf_email__" data-cfemail="9bfffef6f4b5fee3faf6ebf7fedbfcf6faf2f7b5f8f4f6">[email&#160;protected]</span></a>
+                               <a href="/cdn-cgi/l/email-protection#ff9b9a9290d19a879e928f939abf98929e9693d19c9092" class="text-reset"><span class="__cf_email__" data-cfemail="9bfffef6f4b5fee3faf6ebf7fedbfcf6faf2f7b5f8f4f6">support@commerceplus.com</span></a>
                             </span>
                         </li>
                     </ul>
@@ -91,32 +91,32 @@
                     </h4>
                     <ul class="list-unstyled">
                                                                                 <li class="mb-2">
-                                <a href="sellerpolicy" class="opacity-50 hov-opacity-100 text-reset">
+                                <a href="/seller-policy" class="opacity-50 hov-opacity-100 text-reset">
                                     Support Policy Page
                                 </a>
                             </li>
                                                         <li class="mb-2">
-                                <a href="returnpolicy" class="opacity-50 hov-opacity-100 text-reset">
+                                <a href="/return-policy" class="opacity-50 hov-opacity-100 text-reset">
                                     Return Policy Page
                                 </a>
                             </li>
                                                         <li class="mb-2">
-                                <a href="aboutus" class="opacity-50 hov-opacity-100 text-reset">
+                                <a href="/about-us" class="opacity-50 hov-opacity-100 text-reset">
                                     About Us
                                 </a>
                             </li>
                                                         <li class="mb-2">
-                                <a href="privacypolicy" class="opacity-50 hov-opacity-100 text-reset">
+                                <a href="/privacy-policy" class="opacity-50 hov-opacity-100 text-reset">
                                     Privacy Policy Page
                                 </a>
                             </li>
                                                         <li class="mb-2">
-                                <a href="sellerpolicy" class="opacity-50 hov-opacity-100 text-reset">
+                                <a href="/sellerpolicy" class="opacity-50 hov-opacity-100 text-reset">
                                     Seller Policy
                                 </a>
                             </li>
                                                         <li class="mb-2">
-                                <a href="terms" class="opacity-50 hov-opacity-100 text-reset">
+                                <a href="/terms" class="opacity-50 hov-opacity-100 text-reset">
                                     Term Conditions Page
                                 </a>
                             </li>
@@ -142,22 +142,22 @@
                             @endif
                         </li>
                         <li class="mb-2">
-                            <a class="opacity-50 hov-opacity-100 text-reset" href="https://demo.activeitzone.com/ecommerce/purchase_history">
+                            <a class="opacity-50 hov-opacity-100 text-reset" href="/purchase_history">
                                 Order History
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a class="opacity-50 hov-opacity-100 text-reset" href="https://demo.activeitzone.com/ecommerce/wishlists">
+                            <a class="opacity-50 hov-opacity-100 text-reset" href="/wishlists">
                                 My Wishlist
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a class="opacity-50 hov-opacity-100 text-reset" href="https://demo.activeitzone.com/ecommerce/track-your-order">
+                            <a class="opacity-50 hov-opacity-100 text-reset" href="/track-your-order">
                                 Track Order
                             </a>
                         </li>
                                                     <li class="mb-2">
-                                <a class="opacity-50 hov-opacity-100 text-light" href="https://demo.activeitzone.com/ecommerce/affiliate">Be an affiliate partner</a>
+                                <a class="opacity-50 hov-opacity-100 text-light" href="/affiliate">Be an affiliate partner</a>
                             </li>
                                             </ul>
                 </div>
