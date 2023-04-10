@@ -65,6 +65,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\CheckRole::class,
         'permission' => \App\Http\Middleware\CheckPermission::class,
+        'session' => \App\Http\Middleware\SetSession::class,
+        'checksession' => \App\Http\Middleware\CheckSession::class,
         'webrole' => \App\Http\Middleware\WebCheckRole::class,
+        'rider' => \App\Http\Middleware\OnlyRider::class,
+        'roles' => \App\Http\Middleware\CheckInRoles::class
     ];
 }

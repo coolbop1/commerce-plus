@@ -16,9 +16,11 @@ class WebCheckRole
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if (! $request->user()->hasRole($role)) {
-            abort(401, 'This action is unauthorized.');
+        $user = $_SESSION['logged_in'];
+        if(!$user->hasRole($role)) {
+            return redirect('/');
         }
+        
         return $next($request);
     }
 }

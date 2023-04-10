@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Store;
+use App\Models\TemporaryFiles;
 use App\Models\ViwedProducts;
 use Illuminate\Support\Facades\Validator;
 
@@ -54,18 +55,91 @@ class ProductController extends  BaseController
             'detail' => 'required',
             'store_id' => 'required',
             'category_id' => 'required',
-            'quantity' => 'nullable|integer'
+            'sub_category_id' => 'nullable|integer',
+            'section_id' => 'nullable|integer',
+            'quantity' => 'nullable|integer',
+            'brand_id' => 'nullable|integer',
+            'unit' => 'nullable|string',
+            'min_qty' => 'nullable|integer',
+            'refundable' => 'nullable|boolean',
+            'photos' => 'nullable|string',
+            'thumbnail_img' => 'nullable|string',
+            'video_provider' => 'nullable|in:youtube',
+            'video_link ' => 'nullable|string',
+            'price' => 'required|numeric|gt:0',
+            'discount' => 'nullable|integer',
+            'discount_type' => 'nullable|in:amount,percent',
+            'sku' => 'nullable|string', 
+            'external_link' => 'nullable|string', 
+            'external_link_btn' => 'nullable|string',
+            'files' => 'nullable|string', 
+            'pdf' => 'nullable|string', 
+            'meta_title' => 'nullable|string', 
+            'meta_description' =>'nullable|string', 
+            'meta_img' => 'nullable|string', 
+            'shipping_type' => 'nullable|in:free,flat_rate',
+            'low_stock_quantity' => 'nullable|integer',
+            'stock_visibility_state' => 'nullable|in:quantity,text,hide',
+            'cash_on_delivery' => 'nullable|boolean',
+            'est_shipping_days' => 'nullable|integer',
+            'tax' => 'nullable|integer',
+            'tax_type' => 'nullable|in:amount,percent',
+            'vat' => 'nullable|integer',
+            'vat_type' => 'nullable|in:amount,percent',
+            'user_id' => 'nullable|integer',
+            'is_digital' => 'nullable|boolean',
         ]);
    
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
+        if(!$request->user()->isStoreAdmin($request->store_id)){
+            return $this->sendError('Permission denied.', [], 401);
+        }
+        if($request->thumbnail_img){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->thumbnail_img))->orWhereIn('file_path', explode(',', $request->thumbnail_img))->latest()->first();
+            $request_thumbnail_img = $temp->file_path ?? null;
+            if($request_thumbnail_img) {
+                $request->request->add(['thumbnail_img' => $request_thumbnail_img]);
+            }
+        }
+        if($request->photos){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->photos))->orWhereIn('file_path', explode(',', $request->photos))->pluck('file_path')->toArray();
+            $request_photos = count($temp) > 0 ? implode(',', $temp) : null;
+            if($request_photos) {
+                $request->request->add(['photos' => $request_photos]);
+            }
+        }
+
+        $category_string = $request->category_id;
+        $category_array = !is_null($category_string) && $category_string != '' ? explode('_', $category_string) : [];
+        $request->request->add(['user_id' => $request->user()->id]);
+        switch (true) {
+            case count($category_array) == 1:
+                $request->request->add(['category_id' => $category_array[0]]);
+                break;
+            case count($category_array) == 2:
+                $request->request->add(['category_id' => $category_array[0]]);
+                $request->request->add(['sub_category_id' => $category_array[1]]);
+                break;
+            case count($category_array) == 3:
+                $request->request->add(['category_id' => $category_array[0]]);
+                $request->request->add(['sub_category_id' => $category_array[1]]);
+                $request->request->add(['section_id' => $category_array[2]]);
+                break;
+            default:
+                # code...
+                break;
+        }
+        $input = $request->all();
    
         $product = Product::updateOrCreate(
             [
                 'name' => $input['name'],
                 'store_id' => $input['store_id'],
-                'category_id' => $input['category_id']
+                'category_id' => $input['category_id'],
+                'sub_category_id' => $input['sub_category_id'] ?? null,
+                'section_id' => $input['section_id'] ?? null,
             ],
             $input
         );
@@ -114,21 +188,97 @@ class ProductController extends  BaseController
             'name' => 'nullable|string',
             'detail' => 'nullable|string',
             'store_id' => 'nullable|integer',
-            'category_id' => 'nullable|integer',
+            'category_id' => 'nullable',
             'quantity' => 'nullable|integer',
-            'price' => 'nullable|numeric'
+            'sub_category_id' => 'nullable',
+            'section_id' => 'nullable|integer',
+            'quantity' => 'nullable|integer',
+            'brand_id' => 'nullable|integer',
+            'unit' => 'nullable|string',
+            'min_qty' => 'nullable|integer',
+            'refundable' => 'nullable|boolean',
+            'photos' => 'nullable|string',
+            'thumbnail_img' => 'nullable|string',
+            'video_provider' => 'nullable|in:youtube',
+            'video_link ' => 'nullable|string',
+            'price' => 'required|numeric|gt:0',
+            'discount' => 'nullable|integer',
+            'discount_type' => 'nullable|in:amount,percent',
+            'sku' => 'nullable|string', 
+            'external_link' => 'nullable|string', 
+            'external_link_btn' => 'nullable|string',
+            'files' => 'nullable|string', 
+            'pdf' => 'nullable|string', 
+            'meta_title' => 'nullable|string', 
+            'meta_description' =>'nullable|string', 
+            'meta_img' => 'nullable|string', 
+            'shipping_type' => 'nullable|in:free,flat_rate',
+            'low_stock_quantity' => 'nullable|integer',
+            'stock_visibility_state' => 'nullable|in:quantity,text,hide',
+            'cash_on_delivery' => 'nullable|boolean',
+            'est_shipping_days' => 'nullable|integer',
+            'tax' => 'nullable|integer',
+            'tax_type' => 'nullable|in:amount,percent',
+            'vat' => 'nullable|integer',
+            'vat_type' => 'nullable|in:amount,percent',
+            'user_id' => 'nullable|integer',
+            'is_digital' => 'nullable|boolean'
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+
+        if($request->thumbnail_img){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->thumbnail_img))->orWhereIn('file_path', explode(',', $request->thumbnail_img))->latest()->first();
+            $request_thumbnail_img = $temp->file_path ?? null;
+            if($request_thumbnail_img) {
+                $request->request->add(['thumbnail_img' => $request_thumbnail_img]);
+            }
+        }
+        if($request->photos){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->photos))->orWhereIn('file_path', explode(',', $request->photos))->pluck('file_path')->toArray();
+            $request_photos = count($temp) > 0 ? implode(',', $temp) : null;
+            if($request_photos) {
+                $request->request->add(['photos' => $request_photos]);
+            }
+        }
+
+        $category_string = $request->category_id;
+        $category_array = !is_null($category_string) && $category_string != '' ? explode('_', $category_string) : [];
+        $request->request->add(['user_id' => $request->user()->id]);
+        switch (true) {
+            case count($category_array) == 1:
+                $request->request->add(['category_id' => $category_array[0]]);
+                break;
+            case count($category_array) == 2:
+                $request->request->add(['category_id' => $category_array[0]]);
+                $request->request->add(['sub_category_id' => $category_array[1]]);
+                break;
+            case count($category_array) == 3:
+                $request->request->add(['category_id' => $category_array[0]]);
+                $request->request->add(['sub_category_id' => $category_array[1]]);
+                $request->request->add(['section_id' => $category_array[2]]);
+                break;
+            default:
+                # code...
+                break;
+        }
    
-        $product->name = $request->name ?? $product->name;
-        $product->detail = $request->detail ?? $product->detail;
-        $product->store_id = $request->store_id ?? $product->store_id;
-        $product->category_id = $request->category_id ?? $product->category_id;
-        $product->quantity = $request->quantity ?? $product->quantity;
-        $product->price = $request->price ?? $product->price;
+        // $product->name = $request->name ?? $product->name;
+        // $product->detail = $request->detail ?? $product->detail;
+        // $product->store_id = $request->store_id ?? $product->store_id;
+        // $product->category_id = $request->category_id ?? $product->category_id;
+        // $product->quantity = $request->quantity ?? $product->quantity;
+        // $product->price = $request->price ?? $product->price;
+        // $product->brand_id = $request->brand_id ?? $product->brand_id;
+        // $product->unit = $request->unit ?? $product->unit;
+        $request_all = $request->all();
+        $product_columns = array_keys($product->toArray());
+        foreach ($request_all as $key => $new_val) {
+            if(in_array($key, $product_columns))
+            $product->{$key} = $new_val;
+        }
         $product->save();
    
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');
@@ -157,8 +307,13 @@ class ProductController extends  BaseController
         }
         $input = $request->all();
         //$request->user()->wishList()->sync(['product_id' => $request->product_id]);
-        $request->user()->wishList()->detach($request->product_id);
-        $request->user()->wishList()->attach($request->product_id);
+        if($request->user()->wishList()->find($request->product_id)) {
+            $request->user()->wishList()->detach($request->product_id);
+        } else {
+            $request->user()->wishList()->attach($request->product_id);
+        }
+        
+        
 
         return $this->getMyWishList($request);
         //return $this->sendResponse([], 'Product added to wish list successfully.');

@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'balance'
     ];
 
     /**
@@ -121,5 +123,21 @@ class User extends Authenticatable
     public function carts()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    public function uploads()
+    {
+        return $this->hasMany(TemporaryFiles::class);
+    }
+
+    public function is_rider()
+    {
+        $delivery_boy = DeliveryBoy::where('user_id', $this->id)->where('is_banned', 0)->first();
+        return $delivery_boy;
+    }
+
+    public function customer()
+    {
+        return $this->hasMany(Customer::class);
     }
 }
