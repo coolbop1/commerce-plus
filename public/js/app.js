@@ -1449,4 +1449,105 @@ function update_delivery_status(ele, id, url = null) {
 }
 
 
+function rangefilter(arg){
+    $('input[name=min_price]').val(arg[0]);
+    $('input[name=max_price]').val(arg[1]);
+    
+    filter(document.getElementById('brand_id').value !== null);
+}
+function filter(brand = false){
+    let params = new FormData();
+    let url = null;
+    if(brand) {
+        let id = document.getElementById('brand_id').value;
+        let min_price = document.getElementById('min_price').value;
+        let max_price = document.getElementById('max_price').value;
+        let sort = document.getElementById('sort_by').value;
+        
+        params.append('min_price', min_price);
+        params.append('max_price', max_price);
+        params.append('sort_by', sort);
+        params.append('id', id);
+        url = '/api/list_brand_products';
+    } else {
+        let id = document.getElementById('category_id').value;
+        let category_type = document.getElementById('cat_type').value;
+        let min_price = document.getElementById('min_price').value;
+        let max_price = document.getElementById('max_price').value;
+        let sort = document.getElementById('sort_by').value;
+        let brand = document.getElementById('brand').value;
+
+        params.append('id', id);
+        params.append('category_type', category_type);
+        params.append('min_price', min_price);
+        params.append('max_price', max_price);
+        params.append('sort_by', sort);
+        params.append('brand', brand);
+        url = '/api/list_category_products';
+    }
+    
+    let http_f = new XMLHttpRequest();
+    http_f.open("POST", url, true);
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                document.getElementById('all-products').innerHTML = '';
+                response.data.forEach(product => {
+                    document.getElementById('all-products').innerHTML += `
+                            <div class="col border-right border-bottom has-transition hov-shadow-out z-1">
+                                <div class="aiz-card-box h-auto bg-white py-3 hov-scale-img">
+                                    <div class="position-relative h-140px h-md-200px img-fit overflow-hidden">
+                                                <!-- Image -->
+                                        <a href="/product/`+ product.slug +`" class="d-block h-100">
+                                            <img class="mx-auto img-fit has-transition lazyloaded" src="/`+ product.thumbnail_img +`" data-src="/`+ product.thumbnail_img +`" alt="`+ product.name +`" title="`+ product.name +`" onerror="this.onerror=null;this.src='/assets/img/placeholder.jpg';">
+                                        </a>
+                                        `+(product.new_price !=  product.price ? 
+                                            `<span class="absolute-top-left bg-primary ml-1 mt-1 fs-11 fw-700 text-white w-35px text-center" style="padding-top:2px;padding-bottom:2px;">-`+product.perc+`%</span>` : 
+                                            ``)+`
+                                        
+                                                <!-- Wholesale tag -->
+                                                            <!-- wishlisht & compare icons -->
+                                            <div class="absolute-top-right aiz-p-hov-icon">
+                                                <a href="javascript:void(0)" class="hov-svg-white" onclick="addToWishListV2(`+product.id+`)" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left">
+                                                    <i class="la la-heart-o"></i>
+                                                </a>
+                                                <a data-value="`+JSON.stringify(product).replaceAll('"', "'")+`" href="javascript:void(0)" onclick="addToCart (`+product.id+`, this, type = 'online')" data-toggle="tooltip" data-title="Add to cart" data-placement="left">
+                                                    <i class="las la-shopping-cart"></i>
+                                                </a>
+                                            </div>
+                                    </div>
+
+                                    <div class="p-2 p-md-3 text-left">
+                                        <!-- Product name -->
+                                        <h3 class="fw-400 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px text-center">
+                                            <a href="/product/`+product.slug+`" class="d-block text-reset hov-text-primary" title="`+product.name+`">`+product.name+`</a>
+                                        </h3>
+                                        <div class="fs-14 d-flex justify-content-center mt-3">
+                                                    <!-- Previous price -->
+                                                    `+(product.new_price !=  product.price ?
+                                                        `<div class="disc-amount has-transition">
+                                                            <del class="fw-400 text-secondary mr-1">₦`+product.price+`</del>
+                                                        </div` : ``)+`
+                                                    
+                                                <!-- price -->
+                                                <div class="">
+                                                    <span class="fw-700 text-primary">₦`+product.new_price+`</span>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                });
+                
+
+            } else {
+
+            }
+        }
+    }
+    http_f.send(params);
+}
+
+
 // 

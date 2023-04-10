@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\BuyerController;
 use App\Http\Controllers\API\CategoryWebController;
@@ -34,6 +34,8 @@ Route::get('/support-policy', [HomeController::class, 'supportPolicy']);
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy']);
 Route::get('/sellers', [HomeController::class, 'stores']);
 Route::get('/category/{caterogy_slug}', [HomeController::class, 'category']);
+Route::get('/brands', [HomeController::class, 'brands']);
+Route::get('/brand/{brand_slug}', [HomeController::class, 'brand']);
 
 Route::middleware(['session'])->group( function () {
     Route::get('/wishlists', [BuyerController::class, 'wishList']);
@@ -53,7 +55,7 @@ Route::get('/testadmin', function () {
 });
 
 Route::get('/create-shop', function () {
-    session_start();
+    //session_start();
     $show_user_form = !isset($_SESSION['logged_in']);
     return view('create-shop', compact('show_user_form'));
 });

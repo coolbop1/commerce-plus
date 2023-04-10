@@ -1,7 +1,7 @@
 <?php
    
 namespace App\Http\Controllers\API;
-session_start();
+//session_start();
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
