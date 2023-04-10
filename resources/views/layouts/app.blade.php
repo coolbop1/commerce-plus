@@ -19,7 +19,7 @@
     <meta name="app-url" content="">
     <meta name="file-base-url" content="">
 
-    <title>Active eCommerce | Demo of Active eCommerce CMS</title>
+    <title>HUB-PLUS</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -394,7 +394,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="categories" class="text-reset d-block text-center pb-2 pt-3">
+            <a href="/categories" class="text-reset d-block text-center pb-2 pt-3">
                 <i class="las la-list-ul fs-20 opacity-60 "></i>
                 <span class="d-block fs-10 fw-600 opacity-60 ">Categories</span>
             </a>
@@ -411,7 +411,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="https://demo.activeitzone.com/ecommerce/all-notifications" class="text-reset d-block text-center pb-2 pt-3">
+            <a href="/all-notifications" class="text-reset d-block text-center pb-2 pt-3">
                 <span class="d-inline-block position-relative px-2">
                     <i class="las la-bell fs-20 opacity-60 "></i>
                                             <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right" style="right: 7px;top: -2px;"></span>
@@ -420,9 +420,21 @@
             </a>
         </div>
         <div class="col">
-                                    <a href="https://demo.activeitzone.com/ecommerce/admin" class="text-reset d-block text-center pb-2 pt-3">
+            @if ($user)
+                @if ($user->stores->count() > 0 && $role == 'ROLE_VENDOR')
+                    <a href="/seller/dashboard" class="text-reset d-block text-center pb-2 pt-3">   
+                @endif
+                @if ($role == 'ROLE_SUPERADMIN')
+                    <a href="/admin" class="text-reset d-block text-center pb-2 pt-3">
+                @endif
+                @if ($role == 'ROLE_DELIVERY')
+                    <a href="/delivery/dashboard" class="text-reset d-block text-center pb-2 pt-3">
+                @endif
+            @else
+                <a href="/login" class="text-reset d-block text-center pb-2 pt-3">
+            @endif
                     <span class="d-block mx-auto">
-                                                    <img src="https://demo.activeitzone.com/ecommerce/public/assets/img/avatar-place.png" class="rounded-circle size-20px">
+                                                    <img src="/assets/img/avatar-place.png" class="rounded-circle size-20px">
                                             </span>
                     <span class="d-block fs-10 fw-600 opacity-60">Account</span>
                 </a>
