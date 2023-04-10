@@ -478,7 +478,7 @@
 
 
 @section('payment-section')
-
+@if ($user)
 <!-- Steps -->
 <section class="pt-5 mb-4">
     <div class="container">
@@ -781,6 +781,7 @@
     </div>
 </section>
 <script src="https://js.paystack.co/v1/inline.js"></script>
+@endif
 @endsection
 
 
