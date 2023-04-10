@@ -20,7 +20,7 @@ class CheckSession
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        session_start();
+        //session_start();
         if (isset($_SESSION['logged_in'])) {
             return redirect('/');
         }

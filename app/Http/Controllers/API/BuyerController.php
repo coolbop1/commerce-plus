@@ -2,7 +2,7 @@
    
 namespace App\Http\Controllers\API;
    
-session_start();
+//session_start();
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Cart;
 use App\Models\Category;

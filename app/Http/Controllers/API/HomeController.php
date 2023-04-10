@@ -2,8 +2,9 @@
    
 namespace App\Http\Controllers\API;
    
-session_start();
+//session_start();
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Checkout;
@@ -41,6 +42,10 @@ class HomeController extends BaseController
 
     public function product($product_slug)
     {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
         $product_name = str_replace('_', ' ',$product_slug); 
         $product_name = str_replace('-:::-', '_',$product_name);
         $product = Product::where('name', $product_name)->first();
@@ -50,7 +55,7 @@ class HomeController extends BaseController
             $top_selling_products = Cart::with('product')->select('product_id', DB::raw('count(*) as total'))->orderBy('total', 'desc')->groupBy('product_id')->take(10)->get();
             $reviews = Cart::with('user')->where('product_id', $product->id)->whereNotNull('review_comment')->get();
             $related_products = Product::where('category_id', $product->category_id)->where('id', '<>', $product->id)->get()->take(10);
-            return view('product', compact('product', 'related_products', 'top_selling_products', 'reviews', 'states', 'customers'));
+            return view('product', compact('product', 'related_products', 'top_selling_products', 'reviews', 'states', 'customers', 'user'));
         }
 
         return back();
@@ -212,7 +217,30 @@ class HomeController extends BaseController
             $type = 'section';
             $sibling_category = [];
         }
+        $brands = Brand::all();
 
-        return view('category-product', compact('user', 'category', 'sibling_category', 'type'));
+        return view('category-product', compact('user', 'category', 'sibling_category', 'type', 'brands'));
+    }
+
+    public function brands()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $brands = Brand::all();
+        return view('brand-list', compact('user', 'brands'));
+    }
+
+    public function brand($brand_slug)
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $brand_name = str_replace('-',' ', $brand_slug);
+        $brand = Brand::with('products')->where('name', $brand_name)->first();
+        $categories = Category::all();
+        return view('brand-product', compact('user', 'categories', 'brand'));
     }
 }

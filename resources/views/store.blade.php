@@ -1,5 +1,5 @@
 @php
-    session_start();
+    //session_start();
 @endphp
 @extends('layouts.app')
 @include('layouts.feature-products')

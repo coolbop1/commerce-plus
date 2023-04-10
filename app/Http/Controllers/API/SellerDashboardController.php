@@ -210,7 +210,7 @@ class SellerDashboardController extends BaseController
 
     public function productImport(Request $request) 
     {
-        session_start();
+        //session_start();
         $_SESSION['category_array'] = array_change_key_case(Category::pluck('id','name')->toArray(), CASE_LOWER);
         $_SESSION['sub_category_array'] = array_change_key_case(SubCategory::pluck('id','name')->toArray(), CASE_LOWER);
         $_SESSION['brand_array'] = array_change_key_case(Brand::pluck('id','name')->toArray(), CASE_LOWER);

@@ -111,6 +111,7 @@ Route::get('list-stores', [StoreController::class, 'listStores']);
 Route::get('view-store/{store_id}', [StoreController::class, 'viewStore']);
 Route::get('view-product/{product_id}', [ProductController::class, 'show']);
 Route::post('list_category_products', [CategoryController::class, 'listCategoryProduct']);
+Route::post('list_brand_products', [CategoryController::class, 'listBrandProduct']);
 
 
 
@@ -122,6 +123,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/logout', function (Request $request) {
-    session_start();
+    //session_start();
     session_destroy();
 });
