@@ -27,7 +27,7 @@
                 
                 <!-- Dashboard -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/dashboard" class="aiz-side-nav-link ">
+                    <a href="/dashboard" class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_24768" data-name="Group 24768" transform="translate(3495.144 -602)">
                               <path id="Path_2916" data-name="Path 2916" d="M15.3,5.4,9.561.481A2,2,0,0,0,8.26,0H7.74a2,2,0,0,0-1.3.481L.7,5.4A2,2,0,0,0,0,6.92V14a2,2,0,0,0,2,2H14a2,2,0,0,0,2-2V6.92A2,2,0,0,0,15.3,5.4M10,15H6V9A1,1,0,0,1,7,8H9a1,1,0,0,1,1,1Zm5-1a1,1,0,0,1-1,1H11V9A2,2,0,0,0,9,7H7A2,2,0,0,0,5,9v6H2a1,1,0,0,1-1-1V6.92a1,1,0,0,1,.349-.76l5.74-4.92A1,1,0,0,1,7.74,1h.52a1,1,0,0,1,.651.24l5.74,4.92A1,1,0,0,1,15,6.92Z" transform="translate(-3495.144 602)" fill="#b5b5bf"></path>
@@ -40,7 +40,7 @@
                 
                 <!-- Purchase History -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/purchase_history" class="aiz-side-nav-link ">
+                    <a href="/purchase_history" class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_8109" data-name="Group 8109" transform="translate(-27.466 -542.963)">
                                 <path id="Path_2953" data-name="Path 2953" d="M14.5,5.963h-4a1.5,1.5,0,0,0,0,3h4a1.5,1.5,0,0,0,0-3m0,2h-4a.5.5,0,0,1,0-1h4a.5.5,0,0,1,0,1" transform="translate(22.966 537)" fill="#b5b5bf"></path>
@@ -54,13 +54,12 @@
                             </g>
                         </svg>
                         <span class="aiz-side-nav-text ml-3">Purchase History</span>
-                                                    <span class="badge badge-inline badge-success">new</span>
                                             </a>
                 </li>
 
                 <!-- Downloads -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/digital-purchase-history" class="aiz-side-nav-link ">
+                    <a href="/digital-purchase-history" class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16.001" height="16" viewBox="0 0 16.001 16">
                             <g id="Group_8110" data-name="Group 8110" transform="translate(-1388.154 -562.604)">
                                 <path id="Path_2963" data-name="Path 2963" d="M77.864,98.69V92.1a.5.5,0,1,0-1,0V98.69l-1.437-1.437a.5.5,0,0,0-.707.707l1.851,1.852a1,1,0,0,0,.707.293h.172a1,1,0,0,0,.707-.293l1.851-1.852a.5.5,0,0,0-.7-.713Z" transform="translate(1318.79 478.5)" fill="#b5b5bf"></path>
@@ -73,7 +72,7 @@
                 
                 <!-- Refund Requests -->
                                     <li class="aiz-side-nav-item">
-                        <a href="https://demo.activeitzone.com/ecommerce/sent-refund-request" class="aiz-side-nav-link ">
+                        <a href="/sent-refund-request" class="aiz-side-nav-link ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g id="Group_8107" data-name="Group 8107" transform="translate(-134.153 -539.823)">
                                     <path id="Path_2951" data-name="Path 2951" d="M119.549,4.47h2.033a.5.5,0,0,0,0-1h-3.24a.5.5,0,0,0-.5.5v3.24a.5.5,0,0,0,1,0V5.189a7,7,0,1,1-4.155-1.366.5.5,0,0,0,0-1,8,8,0,1,0,4.862,1.647" transform="translate(27.466 537)" fill="#b5b5bf"></path>
@@ -86,7 +85,7 @@
                 
                 <!-- Wishlist -->
                 <li class="aiz-side-nav-item mm-active">
-                    <a href="https://demo.activeitzone.com/ecommerce/wishlists" class="aiz-side-nav-link active" aria-expanded="true">
+                    <a href="/wishlists" class="aiz-side-nav-link active" aria-expanded="true">
                         <svg id="Group_8116" data-name="Group 8116" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="14" viewBox="0 0 16 14">
                             <defs>
                                 <clipPath id="clip-path">
@@ -102,7 +101,7 @@
                 </li>
 
                 <!-- Compare -->
-                <li class="aiz-side-nav-item">
+                {{-- <li class="aiz-side-nav-item">
                     <a href="https://demo.activeitzone.com/ecommerce/compare" class="aiz-side-nav-link ">
                         <svg id="Group_22071" data-name="Group 22071" xmlns="http://www.w3.org/2000/svg" width="14.6" height="16" viewBox="0 0 14.6 16">
                             <g id="LWPOLYLINE" transform="translate(0.158)">
@@ -114,10 +113,10 @@
                         </svg>
                         <span class="aiz-side-nav-text ml-3">Compare</span>
                     </a>
-                </li>
+                </li> --}}
 
                 <!-- Followed Sellers -->
-                <li class="aiz-side-nav-item">
+                {{-- <li class="aiz-side-nav-item">
                     <a href="https://demo.activeitzone.com/ecommerce/followed-seller" class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_8114" data-name="Group 8114" transform="translate(-1501.679 -486)">
@@ -126,10 +125,10 @@
                         </svg>
                         <span class="aiz-side-nav-text ml-3">Followed Sellers</span>
                     </a>
-                </li>
+                </li> --}}
 
                 <!-- Classified Products -->
-                                    <li class="aiz-side-nav-item">
+                                    {{-- <li class="aiz-side-nav-item">
                         <a href="https://demo.activeitzone.com/ecommerce/customer_products" class="aiz-side-nav-link ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16.002" height="16.001" viewBox="0 0 16.002 16.001">
                                 <g id="Group_24750" data-name="Group 24750" transform="translate(-242.999 -1172.998)">
@@ -147,10 +146,10 @@
                             </svg>
                             <span class="aiz-side-nav-text ml-3">Classified Products</span>
                         </a>
-                    </li>
+                    </li> --}}
                 
                 <!-- Auction -->
-                                    <li class="aiz-side-nav-item">
+                                    {{-- <li class="aiz-side-nav-item">
                         <a href="javascript:void(0);" class="aiz-side-nav-link">
                             <svg id="Group_8142" data-name="Group 8142" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
                                 <defs>
@@ -181,11 +180,11 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                 
                 <!-- Conversations -->
                                                         <li class="aiz-side-nav-item">
-                        <a href="https://demo.activeitzone.com/ecommerce/conversations" class="aiz-side-nav-link ">
+                        <a href="/conversations" class="aiz-side-nav-link ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g id="Group_8134" data-name="Group 8134" transform="translate(1053.151 256.688)">
                                     <path id="Path_3012" data-name="Path 3012" d="M134.849,88.312h-8a2,2,0,0,0-2,2v5a2,2,0,0,0,2,2v3l2.4-3h5.6a2,2,0,0,0,2-2v-5a2,2,0,0,0-2-2m1,7a1,1,0,0,1-1,1h-8a1,1,0,0,1-1-1v-5a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Z" transform="translate(-1178 -341)" fill="#b5b5bf"></path>
@@ -200,7 +199,7 @@
                 
                 <!-- My Wallet -->
                                     <li class="aiz-side-nav-item">
-                        <a href="https://demo.activeitzone.com/ecommerce/wallet" class="aiz-side-nav-link ">
+                        <a href="/wallet" class="aiz-side-nav-link ">
                             <svg id="Group_8103" data-name="Group 8103" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
                                 <defs>
                                     <clipPath id="clip-path">
@@ -217,7 +216,7 @@
                 
                 <!-- Earning Points -->
                                     <li class="aiz-side-nav-item">
-                        <a href="https://demo.activeitzone.com/ecommerce/earning-points" class="aiz-side-nav-link ">
+                        <a href="/earning-points" class="aiz-side-nav-link ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g id="Group_24762" data-name="Group 24762" transform="translate(-240.535 -537)">
                                     <path id="Path_2961" data-name="Path 2961" d="M221.069,0a8,8,0,1,0,8,8,8,8,0,0,0-8-8m0,15a7,7,0,1,1,7-7,7,7,0,0,1-7,7" transform="translate(27.466 537)" fill="#b5b5bf"></path>
@@ -229,7 +228,7 @@
                     </li>
                 
                 <!-- Affiliate -->
-                                    <li class="aiz-side-nav-item">
+                                    {{-- <li class="aiz-side-nav-item">
                         <a href="javascript:void(0);" class="aiz-side-nav-link">
                             <svg xmlns="http://www.w3.org/2000/svg" width="19.998" height="19.998" viewBox="0 0 19.998 19.998">
                                 <g id="Group_25000" data-name="Group 25000" transform="translate(-298 -935.05)">
@@ -259,12 +258,12 @@
                             </li>
 
                         </ul>
-                    </li>
+                    </li> --}}
                 
                 
                 <!-- Support Ticket -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/support_ticket" class="aiz-side-nav-link ">
+                    <a href="/support_ticket" class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16.001" viewBox="0 0 16 16.001">
                             <g id="Group_24764" data-name="Group 24764" transform="translate(-316 -1066)">
                                 <path id="Subtraction_184" data-name="Subtraction 184" d="M16427.109,902H16420a8.015,8.015,0,1,1,8-8,8.278,8.278,0,0,1-1.422,4.535l1.244,2.132a.81.81,0,0,1,0,.891A.791.791,0,0,1,16427.109,902ZM16420,887a7,7,0,1,0,0,14h6.283c.275,0,.414,0,.549-.111s-.209-.574-.34-.748l0,0-.018-.022-1.064-1.6A6.829,6.829,0,0,0,16427,894a6.964,6.964,0,0,0-7-7Z" transform="translate(-16096 180)" fill="#b5b5bf"></path>
@@ -272,13 +271,13 @@
                             </g>
                         </svg>
                         <span class="aiz-side-nav-text ml-3">Support Ticket</span>
-                                                    <span class="badge badge-inline badge-success">1</span>
+                                                    <span class="badge badge-inline badge-success">0</span>
                                             </a>
                 </li>
                 
                 <!-- Manage Profile -->
                 <li class="aiz-side-nav-item">
-                    <a href="https://demo.activeitzone.com/ecommerce/profile" class="aiz-side-nav-link ">
+                    <a href="/profile" class="aiz-side-nav-link ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_8094" data-name="Group 8094" transform="translate(3176 -602)">
                               <path id="Path_2924" data-name="Path 2924" d="M331.144,0a4,4,0,1,0,4,4,4,4,0,0,0-4-4m0,7a3,3,0,1,1,3-3,3,3,0,0,1-3,3" transform="translate(-3499.144 602)" fill="#b5b5bf"></path>
@@ -291,7 +290,7 @@
 
                 <!-- Delete My Account -->
                 <li class="aiz-side-nav-item">
-                    <a href="javascript:void(0)" onclick="account_delete_confirm_modal('https://demo.activeitzone.com/ecommerce/account-deletion')" class="aiz-side-nav-link">
+                    <a href="javascript:void(0)" onclick="account_delete_confirm_modal()" class="aiz-side-nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25000" data-name="Group 25000" transform="translate(-240.535 -537)">
                             <path id="Path_2961" data-name="Path 2961" d="M221.069,0a8,8,0,1,0,8,8,8,8,0,0,0-8-8m0,15a7,7,0,1,1,7-7,7,7,0,0,1-7,7" transform="translate(27.466 537)" fill="#b5b5bf"></path>
@@ -305,7 +304,7 @@
             </ul>
         
             <!-- logout -->
-            <a href="https://demo.activeitzone.com/ecommerce/logout" class="btn btn-primary btn-block fs-14 fw-700 mb-5 mb-md-0" style="border-radius: 25px;">Sign Out</a>
+            <a href="" onclick="logout()" class="btn btn-primary btn-block fs-14 fw-700 mb-5 mb-md-0" style="border-radius: 25px;">Sign Out</a>
         </div>
 
     </div>
