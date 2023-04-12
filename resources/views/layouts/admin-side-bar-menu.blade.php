@@ -8,10 +8,10 @@
         </div>
         <div class="aiz-side-nav-wrap">
             <div class="px-20px mb-3">
-                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
+                <select onchange="return switchStore(this.value, '/admin')" value="{{ $store ? $store->id : '' }}" class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
                     <option value="">Pick a store</option>
-                    @foreach ($stores as $store)
-                        <option value="{{ $store->id }}">{{ $store->name }}</option>
+                    @foreach ($stores as $store_)
+                        <option {{ $store_->id == optional($store)->id ? 'selected' : '' }} value="{{ $store_->id }}">{{ $store_->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -35,15 +35,15 @@
                         </a>
                         <ul class="aiz-side-nav-list level-2">
                                                             <li class="aiz-side-nav-item">
-                                    <a href="https://demo.activeitzone.com/ecommerce/admin/pos" class="aiz-side-nav-link ">
+                                    <a href="/admin/pos" class="aiz-side-nav-link ">
                                         <span class="aiz-side-nav-text">POS Manager</span>
                                     </a>
                                 </li>
-                                                                                        <li class="aiz-side-nav-item">
-                                    <a href="https://demo.activeitzone.com/ecommerce/admin/pos-activation" class="aiz-side-nav-link">
+                                                                                        {{-- <li class="aiz-side-nav-item">
+                                    <a href="/admin/pos-activation" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">POS Configuration</span>
                                     </a>
-                                </li>
+                                </li> --}}
                                                     </ul>
                     </li>
                 
@@ -57,7 +57,7 @@
                         <!--Submenu-->
                         <ul class="aiz-side-nav-list level-2">
                                                             <li class="aiz-side-nav-item">
-                                    <a class="aiz-side-nav-link" href="https://demo.activeitzone.com/ecommerce/admin/products/create">
+                                    <a class="aiz-side-nav-link" href="/admin/products/create">
                                         <span class="aiz-side-nav-text">Add New product</span>
                                     </a>
                                 </li>

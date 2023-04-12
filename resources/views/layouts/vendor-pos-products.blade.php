@@ -59,7 +59,7 @@
                                     $product->new_price = $product->price - (($perc/100) * $product->price);
                                 }
                             @endphp
-                                <div onclick="addToCart({{ $product }})" class="w-140px w-xl-180px w-xxl-210px mx-2">
+                                <div data-value="{{ str_replace(`"`, `'`, json_encode($product)) }}"  onclick="addToCart ({{ $product->id }}, this)" class="w-140px w-xl-180px w-xxl-210px mx-2">
                                     <div class="card bg-white c-pointer product-card hov-container">
                                         <div class="position-relative">
                                             <span class="absolute-top-left mt-1 ml-1 mr-0">

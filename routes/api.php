@@ -39,8 +39,15 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     
     Route::get('switch-store', function (Request $request) {
         if($request->id) {
-            session_start();
-            $_SESSION['vendor_current_store_id'] = $request->id;
+            //session_start();
+            if($request->id == '') {
+               unset($_SESSION['vendor_current_store_id']);
+            } else {
+                $_SESSION['vendor_current_store_id'] = $request->id;
+            }
+            
+        } else {
+            unset($_SESSION['vendor_current_store_id']);
         }
         return $request->user();
     });

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\DeliveryBoy;
 use App\Models\Product;
 use App\Models\States;
@@ -45,6 +47,33 @@ class AdminController extends Controller
         $page ='dashboard';
         return view('admin', compact('user', 'store', 'ratings', 'page', 'stores', 'products_categories', 'products_brands', 'published_products'));
     }
+
+    public function pos() 
+    {
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders', 'customers.state')->find($store_id);
+        $products_id = $store->products->pluck('id')->toArray();
+        $page = 'packages';
+        $carts = Cart::with('user', 'product')->whereHas('checkout', function($q) {
+            $q->where('status', 'completed');
+        })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->get();
+        $categories = Category::with('subCategories.sections')->get();
+        $brands = Brand::all();
+        $states = States::all();
+
+
+        return view('admin-pos', compact('user', 'store', 'page', 'carts', 'categories', 'brands', 'states', 'stores'));
+    }
+
+
 
     public function deliveryBoys($delivery_boy_id = null)
     {

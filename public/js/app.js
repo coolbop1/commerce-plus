@@ -456,7 +456,8 @@ function expandStoreList() {
     }
 }
 
-function switchStore  (store_id)  {
+function switchStore  (store_id, url = null)  {
+    if(url == null)
     expandStoreList();
     let http_f = new XMLHttpRequest();
     http_f.open("GET", '/api/switch-store?id='+store_id, true);
@@ -464,7 +465,7 @@ function switchStore  (store_id)  {
     http_f.onreadystatechange = function() {
         if(http_f.readyState == 4) {
             if(http_f.status == 200) {
-                window.location.href = '/seller/dashboard';
+                window.location.href = url ?? '/seller/dashboard';
             }
         }
     }
@@ -902,7 +903,8 @@ function addToCart (product, ele = null, type = 'pos'){
 
     localStorage.setItem(cart_storage, JSON.stringify(cart));
     if(type == 'pos'){
-        populateCartDetails(new_add.store_id);
+        let store_id = document.getElementById('pos-cart-store-id')?.value;
+        populateCartDetails(store_id ?? new_add?.store_id);
     } else if(type == 'cart') {
         populateCartPage();
     } else {
