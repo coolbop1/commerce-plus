@@ -12,7 +12,7 @@
 
 	<!-- Favicon -->
     <link rel="icon" href="/uploads/icon.png">
-	<title>Active eCommerce | Demo of Active eCommerce CMS</title>
+	<title>HUB-PLUS</title>
 
 	<!-- google font -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
