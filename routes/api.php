@@ -35,6 +35,8 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     Route::post('user-customer-auth', [RegisterController::class, 'register']);
     Route::post('validate-cart', [StoreController::class, 'validateCart']);
     Route::post('submit-order', [StoreController::class, 'submitOrder']);
+    Route::post('recharge-wallet', [StoreController::class, 'rechargeWallet']);
+    Route::post('update_user', [RegisterController::class, 'updateUser']);
     
     
     Route::get('switch-store', function (Request $request) {

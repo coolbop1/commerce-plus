@@ -241,7 +241,7 @@
                         <div class="col">
                             <p class="small text-muted mb-0">
                                 <span class="fe fe-arrow-down fe-12"></span>
-                                <span class="fs-13 text-primary fw-600">New Order</span>
+                                <span class="fs-13 text-primary fw-600">Pending Order</span>
                             </p>
                             <h3 class="mb-0" style="color: #A9A3CC">
                                 {{ $store->orders->where('status', 'pending')->count() }}

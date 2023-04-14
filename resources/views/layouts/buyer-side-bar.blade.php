@@ -84,8 +84,8 @@
                     </li>
                 
                 <!-- Wishlist -->
-                <li class="aiz-side-nav-item mm-active">
-                    <a href="/wishlists" class="aiz-side-nav-link active" aria-expanded="true">
+                <li class="aiz-side-nav-item">
+                    <a href="/wishlists" class="aiz-side-nav-link" aria-expanded="true">
                         <svg id="Group_8116" data-name="Group 8116" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="14" viewBox="0 0 16 14">
                             <defs>
                                 <clipPath id="clip-path">
@@ -183,7 +183,7 @@
                     </li> --}}
                 
                 <!-- Conversations -->
-                                                        <li class="aiz-side-nav-item">
+                                                        {{-- <li class="aiz-side-nav-item">
                         <a href="/conversations" class="aiz-side-nav-link ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g id="Group_8134" data-name="Group 8134" transform="translate(1053.151 256.688)">
@@ -195,7 +195,7 @@
                             </svg>
                             <span class="aiz-side-nav-text ml-3">Conversations</span>
                                                     </a>
-                    </li>
+                    </li> --}}
                 
                 <!-- My Wallet -->
                                     <li class="aiz-side-nav-item">
@@ -215,7 +215,7 @@
                     </li>
                 
                 <!-- Earning Points -->
-                                    <li class="aiz-side-nav-item">
+                                    {{-- <li class="aiz-side-nav-item">
                         <a href="/earning-points" class="aiz-side-nav-link ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g id="Group_24762" data-name="Group 24762" transform="translate(-240.535 -537)">
@@ -225,7 +225,7 @@
                             </svg>
                             <span class="aiz-side-nav-text ml-3">Earning Points</span>
                         </a>
-                    </li>
+                    </li> --}}
                 
                 <!-- Affiliate -->
                                     {{-- <li class="aiz-side-nav-item">
@@ -289,7 +289,7 @@
                 </li>
 
                 <!-- Delete My Account -->
-                <li class="aiz-side-nav-item">
+                {{-- <li class="aiz-side-nav-item">
                     <a href="javascript:void(0)" onclick="account_delete_confirm_modal()" class="aiz-side-nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                             <g id="Group_25000" data-name="Group 25000" transform="translate(-240.535 -537)">
@@ -299,7 +299,7 @@
                         </svg>
                         <span class="aiz-side-nav-text ml-3">Delete My Account</span>
                     </a>
-                </li>
+                </li> --}}
 
             </ul>
         

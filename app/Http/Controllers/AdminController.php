@@ -9,6 +9,8 @@ use App\Models\DeliveryBoy;
 use App\Models\Product;
 use App\Models\States;
 use App\Models\Store;
+use App\Models\TemporaryFiles;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -71,6 +73,55 @@ class AdminController extends Controller
 
 
         return view('admin-pos', compact('user', 'store', 'page', 'carts', 'categories', 'brands', 'states', 'stores'));
+    }
+
+    public function products() {
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders', 'customers.state')->find($store_id);
+        $current_month_start = Carbon::now()->startOfMonth(); //Todo: This should the subscription start date ;
+        $current_month_end = Carbon::now()->endOfMonth();
+        //$uploads =  Product::where('store_id', $store_id)->whereBetween('created_at', [$current_month_start, $current_month_end])->count();
+        $uploads =  Product::where('store_id', $store_id)->count();
+        $subscription = $store->isSubscribed() ? $store->subscriptions()->latest()->first() : null;
+        $package = optional($subscription)->package;
+        $remaining_uploads = $package ? ($package->product_cap - $uploads) : 0;
+        $page ='products';
+
+        return view('admin-products', compact('user', 'store', 'remaining_uploads', 'stores', 'page'));
+
+    }
+
+    public function createProduct($product_id = null)
+    {
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders', 'customers.state')->find($store_id);
+        $page = 'products';
+        $categories = Category::with('subCategories.sections')->get();
+        $brands = Brand::all();
+        $product = null;
+        if($product_id) {
+            $product = Product::find($product_id);
+        }
+        $files = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+         return view('admin-product-create',  compact('user', 'store', 'page', 'categories', 'brands', 'product', 'files', 'stores'));
+       
+
     }
 
 

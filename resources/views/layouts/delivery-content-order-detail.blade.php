@@ -24,7 +24,7 @@
                         </tr>
                         <tr>
                             <td class="w-50 fw-600">Customer:</td>
-                            <td>{{ ucwords($order->checkout->customer->customer_name) }}</td>
+                            <td>{{ ucwords(optional(optional(optional($order)->checkout)->customer)->customer_name) }}</td>
                         </tr>
                         <tr>
                             <td class="w-50 fw-600">Phone:</td>
@@ -32,7 +32,7 @@
                                                     </tr>
                         <tr>
                             <td class="w-50 fw-600">Shipping address:</td>
-                            <td>{{ $order->checkout->customer->address }}, {{ $order->checkout->customer->state->name }}, Nigeria</td>
+                            <td>{{ optional(optional(optional($order)->checkout)->customer)->address }}, {{ optional(optional(optional(optional($order)->checkout)->customer)->state)->name }}, Nigeria</td>
                         </tr>
                     </table>
                 </div>
@@ -132,7 +132,7 @@
     <div class="col-lg-3">
         <div class="card mt-4 shadow-none rounded-0 border">
             <div class="card-header border-bottom-0">
-                <b class="fs-16 fw-700 text-dark">Order Ammount</b>
+                <b class="fs-16 fw-700 text-dark">Order Amount</b>
             </div>
             <div class="card-body pb-0">
                 <table class="table table-borderless">
