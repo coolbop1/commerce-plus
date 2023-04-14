@@ -39,6 +39,14 @@ Route::get('/brand/{brand_slug}', [HomeController::class, 'brand']);
 
 Route::middleware(['session'])->group( function () {
     Route::get('/wishlists', [BuyerController::class, 'wishList']);
+    Route::get('/dashboard', [BuyerController::class, 'dashboard']);
+    Route::get('/purchase_history', [BuyerController::class, 'purchaseHistory']);
+    Route::get('/invoice/{id}', [SellerDashboardController::class, 'downloadInvoice']);
+    Route::get('/purchase_history/details/{order_code}', [BuyerController::class, 'orderDetail']);
+    Route::get('/digital-purchase-history', [BuyerController::class, 'digitalPurchaseHistory']);
+    Route::get('/sent-refund-request', [BuyerController::class, 'sentRefundRequest']);
+    Route::get('/wallet', [BuyerController::class, 'wallet']);
+    Route::get('/profile', [BuyerController::class, 'profile']);
 });
 
 
@@ -67,6 +75,8 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/delivery-boy/ban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
     Route::get('/admin/delivery-boy/unban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
     Route::get('/admin/pos', [AdminController::class, 'pos']);
+    Route::get('/admin/products/all', [AdminController::class, 'products']);
+    Route::get('/admin/products/create', [AdminController::class, 'createProduct']);
 });
 
 Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {

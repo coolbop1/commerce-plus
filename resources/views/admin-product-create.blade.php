@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @include('layouts.admin-side-bar-menu')
 @include('layouts.admin-top-bar')
-@include('layouts.vendor-pos-products')
+@include('layouts.vendor-product-form')
 @section('content')
 <input id="pos-cart-store-id" value="{{ $store->id }}" >
 	<div class="aiz-main-wrapper">
@@ -15,10 +15,7 @@
 
 
 
-
-
-                    @yield('pos-products')
-
+                    @yield('product-form')
 
 
 

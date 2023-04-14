@@ -17,6 +17,7 @@ use App\Models\DeliveryBoy;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\PodRecord;
+use App\Models\RechargeHistory;
 use App\Models\RefundRequest;
 use App\Models\Store;
 use App\Models\Subscription;
@@ -402,6 +403,27 @@ class StoreController extends BaseController
             User::where('id', $request->user()->id)->update(['balance' => $remaining_balance]);
         }
         return $this->sendResponse($checkout, 'Order added successfully.');
+    }
+
+    public function rechargeWallet(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $payment_reference = $request->payment_reference ?? null;
+        $user_id = $request->user()->id ?? $request->user_id;
+        $user = User::find($user_id);
+        $user->balance += $request->amount;
+        $user->save();
+        RechargeHistory::create([
+            'amount' => $request->amount,
+            'user_id' => $user_id,
+            'payment_reference' => $payment_reference,
+            'transaction' => 'credit'
+        ]);
+        return $this->sendResponse([], 'Recharge wallet succesfully.');
     }
 
 

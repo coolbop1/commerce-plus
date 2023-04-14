@@ -445,7 +445,8 @@ class SellerDashboardController extends BaseController
         $text_align = 'left';
         $not_text_align = 'right';   
 
-        $order= Order::with('store', 'checkout.customer.state')->where('id', $id)->first();
+        $order = Order::with('store', 'checkout.customer.state')->where('id', $id)->first();
+        info('the order '.json_encode($order));
         // return PDF::loadView('backend.invoices.invoice',[
         //     'order' => $order,
         //     'font_family' => $font_family,
