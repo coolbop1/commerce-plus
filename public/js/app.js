@@ -1,4 +1,5 @@
 const COMMERCE_PLUS_TOKEN = localStorage.getItem('COMMERCE_PLUS_TOKEN');
+const PAYSTACK_PUBLIC_KEY = 'pk_test_f2f63bc5ba861e1a3e55de8ea08352ac3dfac175';
 function setAccessss () {
     if(COMMERCE_PLUS_TOKEN) {
         let http_f = new XMLHttpRequest();
@@ -478,7 +479,7 @@ function payWithPaystack(order_amount = null, cart = null) {
   //e.preventDefault();
 
   let handler = PaystackPop.setup({
-    key: 'pk_test_f2f63bc5ba861e1a3e55de8ea08352ac3dfac175', // Replace with your public key
+    key: PAYSTACK_PUBLIC_KEY, // Replace with your public key
     email: document.getElementById("email-address").value,
     amount: (order_amount ?? document.getElementById("amount").value) * 100 ,
     ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
@@ -499,6 +500,65 @@ function payWithPaystack(order_amount = null, cart = null) {
   });
 
   handler.openIframe();
+}
+
+function rechargeWallet(recharge_amount, email_address) {
+    let handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY, // Replace with your public key
+        email: email_address,
+        amount: recharge_amount * 100 ,
+        ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+        onClose: function(){
+            showAlert('window closed', 'alert-warning', []);
+        },
+        callback: function(response){
+            let params = new FormData();
+            params.append('amount', recharge_amount);
+            params.append('payment_reference', response.reference);
+
+            let http_f = new XMLHttpRequest();
+            http_f.open("POST", '/api/recharge-wallet', true);
+            http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+            http_f.onreadystatechange = function() {
+                if(http_f.readyState == 4) {
+                    let response = JSON.parse(this?.responseText);
+                    if(http_f.status == 200) {
+                        showAlert(response.message, 'alert-success');
+                        window.location.href = '/dashboard';
+                    } else {
+                        showAlert(response.message, 'alert-warning', []);
+                    }
+                }
+            }
+            http_f.send(params);
+        }
+      });
+    
+      handler.openIframe();
+
+      return false;
+}
+
+function updateProfile(element) {
+    let params = new FormData(element);
+    let http_f = new XMLHttpRequest();
+    // params.forEach((val, key) => {
+    //     console.log("form ",key, val);
+    // });
+    http_f.open("POST", '/api/update_user', true);
+    http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                showAlert(response.message, 'alert-success');
+                window.location.href = '/profile';
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http_f.send(params);
 }
 
 function submitOrder(paymentType, cart, paymentReference = null) {

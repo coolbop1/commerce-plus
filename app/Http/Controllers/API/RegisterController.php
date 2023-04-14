@@ -92,6 +92,32 @@ class RegisterController extends BaseController
         return $this->sendResponse($success, 'User register successfully.');
     }
 
+    public function updateUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'new_password' => 'nullable',
+            'confirm_password' => 'same:new_password'
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $user = User::find($request->user()->id);
+        if($request->new_password) {
+            $user->password = bcrypt($request->password);
+        }
+        if($request->name){
+            $user->name = $request->name;
+        }
+        if($request->phone){
+            $user->phone = $request->phone;
+        }
+        $user->save();
+        
+        return $this->sendResponse($user, 'User updated successfully.');
+    }
+
     public function createShop(Request $request)
     {
         $validator = Validator::make($request->all(), [
