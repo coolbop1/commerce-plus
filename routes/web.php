@@ -36,6 +36,7 @@ Route::get('/sellers', [HomeController::class, 'stores']);
 Route::get('/category/{caterogy_slug}', [HomeController::class, 'category']);
 Route::get('/brands', [HomeController::class, 'brands']);
 Route::get('/brand/{brand_slug}', [HomeController::class, 'brand']);
+Route::get('/search', [HomeController::class, 'searchpage']);
 
 Route::middleware(['session'])->group( function () {
     Route::get('/wishlists', [BuyerController::class, 'wishList']);

@@ -32,13 +32,13 @@
                             <span class="badge-custom">OFF<span class="box ml-1 mr-0">&nbsp;{{ $perc }}%</span></span>
                             @endif
                                 <div class="position-relative">
-                                    <a href="/product/{{ $product_name_link }}" class="d-block">
+                                    <a href="/product/{{ $product->slug }}" class="d-block">
                                         <img
                                             class="img-fit lazyload mx-auto h-140px h-md-210px"
                                             src="{{ asset('/assets/img/placeholder.jpg') }}"
                                             data-src="/{{ $product_hero_image }}"
                                             alt="{{ $product->name }}"
-                                            onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/placeholder.jpg';"
+                                            onerror="this.onerror=null;this.src='/assets/img/placeholder.jpg';"
                                         >
                                     </a>
                                     <div class="absolute-top-right aiz-p-hov-icon">
