@@ -84,7 +84,7 @@ class BuyerController extends BaseController
         if(isset($_SESSION['logged_in'])) {
             $user = User::find($_SESSION['logged_in']->id);
         }
-        $recharge_histories = RechargeHistory::where('transaction', 'credit')->get();
+        $recharge_histories = RechargeHistory::where('transaction', 'credit')->where('user_id', $user->id)->get();
         return view('wallet', compact('user', 'recharge_histories'));
     }
 
