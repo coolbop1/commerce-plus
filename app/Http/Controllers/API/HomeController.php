@@ -41,6 +41,28 @@ class HomeController extends BaseController
         return view('home', compact('categories', 'productsByStore', 'flash_sales', 'states', 'customers', 'user', 'brands'));
     }
 
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $shops = Store::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
+        $categories = Category::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
+        $products = Product::where('name', 'LIKE', '%'.$keyword.'%')
+        //->orWhereIn('category_id', $categories->pluck('id'))
+        ->take(20)->get();
+
+        return view('partials.search-content', compact('shops', 'categories', 'products'));
+    }
+
+    public function searchpage()
+    {
+        $keyword = $_GET['keyword'];
+        $shops = Store::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
+        $categories = Category::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
+        $products = Product::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
+
+        return view('search-content', compact('shops', 'categories', 'products'));   
+    }
+
     public function product($product_slug)
     {
         $user = null;

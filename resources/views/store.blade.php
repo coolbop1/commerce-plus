@@ -32,13 +32,13 @@
             <div class="col-lg-6 order-2 order-lg-0">
                 <ul class="list-inline mb-0 text-center text-lg-left">
                     <li class="list-inline-item ">
-                        <a class="text-reset d-inline-block fw-600 fs-15 p-3  border-bottom border-primary border-width-2 " href="https://demo.activeitzone.com/ecommerce/shop/Filon-Asset-Store-2">Store Home</a>
+                        <a class="text-reset d-inline-block fw-600 fs-15 p-3  border-bottom border-primary border-width-2 " href="/shop/{{ str_replace(' ', '-', $store->name) }}">Store Home</a>
                     </li>
                     <li class="list-inline-item ">
-                        <a class="text-reset d-inline-block fw-600 fs-15 p-3 " href="https://demo.activeitzone.com/ecommerce/shop/Filon-Asset-Store-2/top-selling">Top Selling</a>
+                        <a class="text-reset d-inline-block fw-600 fs-15 p-3 " href="/shop/{{ str_replace(' ', '-', $store->name) }}/top-selling">Top Selling</a>
                     </li>
                     <li class="list-inline-item ">
-                        <a class="text-reset d-inline-block fw-600 fs-15 p-3 " href="https://demo.activeitzone.com/ecommerce/shop/Filon-Asset-Store-2/all-products">All Products</a>
+                        <a class="text-reset d-inline-block fw-600 fs-15 p-3 " href="/shop/{{ str_replace(' ', '-', $store->name) }}/all-products">All Products</a>
                     </li>
                 </ul>
             </div>

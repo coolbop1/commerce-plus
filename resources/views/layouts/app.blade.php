@@ -15,7 +15,7 @@
 <html lang="en">
 <head>
 
-    <meta name="csrf-token" content="P54hNJtbnPpNjyx9nY1tneWSGkmotlKPs4rLaJjl">
+    <meta name="csrf-token" content="{{ csrf_token() }}"">
     <meta name="app-url" content="">
     <meta name="file-base-url" content="">
 
@@ -226,7 +226,7 @@
 
                 <div class="flex-grow-1 front-header-search d-flex align-items-center bg-white">
                     <div class="position-relative flex-grow-1">
-                        <form action="https://demo.activeitzone.com/ecommerce/search" method="GET" class="stop-propagation">
+                        <form action="/search" method="GET" class="stop-propagation">
                             <div class="d-flex position-relative align-items-center">
                                 <div class="d-lg-none" data-toggle="class-toggle" data-target=".front-header-search">
                                     <button class="btn px-2" type="button"><i class="la la-2x la-long-arrow-left"></i></button>
@@ -524,7 +524,6 @@
                                 </g>
                             </svg>
                             <span class="aiz-side-nav-text ml-3">Purchase History</span>
-                                                        <span class="badge badge-inline badge-success">new</span>
                                                 </a>
                     </li>
     
@@ -1014,7 +1013,7 @@
 
                 $('.typed-search-box').removeClass('d-none');
                 $('.search-preloader').removeClass('d-none');
-                $.post('https://demo.activeitzone.com/ecommerce/ajax-search', { _token: AIZ.data.csrf, search:searchKey}, function(data){
+                $.post('/api/ajax-search', { search:searchKey}, function(data){
                     if(data == '0'){
                         // $('.typed-search-box').addClass('d-none');
                         $('#search-content').html(null);
