@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\DeliveryBoyController;
+use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
@@ -28,6 +29,7 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('create-shop', 'createShop');
     Route::post('login', 'login');
 });
+Route::post('/ajax-search', [HomeController::class, 'search']);
 
 Route::post('user-customer', [RegisterController::class, 'register']);
         
