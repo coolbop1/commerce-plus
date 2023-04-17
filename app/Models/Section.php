@@ -10,7 +10,7 @@ class Section extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'description', 'verified',  'user_id', 'sub_category_id'
+        'name', 'description', 'verified',  'user_id', 'sub_category_id', 'icon', 'banner'
     ];
 
     protected $casts = [

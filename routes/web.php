@@ -78,6 +78,16 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/pos', [AdminController::class, 'pos']);
     Route::get('/admin/products/all', [AdminController::class, 'products']);
     Route::get('/admin/products/create', [AdminController::class, 'createProduct']);
+    Route::get('/admin/product/{product_id}/edit', [AdminController::class, 'createProduct']);
+    Route::get('/admin/products/admin', [AdminController::class, 'inHouseProducts']);
+    Route::get('/admin/products/seller', [AdminController::class, 'sellerProducts']);
+    Route::get('/admin/digitalproducts', [AdminController::class, 'digitalProducts']);
+    Route::get('/admin/product-bulk-upload/index', [AdminController::class, 'productBulkUpload']);
+    Route::get('/admin/product-bulk-export/{store_id}', [SellerDashboardController::class, 'productExport']);
+    Route::get('/admin/product-bulk-export', [SellerDashboardController::class, 'productExport']);
+    Route::get('/admin/categories', [AdminController::class, 'categories']);
+    Route::get('/admin/categories/create', [AdminController::class, 'addCategories']);
+    //Route::get('/admin/categories/edit/{category_id}', [AdminController::class, 'addCategories']);
 });
 
 Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {
