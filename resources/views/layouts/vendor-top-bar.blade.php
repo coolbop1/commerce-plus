@@ -21,7 +21,7 @@
                             <div class="d-flex justify-content-around align-items-center align-items-stretch ml-3">
                     <div class="aiz-topbar-item">
                         <div class="d-flex align-items-center">
-                            <a class="btn btn-icon btn-circle btn-light" href="https://demo.activeitzone.com/ecommerce/seller/pos" target="_blank" title="POS">
+                            <a class="btn btn-icon btn-circle btn-light" href="/seller/pos" target="_blank" title="POS">
                                 <i class="las la-print"></i>
                             </a>
                         </div>
