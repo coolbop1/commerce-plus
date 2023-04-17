@@ -71,6 +71,7 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('edit-store/{store_id}', [StoreController::class, 'updateStore']);
         Route::get('delete-store/{store_id}', [StoreController::class, 'deleteStore']);
         Route::post('import-products', [SellerDashboardController::class, 'productImport']);
+        Route::get('export-products', [SellerDashboardController::class, 'productExport']);
         Route::post('toggle-product-column', [SellerDashboardController::class, 'toggleProductColumn']);
         Route::post('create-customer', [StoreController::class, 'createCustomer']);
         Route::post('pos-order', [StoreController::class, 'posOrder']);

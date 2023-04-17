@@ -25,11 +25,30 @@ class CategoryController extends BaseController
         }
         $input = $request->all();
         $input['verified'] = true;
+        if($request->parent_id && !empty($request->parent_id)){
+            if(is_numeric($request->parent_id)) {
+                $input['category_id'] = $request->parent_id;
+                $category = SubCategory::updateOrCreate(
+                    ['name' => $request->name],
+                    $input
+                );
+            } else {
+                $parents_data = explode('_', $request->parent_id);
+                $input['category_id'] = $parents_data[0];
+                $input['sub_category_id'] = $parents_data[1];
+                $category = Section::updateOrCreate(
+                    ['name' => $request->name],
+                    $input
+                );
+            }
+        } else {
+            $category = Category::updateOrCreate(
+                ['name' => $request->name],
+                $input
+            );
+        }
 
-        $category = Category::updateOrCreate(
-            ['name' => $request->name],
-            $input
-        );
+        
 
         return $this->sendResponse(new CategoryResource($category), 'Category created successfully.');
     }

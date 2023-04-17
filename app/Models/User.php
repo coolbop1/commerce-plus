@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function hasRole($role)
     {
-        if ($this->roles()->where('name', $role)->first()) {
+        if ($this->roles()->where('name', $role)->first() || $this->roles()->first()->name == 'ROLE_SUPERADMIN') {
             return true;
         }
         return false;

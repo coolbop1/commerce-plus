@@ -329,7 +329,7 @@
                                                             </ul>
                         </div>
                         <div class="text-center border-top">
-                            <a href="https://demo.activeitzone.com/ecommerce/seller/all-notification" class="text-reset d-block py-2">
+                            <a href="/seller/all-notification" class="text-reset d-block py-2">
                                 View All Notifications
                             </a>
                         </div>
@@ -348,8 +348,8 @@
                         <span class="d-flex align-items-center">
                             <span class="avatar avatar-sm mr-md-2">
                                 <img
-                                    src="https://demo.activeitzone.com/ecommerce/public/uploads/all/2bn2SwHTbJHw4k7GmCFn8lKYaxxxBFuCqiO7jfmI.jpg"
-                                    onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/avatar-place.png';"
+                                    src="/"
+                                    onerror="this.onerror=null;this.src='/assets/img/avatar-place.png';"
                                 >
                             </span>
                             <span class="d-none d-md-block">
@@ -359,7 +359,7 @@
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md">
-                        <a href="https://demo.activeitzone.com/ecommerce/seller/profile" class="dropdown-item">
+                        <a href="/seller/profile" class="dropdown-item">
                             <i class="las la-user-circle"></i>
                             <span>Profile</span>
                         </a>
