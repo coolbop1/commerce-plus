@@ -38,7 +38,11 @@
                         return $q->where('is_digital', 1);
                     }, function($q) {
                         return $q->where('is_digital', 0);
-                    })->sortByDesc('updated_at');
+                    });
+                    if(isset($in_house) && !is_null($in_house)) {
+                        $products = $products->where('in_house', $in_house);
+                    }
+                    $products = $products->sortByDesc('updated_at');
                     $key = 0;
                 @endphp
                 @foreach ($products as $product)
@@ -85,9 +89,17 @@
                                 <i class="las la-edit"></i>
                             </a>
                             @else
-                            <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="/seller/product/{{ $product->id }}/edit" title="Edit">
-                                <i class="las la-edit"></i>
-                            </a>
+                            @if (isset($is_admin))
+                                <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="/admin/product/{{ $product->id }}/edit" title="Edit">
+                                    <i class="las la-edit"></i>
+                                </a>
+                            @else
+                                <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="/seller/product/{{ $product->id }}/edit" title="Edit">
+                                    <i class="las la-edit"></i>
+                                </a>
+                                
+                            @endif
+                            
                             @endif
                             
                             @if ($page == 'digitalproducts')

@@ -10,7 +10,7 @@ class SubCategory extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'description', 'verified',  'user_id', 'category_id'
+        'name', 'description', 'verified',  'user_id', 'category_id', 'icon', 'banner'
     ];
 
     protected $casts = [

@@ -21,6 +21,10 @@ class AdminController extends Controller
         //$this->middleware('auth');
         //$this->middleware('webrole:ROLE_ADMIN');
     }
+
+    protected $in_house;
+
+    protected  $page;
     
     public function index()
     {
@@ -48,6 +52,30 @@ class AdminController extends Controller
        
         $page ='dashboard';
         return view('admin', compact('user', 'store', 'ratings', 'page', 'stores', 'products_categories', 'products_brands', 'published_products'));
+    }
+
+    public function categories()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $categories = Category::with('subCategories.sections')->get();
+        return view('admin-categories', compact('user', 'store', 'ratings', 'page', 'stores', 'categories'));
+    }
+
+    public function addCategories($category_id = null)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $categories = Category::with('subCategories.sections')->get();
+        return view('admin-add-categories', compact('user', 'store', 'ratings', 'page', 'stores', 'categories'));   
     }
 
     public function pos() 
@@ -93,10 +121,50 @@ class AdminController extends Controller
         $subscription = $store->isSubscribed() ? $store->subscriptions()->latest()->first() : null;
         $package = optional($subscription)->package;
         $remaining_uploads = $package ? ($package->product_cap - $uploads) : 0;
-        $page ='products';
+        $page = $this->page ?? 'products';
+        $is_admin = true;
 
-        return view('admin-products', compact('user', 'store', 'remaining_uploads', 'stores', 'page'));
+        if(is_numeric($this->in_house))
+        {
+            $in_house = $this->in_house;
+        } else {
+            $in_house = null;
+        }
+        return view('admin-products', compact('user', 'store', 'remaining_uploads', 'stores', 'page', 'is_admin', 'in_house'));
 
+    }
+
+    public function inHouseProducts() {
+        $this->in_house = 1;
+        return $this->products();
+    }
+
+    public function sellerProducts() {
+        $this->in_house = 0;
+        return $this->products();
+    }
+
+    public function digitalProducts() {
+        $this->page = 'digitalproducts';
+        return $this->products();
+    }
+
+    public function productBulkUpload() {
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders', 'customers.state')->find($store_id);
+
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $page = 'products-bulk-upload';
+
+        return view('admin-product-bulk-upload', compact('user', 'store', 'page', 'stores'));
     }
 
     public function createProduct($product_id = null)

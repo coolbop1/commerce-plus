@@ -397,7 +397,7 @@
                                     @endif
                                     
                                         <div class="">
-                                            <a href="https://demo.activeitzone.com/ecommerce/seller/seller-packages"
+                                            <a href="/seller/seller-packages"
                                                 class="btn btn-soft-primary">Upgrade Package</a>
                                         </div>
                                 </div>
@@ -416,7 +416,7 @@
 
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-3">
-            <a href="https://demo.activeitzone.com/ecommerce/seller/money-withdraw-requests"
+            <a href="/seller/money-withdraw-requests"
                 class="card mb-4 p-4 text-center bg-soft-primary h-180px">
                 <div class="fs-16 fw-600 text-primary">
                     Money Withdraw
@@ -506,14 +506,14 @@
                             transform="translate(-92.946 -10)" fill="#2E294E" />
                     </svg>
                 </div>
-                <a href="https://demo.activeitzone.com/ecommerce/seller/profile" class="btn btn-primary">
+                <a href="/seller/profile" class="btn btn-primary">
                     Configure Now
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="card">
+    {{-- <div class="card">
         <div class="card-body">
             <div class="card-title text-primary">
                 <h6 class="mb-0">Top 12 Products</h6>
@@ -838,7 +838,7 @@
                     </div>
                             </div>
         </div>
-    </div>
+    </div> --}}
 
 				</div>
 				<div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto border-sm-top">

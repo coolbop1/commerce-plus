@@ -86,11 +86,20 @@
                                         <span class="aiz-side-nav-text">Bulk Import</span>
                                     </a>
                                 </li>
-                                                                                        <li class="aiz-side-nav-item">
-                                    <a href="/admin/product-bulk-export" class="aiz-side-nav-link">
-                                        <span class="aiz-side-nav-text">Bulk Export</span>
-                                    </a>
-                                </li>
+                                @if ($store)
+                                    <li class="aiz-side-nav-item">
+                                        <a href="/admin/product-bulk-export/{{ $store->id }}" class="aiz-side-nav-link">
+                                            <span class="aiz-side-nav-text">Bulk Export</span>
+                                        </a>
+                                    </li>
+                                @else
+                                    <li class="aiz-side-nav-item">
+                                        <a href="/admin/product-bulk-export" class="aiz-side-nav-link">
+                                            <span class="aiz-side-nav-text">Bulk Export</span>
+                                        </a>
+                                    </li>
+                                @endif
+                                
                                                                                         <li class="aiz-side-nav-item">
                                     <a href="/admin/categories" class="aiz-side-nav-link ">
                                         <span class="aiz-side-nav-text">Category</span>

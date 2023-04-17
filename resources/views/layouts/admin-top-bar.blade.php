@@ -30,10 +30,15 @@
                         <div class="d-flex justify-content-around align-items-center align-items-stretch ml-3">
                 <div class="aiz-topbar-item">
                     <div class="d-flex align-items-center">
-                        <a class="btn btn-soft-danger btn-sm d-flex align-items-center" href="/admin/clear-cache">
-                            <i class="las la-hdd fs-20"></i>
-                            <span class="fw-500 ml-1 mr-0 d-none d-md-block">Clear Cache</span>
-                        </a>
+                        @if ($store)
+                            <a class="btn btn-soft-danger btn-sm d-flex align-items-center" href="">
+                                <i class="las la-store fs-20"></i>
+                                <span class="fw-500 ml-1 mr-0 d-none d-md-block">Current Store: {{ $store->name }}</span>
+                            </a>
+                        @else
+                            PLEASE PICK A STORE TO MANAGE
+                        @endif
+                        
                     </div>
                 </div>
             </div>
@@ -299,7 +304,7 @@
                                                             </ul>
                         </div>
                         <div class="text-center border-top">
-                            <a href="https://demo.activeitzone.com/ecommerce/admin/all-notification" class="text-reset d-block py-2">
+                            <a href="/admin/all-notification" class="text-reset d-block py-2">
                                 View All Notifications
                             </a>
                         </div>
@@ -318,8 +323,8 @@
                         <span class="d-flex align-items-center">
                             <span class="avatar avatar-sm mr-md-2">
                                 <img
-                                    src="https://demo.activeitzone.com/ecommerce/public/uploads/all/jxUqbB2ThpoDFZbBtPHaiy2pF7i02hDaFJEEF9rx.png"
-                                    onerror="this.onerror=null;this.src='https://demo.activeitzone.com/ecommerce/public/assets/img/avatar-place.png';"
+                                    src="/"
+                                    onerror="this.onerror=null;this.src='/assets/img/avatar-place.png';"
                                 >
                             </span>
                             <span class="d-none d-md-block">
@@ -329,7 +334,7 @@
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md">
-                        <a href="https://demo.activeitzone.com/ecommerce/admin/profile" class="dropdown-item">
+                        <a href="/admin/profile" class="dropdown-item">
                             <i class="las la-user-circle"></i>
                             <span>Profile</span>
                         </a>

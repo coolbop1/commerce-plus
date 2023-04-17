@@ -2,6 +2,7 @@
    
 namespace App\Http\Controllers\API;
 
+use App\Exports\ProductsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\CartResource;
@@ -224,6 +225,17 @@ class SellerDashboardController extends BaseController
         return $this->sendResponse([], 'Product created successfully.');
         //return back();
     }
+
+    public function productExport(Request $request, $store_id = null) 
+    {
+        if($store_id) {
+            $products = Product::select('name', 'detail', 'store_id', 'category_id', 'sub_category_id', 'section_id', 'price',    'quantity','brand_id','unit','min_qty','refundable','photos','thumbnail_img','date_range','video_provider','video_link','price','discount','discount_type','sku', 'external_link', 'external_link_btn','files', 'pdf', 'meta_title', 'meta_description', 'meta_img', 'shipping_type','low_stock_quantity','stock_visibility_state','cash_on_delivery','est_shipping_days','tax','tax_type','vat','vat_type','user_id','featured','published','is_digital')->where('store_id', $store_id)->get();
+        } else {
+            $products = Product::select('name', 'detail', 'store_id', 'category_id', 'sub_category_id', 'section_id', 'price',    'quantity','brand_id','unit','min_qty','refundable','photos','thumbnail_img','date_range','video_provider','video_link','price','discount','discount_type','sku', 'external_link', 'external_link_btn','files', 'pdf', 'meta_title', 'meta_description', 'meta_img', 'shipping_type','low_stock_quantity','stock_visibility_state','cash_on_delivery','est_shipping_days','tax','tax_type','vat','vat_type','user_id','featured','published','is_digital')->get();
+        }
+        
+        return Excel::download(new ProductsExport($products), 'product-collection.xlsx');
+    }   
 
     public function toggleProductColumn(Request $request) 
     {
