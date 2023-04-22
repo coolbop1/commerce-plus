@@ -362,6 +362,12 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                     case 'add-user-customer':
                         window.location.href = '/checkout';
                         break;
+                    case 'add-category':
+                        window.location.href = '/admin/categories';
+                        break;
+                    case 'add-brand':
+                        window.location.href = '/admin/brands';
+                        break;
                 
                     default:
                         window.location.href = '/';
