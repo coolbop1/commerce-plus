@@ -11,6 +11,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Section;
 use App\Models\SubCategory;
+use App\Models\TemporaryFiles;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends BaseController
@@ -23,13 +24,27 @@ class CategoryController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
+        if($request->icon){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->icon))->orWhereIn('file_path', explode(',', $request->icon))->latest()->first();
+            $request_icon = $temp->file_path ?? null;
+            if($request_icon) {
+                $request->request->add(['icon' => $request_icon]);
+            }
+        }
+        if($request->banner){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->banner))->orWhereIn('file_path', explode(',', $request->banner))->latest()->first();
+            $request_banner = $temp->file_path ?? null;
+            if($request_banner) {
+                $request->request->add(['banner' => $request_banner]);
+            }
+        }
         $input = $request->all();
         $input['verified'] = true;
         if($request->parent_id && !empty($request->parent_id)){
             if(is_numeric($request->parent_id)) {
                 $input['category_id'] = $request->parent_id;
                 $category = SubCategory::updateOrCreate(
-                    ['name' => $request->name],
+                    $request->id ? ['id' => $request->id] : ['name' => $request->name],
                     $input
                 );
             } else {
@@ -37,13 +52,13 @@ class CategoryController extends BaseController
                 $input['category_id'] = $parents_data[0];
                 $input['sub_category_id'] = $parents_data[1];
                 $category = Section::updateOrCreate(
-                    ['name' => $request->name],
+                    $request->id ? ['id' => $request->id] : ['name' => $request->name],
                     $input
                 );
             }
         } else {
             $category = Category::updateOrCreate(
-                ['name' => $request->name],
+                $request->id ? ['id' => $request->id] : ['name' => $request->name],
                 $input
             );
         }
@@ -51,6 +66,29 @@ class CategoryController extends BaseController
         
 
         return $this->sendResponse(new CategoryResource($category), 'Category created successfully.');
+    }
+
+    public function createBrand(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        if($request->logo){
+            $temp = TemporaryFiles::whereIn('id', explode(',', $request->logo))->orWhereIn('file_path', explode(',', $request->logo))->latest()->first();
+            $request_logo = $temp->file_path ?? null;
+            if($request_logo) {
+                $request->request->add(['logo' => $request_logo]);
+            }
+        }
+        $input = $request->all();
+        $input['verified'] = true;
+        $brand = Brand::updateOrCreate(
+            $request->id ? ['id' => $request->id] : ['name' => $request->name],
+            $input
+        );
+        return $this->sendResponse($brand, 'Brand saved successfully.');
     }
 
     public function listCategories(Request $request){

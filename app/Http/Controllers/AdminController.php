@@ -66,6 +66,43 @@ class AdminController extends Controller
         return view('admin-categories', compact('user', 'store', 'ratings', 'page', 'stores', 'categories'));
     }
 
+    public function brands()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $brands = Brand::all();
+        return view('admin-brands', compact('user', 'store', 'ratings', 'page', 'stores', 'brands'));
+    }
+
+    public function brandEdit($brand_id)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $brand = Brand::find($brand_id);
+        return view('admin-edit-brand', compact('user', 'store', 'ratings', 'page', 'stores', 'brand'));
+    }
+
+    public function brandDelete($brand_id)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $brand = Brand::find($brand_id);
+        $brand->delete();
+        return redirect('/admin/brands');
+    }
+
     public function addCategories($category_id = null)
     {
         if(isset($_SESSION['logged_in'])) {
@@ -75,7 +112,43 @@ class AdminController extends Controller
         $page ='dashboard';
         $store = $ratings = null;
         $categories = Category::with('subCategories.sections')->get();
-        return view('admin-add-categories', compact('user', 'store', 'ratings', 'page', 'stores', 'categories'));   
+        return view('admin-add-categories', compact('user', 'store', 'ratings', 'page', 'stores', 'categories', 'category_id'));   
+    }
+
+    public function deleteCategory($category_id = null)
+    {
+        $ids_array = explode('_', $category_id);
+        if(count($ids_array) == 1) {
+            $category = Category::find($ids_array[0]);
+            $category->delete();
+        }
+
+        if(count($ids_array) == 2) {
+            $category = Category::find($ids_array[0]);
+            $category = $category->subCategories()->where('id', $ids_array[1])->first();
+            $category->delete();
+        }
+
+        if(count($ids_array) == 3) {
+            $category = Category::find($ids_array[0]);
+            $category = $category->subCategories()->where('id', $ids_array[1])->first();
+            $category = $category->sections()->where('id', $ids_array[2])->first();
+            $category->delete();
+        }
+
+        return redirect('/admin/categories');
+    }
+
+    public function reviews()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $carts = Cart::with('product.store', 'customer.user')->whereNotNull('review_comment')->get();
+        return view('reviews', compact('user', 'store', 'ratings', 'page', 'stores', 'carts'));   
     }
 
     public function pos() 

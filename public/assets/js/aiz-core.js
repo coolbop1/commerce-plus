@@ -41,25 +41,41 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
         },
         removeAttachment: function () {
             $(document).on("click",'.remove-attachment', function () {
-                var value = $(this)
-                    .closest(".file-preview-item")
-                    .data("id");
-                var selected = $(this)
-                    .closest(".file-preview")
-                    .prev('[data-toggle="aizuploader"]')
-                    .find(".selected-files")
-                    .val()
-                    .split(",")
-                    .map(Number);
+                let img_path = this.parentElement.parentElement.querySelector('img').src;
+                let domain = window.location.origin;
+                img_path = img_path.replace(domain+'/', '');
+                let preview_id = this.parentElement.parentElement.parentElement.id;
+                let input_id = preview_id.replace('preview_', '');
+                let current_input_value = document.getElementById(input_id).value;
+                let current_value_array = current_input_value.split(',');
+                const index = current_value_array.indexOf(current_input_value);
+                if (index > -1) { // only splice array when item is found
+                    current_value_array.splice(index, 1); // 2nd parameter means remove one item only
+                }
+                let new_input_value = current_value_array.join(',');
+                document.getElementById(input_id).value = new_input_value;
+                this.parentElement.parentElement.remove();
+                
+                
+                // var value = $(this)
+                //     .closest(".file-preview-item")
+                //     .data("id");
+                // console.log('value clicked ',value);
+                // var selected = $(this)
+                //     .closest(".file-preview")
+                //     .find(".selected-files")
+                //     .val()
+                //     .split(",")
+                //     .map(Number);
 
-                AIZ.uploader.removeInputValue(
-                    value,
-                    selected,
-                    $(this)
-                        .closest(".file-preview")
-                        .prev('[data-toggle="aizuploader"]')
-                );
-                $(this).closest(".file-preview-item").remove();
+                // AIZ.uploader.removeInputValue(
+                //     value,
+                //     selected,
+                //     $(this)
+                //         .closest(".file-preview")
+                //         .prev('[data-toggle="aizuploader"]')
+                // );
+                // $(this).closest(".file-preview-item").remove();
             });
         },
         deleteUploaderFile: function () {

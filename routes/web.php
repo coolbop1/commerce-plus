@@ -87,7 +87,12 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/product-bulk-export', [SellerDashboardController::class, 'productExport']);
     Route::get('/admin/categories', [AdminController::class, 'categories']);
     Route::get('/admin/categories/create', [AdminController::class, 'addCategories']);
-    //Route::get('/admin/categories/edit/{category_id}', [AdminController::class, 'addCategories']);
+    Route::get('/admin/categories/edit/{category_id}', [AdminController::class, 'addCategories']);
+    Route::get('/admin/categories/destroy/{category_id}', [AdminController::class, 'deleteCategory']);
+    Route::get('/admin/brands', [AdminController::class, 'brands'])->name('brands');
+    Route::get('/admin/brands/edit/{brand_id}', [AdminController::class, 'brandEdit']);
+    Route::get('/admin/brands/destroy/{brand_id}', [AdminController::class, 'brandDelete']);
+    Route::get('/reviews', [AdminController::class, 'reviews']);
 });
 
 Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {
