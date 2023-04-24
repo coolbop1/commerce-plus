@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\DeliveryBoy;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\States;
 use App\Models\Store;
@@ -113,6 +114,142 @@ class AdminController extends Controller
         $store = $ratings = null;
         $categories = Category::with('subCategories.sections')->get();
         return view('admin-add-categories', compact('user', 'store', 'ratings', 'page', 'stores', 'categories', 'category_id'));   
+    }
+
+    public function orders()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+            $store = Store::with('products.category', 'orders')->find($store_id);
+            $products_id = $store->products->pluck('id')->toArray();
+            $ratings_data = Cart::whereHas('checkout', function($q) {
+                $q->where('status', 'completed');
+            })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->select(DB::raw('count(*) as num'), DB::raw('sum(ratings) as total_ratings'))->first();
+            $total_ratings = $ratings_data->total_ratings ?? 0;
+            $total_sold = $ratings_data->num;
+            $ratings = $total_sold > 0 ? ($total_ratings/$total_sold) : 0;
+            $orders = Order::where('store_id', $store_id)->get();
+        } else {
+            $store = $ratings = null;
+            $orders = Order::all();
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        return view('orders', compact('user', 'store', 'ratings', 'stores', 'orders'));   
+    }
+
+    public function inhouseOrders()
+    { 
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+            $store = Store::with('products.category', 'orders')->find($store_id);
+            $products_id = $store->products->pluck('id')->toArray();
+            $ratings_data = Cart::whereHas('checkout', function($q) {
+                $q->where('status', 'completed');
+            })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->select(DB::raw('count(*) as num'), DB::raw('sum(ratings) as total_ratings'))->first();
+            $total_ratings = $ratings_data->total_ratings ?? 0;
+            $total_sold = $ratings_data->num;
+            $ratings = $total_sold > 0 ? ($total_ratings/$total_sold) : 0;
+            $orders = Order::whereHas('checkout', function($query){
+                $query->whereHas('carts', function($q_) {
+                    $q_->whereHas('product', function($q) {
+                        $q->where('in_house', 1);
+                    });
+                });
+            })->where('store_id', $store_id)->get();
+        } else {
+            $store = $ratings = null;
+            $orders = Order::whereHas('checkout', function($query){
+                $query->whereHas('carts', function($q_) {
+                    $q_->whereHas('product', function($q) {
+                        $q->where('in_house', 1);
+                    });
+                });
+            })->get();
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        return view('orders', compact('user', 'store', 'ratings', 'stores', 'orders'));   
+    }
+
+    public function sellerOrders()
+    { 
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+            $store = Store::with('products.category', 'orders')->find($store_id);
+            $products_id = $store->products->pluck('id')->toArray();
+            $ratings_data = Cart::whereHas('checkout', function($q) {
+                $q->where('status', 'completed');
+            })->whereIn('product_id', $products_id)->where('ratings', '>', 0)->select(DB::raw('count(*) as num'), DB::raw('sum(ratings) as total_ratings'))->first();
+            $total_ratings = $ratings_data->total_ratings ?? 0;
+            $total_sold = $ratings_data->num;
+            $ratings = $total_sold > 0 ? ($total_ratings/$total_sold) : 0;
+            $orders = Order::whereHas('checkout', function($query){
+                $query->whereHas('carts', function($q_) {
+                    $q_->whereHas('product', function($q) {
+                        $q->where('in_house', 0);
+                    });
+                });
+            })->where('store_id', $store_id)->get();
+        } else {
+            $store = $ratings = null;
+            $orders = Order::whereHas('checkout', function($query){
+                $query->whereHas('carts', function($q_) {
+                    $q_->whereHas('product', function($q) {
+                        $q->where('in_house', 0);
+                    });
+                });
+            })->get();
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        return view('orders', compact('user', 'store', 'ratings', 'stores', 'orders'));   
+    }
+
+    public function listOrders(Request $request)
+    {
+        $store_id = $request->store_id ?? null;
+        //=&=&date=&search=
+        $from = $to = null;
+        if($request->date) {
+            $date_array = explode(' to ',$request->date);
+            $from = $date_array[0];
+            $to = $date_array[1];
+        }
+        $orders = Order::when($store_id, function($q, $store_id){
+            return $q->where('store_id', $store_id);
+        })->when($request->delivery_status, function($q) use($request){
+            return $q->whereHas('delivery', function($query) use($request){
+                return $query->where('status', $request->delivery_status);
+            });
+        })->when($request->payment_status, function($q) use($request){
+            return $q->where('payment_status', $request->payment_status);
+        })->when($from && $to, function($q) use($from,$to){
+            return $q->whereBetween('created_at',[$from, $to]);
+        })->when($request->search, function($q) use($request){
+            return $q->where('order_code', 'LIKE', '%'.$request->search.'%');
+        })->get();
+
+
+        return view('partials.orders-list', compact('orders'));
+       
+    }
+
+    public function order($code)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::all();
+        $store = $ratings = null;
+        $order = Order::with('checkout.user', 'checkout.customer.state', 'delivery')->where('order_code', $code)->first();
+        return view('admin-order', compact('user', 'stores', 'order', 'store'));   
     }
 
     public function deleteCategory($category_id = null)

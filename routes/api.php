@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\DeliveryBoyController;
@@ -64,6 +65,7 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::get('delete-category', [CategoryController::class, 'deleteCategory']);
         Route::post('create-delivery-boy', [DeliveryBoyController::class, 'create']);
         Route::post('update-delivery-boy', [DeliveryBoyController::class, 'update']);
+        Route::post('list-all-orders', [AdminController::class, 'listOrders']);
     });
 
     //Store endpoints
