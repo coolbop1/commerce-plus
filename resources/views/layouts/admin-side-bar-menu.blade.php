@@ -220,11 +220,7 @@
                                     </a>
                                 </li>
                                                         
-                                                            <li class="aiz-side-nav-item">
-                                    <a href="/admin/orders_by_pickup_point" class="aiz-side-nav-link ">
-                                        <span class="aiz-side-nav-text">Pick-up Point Order</span>
-                                    </a>
-                                </li>
+                                                            
                                                     </ul>
                     </li>
                 

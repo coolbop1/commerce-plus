@@ -389,6 +389,45 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
     return false;
 }
 
+function sortOrders(element) {
+    let params = new FormData(element);
+
+    var object = {};
+    params.forEach((val, key, parent) => {
+        object[key] = val;
+    })
+    $.post({
+        url: '/api/list-all-orders',
+        headers: {
+            'Authorization': "Bearer "+COMMERCE_PLUS_TOKEN
+        }
+    }, object, function(data){
+        if(data == '0'){
+            console.log("nothing here");
+        }
+        else{
+            console.log('got to this place');
+            document.getElementById('order-list').innerHTML = data;
+            //$('#order-list').html(data);
+        }
+    });
+    // let http_f = new XMLHttpRequest();
+    
+    // http_f.open("POST", '/api/list-all-orders', true);
+    // http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    // http_f.onreadystatechange = function() {
+    //     if(http_f.readyState == 4) {
+    //         if(http_f.status == 200) {
+    //             console.log('http_f',http_f);
+    //             document.getElementById('order-list').innerHTML(this.responseText);
+    //         }
+    //     }
+    // }
+    // http_f.send(params);
+    
+    return false;
+}
+
 function logout () {
     localStorage.removeItem('COMMERCE_PLUS_TOKEN');
     let http_f = new XMLHttpRequest();

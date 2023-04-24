@@ -93,6 +93,10 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/brands/edit/{brand_id}', [AdminController::class, 'brandEdit']);
     Route::get('/admin/brands/destroy/{brand_id}', [AdminController::class, 'brandDelete']);
     Route::get('/reviews', [AdminController::class, 'reviews']);
+    Route::get('/admin/all_orders', [AdminController::class, 'orders']);
+    Route::get('/admin/orders/{code}', [AdminController::class, 'order']);
+    Route::get('/admin/inhouse-orders', [AdminController::class, 'inhouseOrders']);
+    Route::get('/admin/seller_orders', [AdminController::class, 'sellerOrders']);
 });
 
 Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {
