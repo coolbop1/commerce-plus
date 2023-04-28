@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Notifications\OrderPlaced;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Notification;
 
 class Store extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Notifiable;
     protected $fillable = [
         'name', 'warehoused','shop_logo','shop_phone','shop_address','meta_title','meta_description', 'lat', 'long',
         'banner','facebook', 'instagram', 'twitter','google','youtube', 'balance'
@@ -70,5 +73,19 @@ class Store extends Model
     public function paymentRequest()
     {
         return $this->hasMany(VendorPaymentRequest::class);
+    }
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @return  array<string, string>|string
+     */
+    public function routeNotificationForMail(OrderPlaced $notification): array|string
+    {
+        // Return email address only...
+        //return $this->email_address;
+ 
+        // Return email address and name...
+        return [$this->users()->first()->email => $this->name];
     }
 }

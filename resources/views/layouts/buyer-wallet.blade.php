@@ -98,7 +98,7 @@
                             <div class="mb-3">
                                 <select class="form-control selectpicker rounded-0" data-minimum-results-for-search="Infinity"
                                     name="payment_option" data-live-search="true">
-                                    <option value="paypal">Paypal</option>
+                                    <option value="paystack">Paystack</option>
                                 </select>
                             </div>
                         </div>

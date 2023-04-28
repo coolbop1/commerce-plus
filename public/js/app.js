@@ -340,6 +340,9 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                 let message = response.message;
                 showAlert(message, 'alert-success');
                 switch (button_id) {
+                    case 'reg-button':
+                        window.location.href = '/login';
+                        break;
                     case 'edit-shop-details-button':
                     case 'edit-shop-location-button':
                     case 'edit-shop-banner-button':
