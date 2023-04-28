@@ -51,8 +51,10 @@
                         <span class="btn btn-icon p-0 d-flex justify-content-center align-items-center">
                             <span class="d-flex align-items-center position-relative">
                                 <i class="las la-bell fs-24"></i>
-                                                                    <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>
-                                                            </span>
+                                @if ($user->unreadNotifications->count() > 0 )
+                                    <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>
+                                @endif
+                            </span>
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg py-0">
@@ -61,247 +63,23 @@
                         </div>
                         <div class="px-3 c-scrollbar-light overflow-auto " style="max-height:300px;">
                             <ul class="list-group list-group-flush">
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
+                                @foreach ($user->unreadNotifications  as $notification)
+                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
                                         <div class="media text-inherit">
                                             <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220912-10085522 has been Delivered
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        September 12 2022, 12:09 am
-                                                    </small>
-                                                                                            </div>
+                                                <p class="mb-1 text-truncate-2">
+                                                    <a href="{{ $notification->data['url'] ?? '' }}">
+                                                        {{ $notification->data['message'] }}
+                                                    </a>
+                                                </p>
+                                                <small class="text-muted">
+                                                    September 12 2022, 12:09 am
+                                                </small>
+                                            </div>
                                         </div>
                                     </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220912-10085522 has been Paid
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        September 12 2022, 12:09 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220912-10085522 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        September 12 2022, 12:09 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220906-10185640 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        September 6 2022, 12:19 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220906-10155759 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        September 6 2022, 12:16 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220829-07250551 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        August 28 2022, 9:25 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220828-13023343 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        August 28 2022, 3:02 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220828-12334652 has been Delivered
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        August 28 2022, 2:34 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220828-12334652 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        August 28 2022, 2:33 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220828-12334652 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        August 28 2022, 2:33 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220828-12322996 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        August 28 2022, 2:32 am
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220726-08275357 has been Delivered
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        July 25 2022, 10:28 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220726-08275357 has been Paid
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        July 25 2022, 10:28 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220726-08275357 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        July 25 2022, 10:27 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220726-08040637 has been Delivered
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        July 25 2022, 10:05 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220726-08040637 has been Paid
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        July 25 2022, 10:05 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220726-08040637 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        July 25 2022, 10:04 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220612-09093535 has been Placed
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        June 11 2022, 11:09 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220602-13204496 has been Delivered
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        June 11 2022, 11:04 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                                    <li class="list-group-item d-flex justify-content-between align-items- py-3">
-                                        <div class="media text-inherit">
-                                            <div class="media-body">
-                                                                                                    <p class="mb-1 text-truncate-2">
-                                                        Order code: 20220602-13204496 has been Paid
-                                                    </p>
-                                                    <small class="text-muted">
-                                                        June 11 2022, 11:04 pm
-                                                    </small>
-                                                                                            </div>
-                                        </div>
-                                    </li>
-                                                            </ul>
+                                @endforeach
+                            </ul>
                         </div>
                         <div class="text-center border-top">
                             <a href="/admin/all-notification" class="text-reset d-block py-2">

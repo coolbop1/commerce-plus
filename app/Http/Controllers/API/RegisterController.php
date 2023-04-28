@@ -9,6 +9,8 @@ use App\Models\Customer;
 use App\Models\Role;
 use App\Models\Store;
 use App\Models\User;
+use App\Notifications\Verification;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,6 +57,7 @@ class RegisterController extends BaseController
 
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+        $user->notify(new Verification());
         if($request->has('account_type')) {
             $new_user = User::find($user->id);
             switch ($request->account_type) {
@@ -85,10 +88,10 @@ class RegisterController extends BaseController
             return $this->login($request, $message = "New customer account created succesfully");
             
         }
-        $success['token'] =  $user->createToken('MyApp')->plainTextToken;
+        //$success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
    
-        $_SESSION['logged_in'] = User::with(['roles', 'carts'])->find($user->id);
+        //$_SESSION['logged_in'] = User::with(['roles', 'carts'])->find($user->id);
         return $this->sendResponse($success, 'User register successfully.');
     }
 
@@ -165,16 +168,39 @@ class RegisterController extends BaseController
      */
     public function login(Request $request, $message = null)
     {
-        info("got to login here ");
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        
+        if($request->user_id) {
+            $user = User::find($request->user_id);
+            
+            if(optional($user)->email == $request->email && Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                $user->email_verified_at = now();
+                $user->save();
+                $user->refresh();
+                $message = "Account Verified successfully";
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'], 401);
+            }
+        }
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password]) && (Carbon::parse(Auth::user()->created_at)->lte('2023-04-27') || Auth::user()->email_verified_at)){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
    
             $_SESSION['logged_in'] = User::with(['roles', 'carts'])->find($user->id);
             return $this->sendResponse($success, $message ?? 'User login successfully.');
-        } 
-        else{ 
+        } elseif (Auth::user() && is_null(Auth::user()->email_verified_at)) {
+            $user = User::find(Auth::user()->id); 
+            $user->notify(new Verification());
+            return $this->sendError('Please verify your account, Verification link as been sent to your mail.',[], 400);
+        } else{ 
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'], 401);
         } 
     }

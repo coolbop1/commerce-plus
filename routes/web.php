@@ -53,8 +53,17 @@ Route::middleware(['session'])->group( function () {
 
 Route::middleware(['checksession'])->group( function () {
     Route::get('/login', function () {
-        return view('login');
+        $user_id = null;
+        return view('login', compact('user_id'));
     })->name('login');
+    Route::get('/verify-account/{user_id}', function ($user_id) {
+        $user_id = explode('$rpm', str_replace('k0k0k', '/', $user_id));
+        if(isset($user_id[1]) && is_numeric($user_id[1]) && isset($user_id[2]) && password_verify($user_id[1], $user_id[0].$user_id[2])) {
+            $user_id = $user_id[1];
+            return view('login', compact('user_id'));
+        }
+        return redirect('/');
+    })->name('verify');
     Route::get('/register', function () {
         return view('register');
     });

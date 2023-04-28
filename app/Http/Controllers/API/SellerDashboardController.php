@@ -421,7 +421,7 @@ class SellerDashboardController extends BaseController
         if(isset($_SESSION['vendor_current_store_id'])) {
             $store_id = $_SESSION['vendor_current_store_id'];
         } else {
-            $store_id = $user->stores->first()->id;
+            $store_id = optional(optional($user->stores)->first())->id;
         }
         $page = 'orders';
         $store = Store::with('products.category', 'orders')->find($store_id);

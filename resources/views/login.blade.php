@@ -6,7 +6,7 @@
         <div class="card">
             <div class="text-center pt-4">
                 <h1 class="h4 fw-600">
-                    Login to your account.
+                   {{ $user_id ? 'Activate your account' : 'Login to your account.'}}
                 </h1>
             </div>
 
@@ -15,6 +15,9 @@
                     <form class="form-default" role="form" onsubmit="return submitForm(this, url = '/api/login', 'POST', 'login-button')">
                         <span id="validate-email" class="alert-danger"></span>
                         <div class="form-group">
+                            @if ($user_id)
+                                <input type="hidden" value="{{ $user_id }}" name="user_id" id="user_id">
+                            @endif
                             <input type="email" class="form-control" value="" placeholder="Email" name="email" id="email" autocomplete="off">
                          </div>
                          <span id="validate-password" class="alert-danger"></span>
@@ -22,29 +25,34 @@
                             <input type="password" class="form-control " placeholder="Password" name="password" id="password">
                         </div>
 
-                        <div class="row mb-2">
-                            <div class="col-6">
-                                <label class="aiz-checkbox">
-                                    <input type="checkbox" name="remember">
-                                    <span class="opacity-60">Remember Me</span>
-                                    <span class="aiz-square-check"></span>
-                                </label>
+                        @if (!$user_id)
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <label class="aiz-checkbox">
+                                        <input type="checkbox" name="remember">
+                                        <span class="opacity-60">Remember Me</span>
+                                        <span class="aiz-square-check"></span>
+                                    </label>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <a href="/password/reset" class="text-reset opacity-60 fs-14">Forgot password?</a>
+                                </div>
                             </div>
-                            <div class="col-6 text-right">
-                                <a href="https://demo.activeitzone.com/ecommerce/password/reset" class="text-reset opacity-60 fs-14">Forgot password?</a>
-                            </div>
-                        </div>
+                        @endif
+                        
 
                         <div class="mb-5">
-                            <button id="login-button" type="submit" class="btn btn-primary btn-block fw-600">Login</button>
+                            <button id="login-button" type="submit" class="btn btn-primary btn-block fw-600">{{ $user_id ? 'Verify Account' : 'Login'}}</button>
                         </div>
                     </form>
 
                 </div>
-                <div class="text-center">
-                    <p class="text-muted mb-0">Dont have an account?</p>
-                    <a href="register">Register Now</a>
-                </div>
+                @if (!$user_id)
+                    <div class="text-center">
+                        <p class="text-muted mb-0">Dont have an account?</p>
+                        <a href="register">Register Now</a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

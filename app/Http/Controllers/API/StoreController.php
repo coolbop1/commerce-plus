@@ -24,6 +24,7 @@ use App\Models\Subscription;
 use App\Models\TemporaryFiles;
 use App\Models\User;
 use App\Models\VendorPaymentRequest;
+use App\Notifications\OrderPlaced;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
@@ -402,6 +403,10 @@ class StoreController extends BaseController
             $remaining_balance = $request->user()->balance - $all_total;
             User::where('id', $request->user()->id)->update(['balance' => $remaining_balance]);
         }
+        $admin = User::whereHas('roles', function($q){ $q->where('name', 'ROLE_SUPERADMIN');})->first();
+        $store = Store::find($store_id);
+        $store->notify(new OrderPlaced($order));
+        $admin->notify(new OrderPlaced($order, $is_admin = true));
         return $this->sendResponse($checkout, 'Order added successfully.');
     }
 

@@ -1,7 +1,4 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#e8ebef">
-    @php
-    $logo = get_setting('header_logo');
-    @endphp
     <tr>
         <td align="center" valign="top" class="container" style="padding:50px 10px;">
             <!-- Container -->
@@ -20,7 +17,7 @@
                                                         <th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;">
                                                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                                 <tr>
-                                                                    <td class="img m-center" style="font-size:0pt; line-height:0pt; text-align:left;"><img src="{{ uploaded_asset($logo) }}" width="" height="24" border="0" alt="" /></td>
+                                                                    <td class="img m-center" style="font-size:0pt; line-height:0pt; text-align:left;"><img src="/uploads/logo.png" width="" height="24" border="0" alt="" /></td>
                                                                 </tr>
                                                             </table>
                                                         </th>
@@ -50,7 +47,7 @@
                                             <td class="p30-15" style="padding: 70px 30px 70px 30px;">
                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                     <tr>
-                                                        <td class="h2 center pb10" style="color:#000000; font-family:'Ubuntu', Arial,sans-serif; font-size:50px; line-height:60px; text-align:center; padding-bottom:10px;">{{ $array['subject'] }}</td>
+                                                        <td class="h4 center pb10" style="color:#000000; font-family:'Ubuntu', Arial,sans-serif; font-size:30px; line-height:60px; text-align:center; padding-bottom:10px;">{{ $array['subject'] }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="h5 center blue pb30" style="font-family:'Ubuntu', Arial,sans-serif; font-size:20px; line-height:26px; text-align:center; color:#2e57ae; padding-bottom:30px;">{{ $array['content'] }} </td>
@@ -58,7 +55,7 @@
                                                     @if(!empty( $array['link']))
                                                     <tr>
                                                         <td class="h5 center blue pb30" style="font-family:'Ubuntu', Arial,sans-serif; font-size:20px; line-height:26px; text-align:center; color:#2e57ae; padding-bottom:30px;">
-                                                            <a href="{{ $array['link'] }}" style="background: #007bff;padding: 0.9rem 2rem;font-size: 0.875rem;color:#fff;border-radius: .2rem;" target="_blank">{{ translate("Click Here") }}</a>
+                                                            <a href="{{ $array['link'] }}" style="background: #007bff;padding: 0.9rem 2rem;font-size: 0.875rem;color:#fff;border-radius: .2rem;" target="_blank">Click Here</a>
                                                         </td>
                                                     </tr>
                                                     @endif

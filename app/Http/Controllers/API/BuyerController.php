@@ -37,7 +37,7 @@ class BuyerController extends BaseController
         if(isset($_SESSION['logged_in'])) {
             $user = User::find($_SESSION['logged_in']->id);
         }
-        $last_credit_transaction = RechargeHistory::where('transaction', 'credit')->latest()->first();
+        $last_credit_transaction = $user ? RechargeHistory::where('user_id', $user->id)->where('transaction', 'credit')->latest()->first() : null;
         $customer = optional(optional($user)->customer)->last();
         return view('dashboard', compact('user', 'last_credit_transaction', 'customer'));
     }

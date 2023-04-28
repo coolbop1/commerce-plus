@@ -185,7 +185,7 @@
                             </li>
                         @else
                             <li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-                                <a href="/dashboard" class="text-reset d-inline-block opacity-60 py-2">Dashboard</a>
+                                <a href="/dashboard" class="text-reset d-inline-block opacity-60 py-2">Account</a>
                             </li>
                         @endif
                         <li class="list-inline-item">
