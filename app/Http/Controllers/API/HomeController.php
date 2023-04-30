@@ -59,8 +59,9 @@ class HomeController extends BaseController
         $shops = Store::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
         $categories = Category::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
         $products = Product::where('name', 'LIKE', '%'.$keyword.'%')->take(20)->get();
+        $page = "search";
 
-        return view('search-content', compact('shops', 'categories', 'products'));   
+        return view('search-content', compact('shops', 'categories', 'products', 'page'));   
     }
 
     public function product($product_slug)

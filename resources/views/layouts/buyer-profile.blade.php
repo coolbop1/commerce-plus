@@ -20,6 +20,12 @@
                       <input type="text" class="form-control rounded-0" placeholder="Your Name" name="name" value="{{ $user->name }}">
                   </div>
               </div>
+              <div class="form-group row">
+                <label class="col-md-2 col-form-label fs-14">Your Email</label>
+                <div class="col-md-10">
+                    <input disabled type="text" class="form-control rounded-0" placeholder="Your Phone"  value="{{ $user->email }}">
+                </div>
+            </div>
               <!-- Phone-->
               <div class="form-group row">
                   <label class="col-md-2 col-form-label fs-14">Your Phone</label>
