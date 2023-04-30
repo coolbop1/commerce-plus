@@ -143,6 +143,35 @@ class CategoryController extends BaseController
     }
 
     public function listCategoryProduct(Request $request) {
+        if($request->keyword) {
+            $products = Product::where('name', 'LIKE', '%'.$request->keyword.'%')->when($request->min_price, function($q) use($request){
+                return $q->where('price', '>=', $request->min_price);
+            })->when($request->max_price, function($q) use($request){
+                return $q->where('price', '<=', $request->max_price);
+            })->when($request->sort_by, function($q) use($request){
+                switch ($request->sort_by) {
+                    case 'newest':
+                        return $q->orderBy('created_at', 'asc');
+                        break;
+                    case 'oldest':
+                        return $q->orderBy('created_at', 'desc');
+                        break;
+                    case 'price-asc':
+                        return $q->orderBy('price', 'asc');
+                        break;
+                    case 'price-desc':
+                        return $q->orderBy('price', 'desc');
+                        break;
+                    
+                    default:
+                    return $q->orderBy('created_at', 'desc');
+                        break;
+                }
+            })->when($request->brand, function($q) use($request){
+                return $q->where('brand_id', $request->brand);
+            })->get();
+        } else {
+
         $validator = Validator::make($request->all(), [
             'id' => 'required',
             'category_type' => 'required'
@@ -192,6 +221,7 @@ class CategoryController extends BaseController
         })->when($request->brand, function($q) use($request){
             return $q->where('brand_id', $request->brand);
         })->get();
+    }
         
         return $this->sendResponse($products, 'Category Product retrieved successfully.');
     }

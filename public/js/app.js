@@ -1565,7 +1565,7 @@ function rangefilter(arg){
     
     filter(document.getElementById('brand_id').value !== null);
 }
-function filter(brand = false){
+function filter(brand = false, keyword = null){
     let params = new FormData();
     let url = null;
     if(brand) {
@@ -1580,8 +1580,8 @@ function filter(brand = false){
         params.append('id', id);
         url = '/api/list_brand_products';
     } else {
-        let id = document.getElementById('category_id').value;
-        let category_type = document.getElementById('cat_type').value;
+        let id = !keyword ? document.getElementById('category_id').value : null;
+        let category_type = !keyword ? document.getElementById('cat_type').value : null;
         let min_price = document.getElementById('min_price').value;
         let max_price = document.getElementById('max_price').value;
         let sort = document.getElementById('sort_by').value;
@@ -1593,6 +1593,9 @@ function filter(brand = false){
         params.append('max_price', max_price);
         params.append('sort_by', sort);
         params.append('brand', brand);
+        if (keyword) {
+            params.append('keyword', keyword);
+        }
         url = '/api/list_category_products';
     }
     

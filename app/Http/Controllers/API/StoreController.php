@@ -25,6 +25,7 @@ use App\Models\TemporaryFiles;
 use App\Models\User;
 use App\Models\VendorPaymentRequest;
 use App\Notifications\OrderPlaced;
+use App\Notifications\OrderProcessed;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
@@ -558,6 +559,7 @@ class StoreController extends BaseController
 
             $delivery->pod_record_id = $pod_record->id;
             $delivery->save();
+            $order->checkout->customer->notify(new OrderProcessed($order));
         } 
         if($order->status == 'out_for_delivery') {
             Delivery::where('order_id', $order->id)->update(['status' => 'picked_up']);
