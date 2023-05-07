@@ -24,11 +24,22 @@
     <script>
         const PRODUCTS = <?php echo json_encode($products); ?>
     </script>
-        
+    @elseif (isset($productsByStore))
+    <script>
+        const PRODUCTS = <?php echo json_encode(collect($productsByStore)->flatten()); ?>
+    </script>
+    @else
+    <script>
+        const PRODUCTS = null;
+    </script>
     @endif
     @if (isset($product))
     <script>
         const PRODUCT = <?php echo json_encode($product); ?>
+    </script>
+    @else
+    <script>
+        const PRODUCT = null;
     </script>
         
     @endif

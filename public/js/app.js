@@ -966,22 +966,22 @@ function addToWishListV2 (product_id, ele = null) {
     }
 }
 
-function addToCart (product, ele = null, type = 'pos', buynow = false){
+function addToCart (product_, ele = null, type = 'pos', buynow = false){
     let new_add = null;
     let cart_storage = null;
     let cart = null;
     
-    if (isNaN(product)) {
-        cart_storage = type == 'pos' ? 'COMMERCE_PLUS_CART_'+product.store_id : 'COMMERCE_PLUS_CART';
+    if (isNaN(product_)) {
+        cart_storage = type == 'pos' ? 'COMMERCE_PLUS_CART_'+product_.store_id : 'COMMERCE_PLUS_CART';
         cart = localStorage.getItem(cart_storage) ?? '[]';
         cart = JSON.parse(cart);
-        new_add = cart.find(item => item.id == product.id)
+        new_add = cart.find(item => item.id == product_.id)
     } else {
         let store_id = document.getElementById('pos-cart-store-id')?.value;
         cart_storage = type == 'pos' ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
         cart = localStorage.getItem(cart_storage) ?? '[]';
         cart = JSON.parse(cart);
-        new_add = cart.find(item => item.id == product);
+        new_add = cart.find(item => item.id == product_);
     }
     if(new_add) {
         let cart_quantity = ele?.value || (parseInt((new_add.quantity_added ?? '1')) + 1);
@@ -998,7 +998,7 @@ function addToCart (product, ele = null, type = 'pos', buynow = false){
         }
         
     } else {
-        let product = PRODUCT;//JSON.parse(((((((ele.getAttribute('data-value').replaceAll(`{'`, `{"`)).replaceAll(`}'`, `}"`)).replaceAll(`,'`, `,"`)).replaceAll(`',`, `",`)).replaceAll(`:'`, `:"`)).replaceAll(`':`, `":`)).replaceAll(`'}`, `"}`));
+        let product = PRODUCT || PRODUCTS[PRODUCTS.findIndex(item => item.id == product_)];//JSON.parse(((((((ele.getAttribute('data-value').replaceAll(`{'`, `{"`)).replaceAll(`}'`, `}"`)).replaceAll(`,'`, `,"`)).replaceAll(`',`, `",`)).replaceAll(`:'`, `:"`)).replaceAll(`':`, `":`)).replaceAll(`'}`, `"}`));
         if(cart.length == 0 || (cart.length > 0 && cart[0].is_digital == product.is_digital)) {
             cart.push(product);
             showAlert("Product added to cart sucessfully", 'alert-success', []);
