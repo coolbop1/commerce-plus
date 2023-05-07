@@ -1165,37 +1165,37 @@
         // }
 
         function buyNow(){
-                            AIZ.plugins.notify('warning', "Please Login as a customer to add products to the Cart.");
-                return false;
+            //                 AIZ.plugins.notify('warning', "Please Login as a customer to add products to the Cart.");
+            //     return false;
                         
-            if(checkAddToCartValidity()) {
-                $('#addToCart-modal-body').html(null);
-                $('#addToCart').modal();
-                $('.c-preloader').show();
-                $.ajax({
-                   type:"POST",
-                   url: 'https://demo.activeitzone.com/ecommerce/cart/addtocart',
-                   data: $('#option-choice-form').serializeArray(),
-                   success: function(data){
-                       if(data.status == 1){
+            // if(checkAddToCartValidity()) {
+            //     $('#addToCart-modal-body').html(null);
+            //     $('#addToCart').modal();
+            //     $('.c-preloader').show();
+            //     $.ajax({
+            //        type:"POST",
+            //        url: 'https://demo.activeitzone.com/ecommerce/cart/addtocart',
+            //        data: $('#option-choice-form').serializeArray(),
+            //        success: function(data){
+            //            if(data.status == 1){
 
-                            $('#addToCart-modal-body').html(data.modal_view);
-                            updateNavCart(data.nav_cart_view,data.cart_count);
+            //                 $('#addToCart-modal-body').html(data.modal_view);
+            //                 updateNavCart(data.nav_cart_view,data.cart_count);
 
-                            window.location.replace("https://demo.activeitzone.com/ecommerce/cart");
-                       }
-                       else{
-                            $('#addToCart-modal-body').html(null);
-                            $('.c-preloader').hide();
-                            $('#modal-size').removeClass('modal-lg');
-                            $('#addToCart-modal-body').html(data.modal_view);
-                       }
-                   }
-               });
-            }
-            else{
-                AIZ.plugins.notify('warning', "Please choose all the options");
-            }
+            //                 window.location.replace("https://demo.activeitzone.com/ecommerce/cart");
+            //            }
+            //            else{
+            //                 $('#addToCart-modal-body').html(null);
+            //                 $('.c-preloader').hide();
+            //                 $('#modal-size').removeClass('modal-lg');
+            //                 $('#addToCart-modal-body').html(data.modal_view);
+            //            }
+            //        }
+            //    });
+            // }
+            // else{
+            //     AIZ.plugins.notify('warning', "Please choose all the options");
+            // }
         }
 
     </script>

@@ -189,7 +189,7 @@ class RegisterController extends BaseController
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'], 401);
             }
         }
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password]) && (Carbon::parse(Auth::user()->created_at)->lte('2023-04-27') || Auth::user()->email_verified_at)){ 
+        if((Auth::attempt(['email' => $request->email, 'password' => $request->password]) && (Carbon::parse(Auth::user()->created_at)->lte('2023-04-27') || Auth::user()->email_verified_at)) || (Auth::attempt(['email' => $request->email, 'password' => $request->password]) && $request->has('address'))){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
