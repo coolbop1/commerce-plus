@@ -998,7 +998,7 @@ function addToCart (product, ele = null, type = 'pos', buynow = false){
         }
         
     } else {
-        let product = JSON.parse(((((((ele.getAttribute('data-value').replaceAll(`{'`, `{"`)).replaceAll(`}'`, `}"`)).replaceAll(`,'`, `,"`)).replaceAll(`',`, `",`)).replaceAll(`:'`, `:"`)).replaceAll(`':`, `":`)).replaceAll(`'}`, `"}`));
+        let product = PRODUCT;//JSON.parse(((((((ele.getAttribute('data-value').replaceAll(`{'`, `{"`)).replaceAll(`}'`, `}"`)).replaceAll(`,'`, `,"`)).replaceAll(`',`, `",`)).replaceAll(`:'`, `:"`)).replaceAll(`':`, `":`)).replaceAll(`'}`, `"}`));
         if(cart.length == 0 || (cart.length > 0 && cart[0].is_digital == product.is_digital)) {
             cart.push(product);
             showAlert("Product added to cart sucessfully", 'alert-success', []);
