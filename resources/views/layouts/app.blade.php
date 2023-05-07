@@ -8,7 +8,6 @@
         $cart = 0;
         $user = null;
     }
-    
 @endphp
 @include('layouts.foot')
 <!DOCTYPE html>
@@ -21,6 +20,18 @@
 
     <title>HUB-PLUS</title>
 
+    @if (isset($products))
+    <script>
+        const PRODUCTS = <?php echo json_encode($products); ?>
+    </script>
+        
+    @endif
+    @if (isset($product))
+    <script>
+        const PRODUCT = <?php echo json_encode($product); ?>
+    </script>
+        
+    @endif
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
