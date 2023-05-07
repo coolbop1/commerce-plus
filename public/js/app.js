@@ -966,7 +966,7 @@ function addToWishListV2 (product_id, ele = null) {
     }
 }
 
-function addToCart (product, ele = null, type = 'pos'){
+function addToCart (product, ele = null, type = 'pos', buynow = false){
     let new_add = null;
     let cart_storage = null;
     let cart = null;
@@ -1019,6 +1019,9 @@ function addToCart (product, ele = null, type = 'pos'){
         populateCartCount();
     }
     sessionStorage.removeItem('COMMERCE_PLUS_ORDER_PAYLOAD');
+    if(buynow) {
+        window.location.href = '/checkout';
+    }
 }
 
 function populateCartCount() 

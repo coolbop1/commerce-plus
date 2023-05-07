@@ -145,7 +145,7 @@
                         <i class="las la-shopping-bag"></i>
                         <span class="d-none d-md-inline-block"> Add to cart</span>
                         </button>
-                        <button type="button" class="btn btn-primary buy-now fw-600 add-to-cart w-150px rounded-0" onclick="buyNow()">
+                        <button type="button" data-value="{{ str_replace('"', "'", json_encode($product)) }}" class="btn btn-primary buy-now fw-600 add-to-cart w-150px rounded-0" onclick="addToCart({{ $product->id }}, this, 'online', true)">
                         <i class="la la-shopping-cart"></i> Buy Now
                         </button>
                         <button type="button" class="btn btn-secondary out-of-stock fw-600 d-none" disabled>
