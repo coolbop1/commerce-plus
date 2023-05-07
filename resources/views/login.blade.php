@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('content')
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v16.0&appId=169498022736637&autoLogAppEvents=1" nonce="N99A1JgR"></script>
 <br>&nbsp;<br>
 <div class="row">
     <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
@@ -25,6 +27,7 @@
                             <input type="password" class="form-control " placeholder="Password" name="password" id="password">
                         </div>
 
+                        <div class="fb-login-button" data-width="" data-size="" data-button-type="" data-layout="" data-auto-logout-link="false" data-use-continue-as="false"></div>
                         @if (!$user_id)
                             <div class="row mb-2">
                                 <div class="col-6">
