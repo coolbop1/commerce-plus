@@ -804,6 +804,7 @@
         @endif
         <!-- User Side nav -->
     
+        <!--
             <div class="modal website-popup removable-session d-none" data-key="website-popup" data-value="removed">
             <div class="absolute-full bg-black opacity-60"></div>
             <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md">
@@ -827,6 +828,7 @@
                 </div>
             </div>
         </div>
+        -->
     
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     function confirm_modal(delete_url)
