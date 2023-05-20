@@ -15,6 +15,7 @@
                     @endforeach
                 </select>
             </div>
+            @if($store)
             @if (!($store->approved))
             <a href="/admin/approve-store/{{ $store->id }}" class="btn btn-success btn-lg btn-block">
                 Approve Store
@@ -23,6 +24,7 @@
             <a href="/admin/approve-store/{{ $store->id }}" class="btn btn-danger btn-lg btn-block">
                 Suspend Store
             </a>
+            @endif
             @endif
             <ul class="aiz-side-nav-list" id="main-menu" data-toggle="aiz-side-menu">
                 
