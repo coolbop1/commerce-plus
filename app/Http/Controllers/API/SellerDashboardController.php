@@ -373,6 +373,23 @@ class SellerDashboardController extends BaseController
         return view('vendor-packages', compact('user', 'store', 'page', 'carts', 'packages'));
     } 
 
+    public function getapproval()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        if(isset($_SESSION['vendor_current_store_id'])) {
+            $store_id = $_SESSION['vendor_current_store_id'];
+        } else {
+            $store_id = $user->stores->first()->id;
+        }
+        $store = Store::with('products.category', 'orders')->find($store_id);
+        $page = 'approval';
+        $carts = [];
+
+        return view('vendor-get-approval', compact('user', 'store', 'page', 'carts'));
+    }
+
     public function packagesList() 
     {
         if(isset($_SESSION['logged_in'])) {

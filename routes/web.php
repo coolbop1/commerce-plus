@@ -83,6 +83,7 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/delivery-boys/create', [AdminController::class, 'deliveryBoyForm']);
     Route::get('/admin/delivery-boys/{delivery_boy_id}/edit', [AdminController::class, 'deliveryBoyForm']);
     Route::get('/admin/delivery-boy/ban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
+    Route::get('/admin/approve-store/{store_id}', [AdminController::class, 'approveStore']);
     Route::get('/admin/delivery-boy/unban/{delivery_boy_id}', [AdminController::class, 'deliveryBoys']);
     Route::get('/admin/pos', [AdminController::class, 'pos']);
     Route::get('/admin/products/all', [AdminController::class, 'products']);
@@ -129,6 +130,7 @@ Route::get('/superadmin', 'SuperAdminController@index');
 Route::get('/categories', [CategoryWebController::class, 'index']);
 Route::get('/shop/{shop_name}', [ShopWebController::class, 'index']);
 Route::middleware(['session','webrole:ROLE_VENDOR' ])->group( function () {
+    Route::middleware(['checkapproval' ])->group( function () {
     Route::get('/seller/dashboard', [SellerDashboardController::class, 'index']);
     Route::get('/seller/shop', [SellerDashboardController::class, 'shop']);
     Route::get('/seller/products', [SellerDashboardController::class, 'products']);
@@ -144,7 +146,6 @@ Route::middleware(['session','webrole:ROLE_VENDOR' ])->group( function () {
     Route::get('/seller/uploads/create', [SellerDashboardController::class, 'uploadFile']);
     Route::get('/seller/uploads/destroy/{id}', [SellerDashboardController::class, 'deleteFile']);
     Route::get('/seller/uploads/delete-multiple', [SellerDashboardController::class, 'deleteMultiple']);
-    Route::get('/seller/seller-packages', [SellerDashboardController::class, 'packages']);
     Route::get('/seller/packages-payment-list', [SellerDashboardController::class, 'packagesList']);
     Route::get('/seller/pos', [SellerDashboardController::class, 'pos']);
     Route::get('/seller/orders', [SellerDashboardController::class, 'orders']);
@@ -153,5 +154,8 @@ Route::middleware(['session','webrole:ROLE_VENDOR' ])->group( function () {
     Route::get('/seller/refund-request', [SellerDashboardController::class, 'refundRequest']);
     Route::get('/seller/payments', [SellerDashboardController::class, 'vendorPaymentHistory']);
     Route::get('/seller/money-withdraw-requests', [SellerDashboardController::class, 'moneyWithdrawRequest']);
+    });
+    Route::get('/seller/seller-packages', [SellerDashboardController::class, 'packages']);
+    Route::get('/seller/getapproval', [SellerDashboardController::class, 'getapproval']);
 });
 

@@ -15,11 +15,12 @@ class Store extends Model
     use HasFactory, SoftDeletes, Notifiable;
     protected $fillable = [
         'name', 'warehoused','shop_logo','shop_phone','shop_address','meta_title','meta_description', 'lat', 'long',
-        'banner','facebook', 'instagram', 'twitter','google','youtube', 'balance'
+        'banner','facebook', 'instagram', 'twitter','google','youtube', 'balance', 'approved'
     ];
 
     protected $casts = [
         'warehoused' => 'boolean',
+        'approved' => 'boolean',
     ];
 
     // protected $appends = ['ratings'];

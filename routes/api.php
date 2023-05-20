@@ -90,10 +90,6 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('update-delivery-profile', [DeliveryBoyController::class, 'update']);
     });
 
-    //Cart Route
-    Route::post('add-item-to-cart', [CartController::class, 'addItemToCart']);
-    Route::get('remove-item-from-cart/{cart_id}', [CartController::class, 'removeItemFromCart']);
-    Route::get('view-cart/{cart_user_id?}', [CartController::class, 'getMyCart']);
 
     //wish list
     Route::post('save-item', [ProductController::class, 'addItemToWishList']);
@@ -120,6 +116,11 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     Route::post('subscribe', [StoreController::class, 'subscribe']);
     
 });
+//Cart Route
+Route::post('add-item-to-cart', [CartController::class, 'addItemToCartNoauth']);
+Route::get('remove-item-from-cart/{cart_id}', [CartController::class, 'removeItemFromCart']);
+Route::get('view-cart/{cart_user_id?}', [CartController::class, 'getMyCart']);
+
 Route::get('list-products', [ProductController::class, 'listProducts']);
 Route::get('list-categories', [CategoryController::class, 'listCategories']);
 Route::get('list-stores', [StoreController::class, 'listStores']);
