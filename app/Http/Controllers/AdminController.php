@@ -437,6 +437,14 @@ class AdminController extends Controller
 
     }
 
+    public function approveStore($store_id) 
+    {
+        $store = Store::find($store_id);
+        $store->approved = !($store->approved);
+        $store->save();
+        return redirect('/admin');
+    }
+
     public function deliveryBoyForm($delivery_boy_id = null)
     {
         if(isset($_SESSION['logged_in'])) {

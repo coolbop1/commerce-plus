@@ -18,7 +18,25 @@ class CartController extends BaseController
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['addItemToCartNoauth', 'getMyCart']);
+    }
+
+    public function addItemToCartNoauth(Request $request)
+    {
+        info("get to controller");
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required|integer'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $input = $request->all();
+        $input['user_id'] = optional($request->user())->id;
+
+        Cart::create($input);
+
+        return $this->getMyCart($request, $input['user_id']);
+    
     }
 
     public function addItemToCart(Request $request)
@@ -48,12 +66,17 @@ class CartController extends BaseController
 
     public function getMyCart(Request $request, $user_id = null)
     {
-        $c_user_id = $user_id ?? $request->user()->id;
+        info("got here ");
+        $c_user_id = $user_id ?? $request->user()->id ?? null;
 
-        $cart = Cart::with('product')->where('user_id', $c_user_id)->get();
-        $items = CartResource::collection($cart);
-        $data['items'] = $items;
-        $data['total_price'] =  collect(json_decode(json_encode($items), true))->sum('price');
+        if($c_user_id) {
+            $cart = Cart::with('product')->where('user_id', $c_user_id)->get();
+            $items = CartResource::collection($cart);
+            $data['items'] = $items;
+            $data['total_price'] =  collect(json_decode(json_encode($items), true))->sum('price');
+        } else {
+
+        }
         return $this->sendResponse($data, 'Cart retrived successfully.');
     }
 

@@ -142,7 +142,7 @@ class HomeController extends BaseController
         if(isset($_SESSION['logged_in'])) {
             $user = User::find($_SESSION['logged_in']->id);
         }
-        $stores = Store::all();
+        $stores = Store::where('approved', 1)->get();
         return view('sellers', compact('user', 'stores'));
     }
     

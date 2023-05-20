@@ -26,6 +26,7 @@
                     </ul>
             </div>
         </div>
+        @if ($store->approved)
         <div class="aiz-side-nav-wrap">
             <div class="px-20px mb-3">
                 <input class="form-control bg-soft-secondary border-0 form-control-sm" type="text"
@@ -222,6 +223,7 @@
 
             </ul><!-- .aiz-side-nav -->
         </div><!-- .aiz-side-nav-wrap -->
+        @endif
     </div><!-- .aiz-sidebar -->
     <div class="aiz-sidebar-overlay"></div>
 </div><!-- .aiz-sidebar -->
