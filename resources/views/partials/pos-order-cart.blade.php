@@ -50,6 +50,7 @@
     @php
         $cart = $carts->first();
     @endphp
+    @if ($cart)
     <div class="col-xl-6">
         <div class="pl-xl-4">
             <div class="card mb-4">
@@ -109,4 +110,6 @@
             </div>
         </div>
     </div>
+    @endif
+    
 </div>
