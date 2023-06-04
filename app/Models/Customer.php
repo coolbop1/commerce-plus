@@ -11,7 +11,7 @@ class Customer extends Model
 {
     use HasFactory, Notifiable;
     protected $fillable = [
-        'customer_name', 'user_id', 'address', 'state_id', 'store_id', 'phone'
+        'customer_name', 'user_id', 'address', 'state_id', 'store_id', 'phone', 'local_govt_id'
     ];
 
     public $prefers_sms = true;
@@ -31,6 +31,11 @@ class Customer extends Model
     public function state()
     {
         return $this->belongsTo(States::class);
+    }
+
+	public function lga()
+    {
+        return $this->belongsTo(LocalGovt::class, 'local_govt_id');
     }
 
     public function sendSms($order) 

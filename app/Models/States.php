@@ -17,7 +17,7 @@ class States extends Model
       return  $this->belongsTo(Countries::class);
     }
 
-    // public function localGovts() {
-    //  return   $this->hasMany(LocalGovt::class, 'state_id');
-    // }
+    public function localGovts() {
+     return   $this->hasMany(LocalGovt::class, 'state_id');
+    }
 }

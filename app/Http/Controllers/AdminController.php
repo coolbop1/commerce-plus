@@ -6,6 +6,8 @@ use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\DeliveryBoy;
+use App\Models\Hub;
+use App\Models\LocalGovt;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\States;
@@ -65,6 +67,58 @@ class AdminController extends Controller
         $store = $ratings = null;
         $categories = Category::with('subCategories.sections')->get();
         return view('admin-categories', compact('user', 'store', 'ratings', 'page', 'stores', 'categories'));
+    }
+
+    public function hub()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();
+        return view('admin-hubs', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs'));
+    }
+
+    public function hubCreate()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();;
+        $hub = null;
+        $states = States::with(['localGovts' => function($query){
+            return $query->whereNull('hub_id');  
+          }])->get();
+        return view('admin-add-hub', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs', 'hub', 'states'));
+    }
+
+    public function hubEdit($id)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $hub = Hub::find($id);
+        $hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();
+        //$local_govts = LocalGovt::whereNull('hub_id')->get();
+        $states = States::with(['localGovts' => function($query){
+          return $query->whereNull('hub_id');  
+        }])->get();
+        return view('admin-add-hub', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs', 'hub', 'states'));
+    }
+
+    public function hubDelete($id)
+    {
+        $hub = Hub::find($id);
+        $hub->delete();
+        return redirect('/admin/hub');
     }
 
     public function brands()

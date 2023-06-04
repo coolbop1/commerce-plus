@@ -37,7 +37,11 @@
                                     <a href="javascript:void(0)" onclick="addToWishListV2({{ $product->id }})" data-toggle="tooltip" data-title="Add to wishlist" data-placement="left">
                                         <i class="la la-heart-o {{ in_array($product->id, $wishlist) ? 'active' : '' }}"></i>
                                     </a>
-                                    <a href="javascript:void(0)" data-value="{{ str_replace(`"`, `'`, json_encode($product)) }}" onclick="addToCart({{ $product->id }}, this, 'online' )" data-toggle="tooltip" data-title="Add to cart" data-placement="left">
+                                    <a href="javascript:void(0)" 
+                                    {{-- data-value="{{ str_replace(`"`, `'`, json_encode($product)) }}"  --}}
+                                    {{-- onclick="addToCart({{ $product->id }}, this, 'online' )"  --}}
+                                    onclick="addToCartV2({{ $product->id }})"
+                                    data-toggle="tooltip" data-title="Add to cart" data-placement="left">
                                         <i class="las la-shopping-cart"></i>
                                     </a>
                                 </div>

@@ -15,7 +15,7 @@ class Store extends Model
     use HasFactory, SoftDeletes, Notifiable;
     protected $fillable = [
         'name', 'warehoused','shop_logo','shop_phone','shop_address','meta_title','meta_description', 'lat', 'long',
-        'banner','facebook', 'instagram', 'twitter','google','youtube', 'balance', 'approved'
+        'banner','facebook', 'instagram', 'twitter','google','youtube', 'balance', 'approved', 'local_govt_id', 'state_id'
     ];
 
     protected $casts = [
@@ -88,5 +88,10 @@ class Store extends Model
  
         // Return email address and name...
         return [$this->users()->first()->email => $this->name];
+    }
+
+    public function lga()
+    {
+        return $this->belongsTo(LocalGovt::class, 'local_govt_id');
     }
 }

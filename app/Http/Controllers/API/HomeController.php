@@ -9,6 +9,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Checkout;
 use App\Models\Customer;
+use App\Models\Hub;
 use App\Models\Order;
 use App\Models\PickupStation;
 use App\Models\Product;
@@ -166,9 +167,9 @@ class HomeController extends BaseController
         $customers = [];
         if(isset($_SESSION['logged_in'])) {
             $user = User::find($_SESSION['logged_in']->id);
-            $customers = Customer::where('user_id', $user->id)->get();
+            $customers = Customer::with('lga')->where('user_id', $user->id)->get();
         }
-        $states = States::all();
+        $states = States::with('localGovts')->get();
         $pickup_stations = PickupStation::all();
         
         return view('checkout', compact('user', 'states', 'customers', 'pickup_stations'));
@@ -183,7 +184,7 @@ class HomeController extends BaseController
             $customers = Customer::where('user_id', $user->id)->get();
         }
         $states = States::all();
-        $pickup_stations = PickupStation::all();
+        $pickup_stations = Hub::Where('parent_id', '>', 0)->get();
         
         return view('deliveryInfo', compact('user', 'states', 'customers', 'pickup_stations'));
     }
@@ -198,8 +199,21 @@ class HomeController extends BaseController
         }
         $states = States::all();
         $pickup_stations = PickupStation::all();
+        $request = new Request();
+        $request->merge(['user' => $user]);
+
+        $request->setUserResolver(function () use ($user) {
+            return $user;
+        });
+        $user_carts = (new CartController())->getMyCart($request, null, $internal = true);
+
+        $has_balance = $user_carts["total_amount"] <= $user->balance;
+
+        $all_cart_items = $user->carts->whereNull('checkout_id');
+        $first_cart = $all_cart_items->first();
+        $is_digital = optional(optional($first_cart)->product)->is_digital;
         
-        return view('paymentselect', compact('user', 'states', 'customers', 'pickup_stations'));
+        return view('paymentselect', compact('user', 'states', 'customers', 'pickup_stations', 'has_balance', 'is_digital'));
     }
 
     public function checkoutOrderConfirmed()
@@ -213,7 +227,7 @@ class HomeController extends BaseController
         $states = States::all();
         $pickup_stations = PickupStation::all();
 
-        $checkout = Checkout::with('carts')->where('user_id', $user->id)->where('status', 'pending')->latest()->first();
+        $checkout = Checkout::with('carts', 'station')->where('user_id', $user->id)->where('status', 'pending')->latest()->first();
         if(is_null($checkout)) {
             return redirect('/');
         }

@@ -32,17 +32,17 @@ class DatabaseSeeder extends Seeder
                 'country_id' => $country->id
             ];
             $state = \App\Models\States::updateOrCreate($state_array);
-            // if($state) {
-            //     $state_id = \App\Models\States::where('name', $data->state->name)->first()->id;
-            //     $local_govts_array_ = collect($data->state->locals)->map(function($each) use($state_id) {
-            //         $arr = [
-            //             'name' => $each->name,
-            //             'state_id' => $state_id
-            //         ];
-            //         return $arr;
-            //     })->toArray();
-            //     //$local_govts_array = LocalGovt::insert($local_govts_array_);
-            // }
+            if($state) {
+                $state_id = \App\Models\States::where('name', $data->state->name)->first()->id;
+                $local_govts_array_ = collect($data->state->locals)->map(function($each) use($state_id) {
+                    $arr = [
+                        'name' => $each->name,
+                        'state_id' => $state_id
+                    ];
+                    \App\Models\LocalGovt::updateOrCreate($arr);
+                    return $arr;
+                });
+            }
             
         }
         $roles = [

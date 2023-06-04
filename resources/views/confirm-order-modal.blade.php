@@ -13,8 +13,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-base-3" data-dismiss="modal">Close</button>
                     <button type="button" onclick="oflinePayment()" class="btn btn-base-1 btn-warning">Offline payment</button>
-                    <button type="button" onclick="submitOrder('cod')" class="btn btn-base-1 btn-info">Confirm with COD</button>
-                    <button type="button" onclick="submitOrder('card')" class="btn btn-base-1 btn-success">Confirm with Cash</button>
+                    <button type="button" onclick="submitPosOrder('cod')" class="btn btn-base-1 btn-info">Confirm with COD</button>
+                    <button type="button" onclick="submitPosOrder('card')" class="btn btn-base-1 btn-success">Confirm with Cash</button>
                 </div>
             </div>
         </div>
@@ -95,7 +95,7 @@
                 <div id="add_new_address_button" data-customer-set="" data-customer="" class="" onclick="add_new_address(this)">
                     <div class="border p-3 rounded mb-3 bord-all pad-all c-pointer text-center bg-white">
                         <i class="fa fa-plus fa-2x"></i>
-                        <div class="alpha-7">Add New Address</div>
+                        <div class="alpha-7">Edit Address</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -136,12 +136,15 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-2 control-label"">
-                                    <label>State</label>
+                                    <label>Local Govt Area</label>
                                 </div>
                                 <div class="col-sm-10">
-                                    <select class="form-control mb-3 aiz-selectpicker" id="customer_state_id" data-live-search="true" name="state_id" required>
+                                    <select id="customer_state_id" class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" required>
                                         @foreach ($states as $state)
-                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                            <option value={{ null }}>{{ $state->name }}</option> 
+                                            @foreach ($state->localGovts as $local_govt)
+                                                <option style="color: grey" value="{{ $state->id.'_'.$local_govt->id }}">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{{ $local_govt->name }}</option>
+                                            @endforeach  
                                         @endforeach
                                     </select>
                                 </div>
@@ -191,7 +194,21 @@
         
         //
         $("#confirm-address").click(function (){
-            document.getElementById('add_new_address_button').setAttribute('data-customer', document.getElementById('add_new_address_button').getAttribute('data-customer-set')) 
+            let cus_id = document.getElementById('customer_id').value;
+            let session_string = sessionStorage.getItem('COMMERCE_PLUS_SESSION');
+            let http_f = new XMLHttpRequest();
+                http_f.open("GET", '/api/set-customer-id?customer_id='+cus_id+'&session_id='+session_string, true);
+                http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+                http_f.onreadystatechange = function() {
+                    if(http_f.readyState == 4) {
+                        if(http_f.status == 200) {
+                            viewMyCart();
+                            console.log("user fetched", this.responseText);
+                        }
+                    }
+                }
+                http_f.send();
+            //document.getElementById('add_new_address_button').setAttribute('data-customer', document.getElementById('add_new_address_button').getAttribute('data-customer-set')) 
         });
 
         // function updateCart(data){
@@ -342,7 +359,7 @@
                 document.getElementById('customer_id').value = customer.id;
                 document.getElementById('customer_name').value = customer.customer_name; 
                 document.getElementById('customer_address').value = customer.address;
-                document.getElementById('customer_state_id').value = customer.state_id;
+                document.getElementById('customer_state_id').value = customer.state_id+'_'+customer.local_govt_id;
                 document.getElementById('customer_phone').value = customer.phone;
  
             } else {
@@ -375,7 +392,8 @@
             // $.post('https://demo.activeitzone.com/ecommerce/pos-order-summary',{_token:AIZ.data.csrf}, function(data){
             //     $('#order-confirmation').html(data);
             // });
-            orderConfirmationList('order-confirmation', <?php echo $store->id; ?>)
+            viewMyCart();
+            //orderConfirmationList('order-confirmation', <?php echo $store->id; ?>)
         }
 
         function oflinePayment(){

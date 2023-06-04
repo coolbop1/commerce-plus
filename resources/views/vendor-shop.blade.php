@@ -64,6 +64,24 @@
                 </div>
             </div>
             <div class="row">
+                <label class="col-md-2 col-form-label">Shop LGA <span class="text-danger text-danger">*</span> <span id="validate-state_id" class="alert-danger"></span></label>
+                <div class="col-md-10">
+                    <select name="state_id" required class="select2 form-control aiz-selectpicker" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true">
+                        <option value="">Pick to add</option>
+                        @foreach ($states as $state)
+                            @php
+                                $local_govts = $state->localGovts;
+                            @endphp
+                            <option  value="{{ $state->id }}">{{ $state->name }}</option>
+                            @foreach ($local_govts as $local_govt)
+                                <option {{ $store->state_id == $state->id && $store->local_govt_id == $local_govt->id ? 'selected' : '' }} style="color: gray" value="{{ $state->id.'_'.$local_govt->id }}">{{ $local_govt->name }}</option>
+                            @endforeach
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
                 <label class="col-md-2 col-form-label">Shop Address <span class="text-danger text-danger">*</span> <span id="validate-shop_address" class="alert-danger"></span></label>
                 <div class="col-md-10">
                     <input type="text" class="form-control mb-3" placeholder="Address" name="shop_address" value="{{ $store->shop_address }}" >

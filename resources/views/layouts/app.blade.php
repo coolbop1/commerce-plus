@@ -2,7 +2,7 @@
 @php
     if(isset($_SESSION['logged_in'])) {
         $user = $user ?? $_SESSION['logged_in'];
-        $cart = $user->carts->count();
+        $cart = $user->carts->whereNull('checkout_id')->count();
         $role = optional($user->roles->first())->name;
     } else {
         $cart = 0;
@@ -160,7 +160,7 @@
 
 
 </head>
-<body onload="populateCartCount();  populateCartPage(); ">
+<body onload="viewMyCart();">
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 
@@ -867,7 +867,7 @@
     }
 </script>
 @if (isset($states))
-@include('layouts.add-new-address-modal');
+@include('layouts.add-new-address-modal')
 @endif
 
 <div class="modal fade" id="account_delete_confirm" tabindex="-1" role="dialog" aria-labelledby="account_delete_confirmModalLabel" aria-hidden="true">

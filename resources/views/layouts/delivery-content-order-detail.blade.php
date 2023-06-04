@@ -32,7 +32,11 @@
                                                     </tr>
                         <tr>
                             <td class="w-50 fw-600">Shipping address:</td>
+                            @if (optional(optional($order)->checkout)->hub_id)
+                            <td>Pickup Station: {{ optional(optional($order)->checkout)->station->address }} , Phone: {{ optional(optional($order)->checkout)->station->phone }}</td>
+                            @else
                             <td>{{ optional(optional(optional($order)->checkout)->customer)->address }}, {{ optional(optional(optional(optional($order)->checkout)->customer)->state)->name }}, Nigeria</td>
+                            @endif
                         </tr>
                     </table>
                 </div>
@@ -51,8 +55,8 @@
                             <td>₦{{ number_format($order->amount, 2) }}</td>
                         </tr>
                         <tr>
-                            <td class="w-50 fw-600">Shipping method:</td>
-                            <td>Flat shipping rate</td>
+                            <td class="w-50 fw-600">Shipping:</td>
+                            <td>₦{{ number_format($order->shipping, 2) }}</td>
                         </tr>
                         <tr>
                             <td class="w-50 fw-600">Payment method:</td>
