@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Role;
 use App\Models\Store;
@@ -21,7 +22,7 @@ class RegisterController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function register(Request $request, $session_id = null)
     {
         info("request->all() ",$request->all());
         $validator = Validator::make($request->all(), [
@@ -31,22 +32,33 @@ class RegisterController extends BaseController
             'c_password' => 'required|same:password',
         ]);
    
+        if($request->has('address') && $request->state_id == ''){
+            return $this->sendError('Please pick a local govt. area.', [], 400);       
+        } elseif ($request->has('address')) {
+            $state_id = is_numeric($request->state_id) ? $request->state_id : explode('_', $request->state_id)[0];
+            $local_govt_id = !is_numeric($request->state_id) ? explode('_', $request->state_id)[1] : null;
+        }
         if($request->user() && $request->has('customer_id') && $request->has('address') && !empty($request->customer_id)) { 
             $request->user()->customer()->where('id', $request->customer_id)->update([
                     'address' => $request->address, 
-                    'state_id' => $request->state_id,
+                    'state_id' => $state_id ?? $request->state_id,
+                    'local_govt_id' => $local_govt_id,
                     'phone' => $request->phone
                 ]);
             return $this->sendResponse([], $message = "Address Updated succesfully");
         }
         if($request->user() && empty($request->customer_id) && $request->has('address') && !empty($request->address)) { 
-            Customer::create([
+            $customer = Customer::create([
                 'user_id' => $request->user()->id,
                 'address' => $request->address, 
-                'state_id' => $request->state_id,
+                'state_id' => $state_id ?? $request->state_id,
+                'local_govt_id' => $local_govt_id,
                 'store_id' => 0, 
                 'phone' => $request->phone
             ]);
+            if($session_id) {
+                Cart::where('session', $session_id)->whereNull('checkout_id')->update(['user_id' => $request->user()->id,'customer_id' => $customer->id]);
+            }
             return $this->sendResponse([], $message = "Address added succesfully");
         }
         if($validator->fails()){
@@ -77,14 +89,18 @@ class RegisterController extends BaseController
         }
         if($request->has('address')) {
             
-            Customer::create([
+            $customer = Customer::create([
                 'customer_name' => $request->name, 
                 'user_id' => $user->id, 
                 'address' => $request->address, 
-                'state_id' => $request->state_id, 
+                'state_id' => $state_id, 
+                'local_govt_id' => $local_govt_id,
                 'store_id' => 0, 
                 'phone' => $request->phone
             ]);
+            if($session_id) {
+                Cart::where('session', $session_id)->whereNull('checkout_id')->update(['user_id' => $user->id,'customer_id' => $customer->id]);
+            }
             return $this->login($request, $message = "New customer account created succesfully");
             
         }

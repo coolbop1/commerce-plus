@@ -10,7 +10,7 @@ class Checkout extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'user_id', 'customer_id', 'total_amount', 'status', 'phone', 'address', 'order_type', 'payment_refrence', 'coupon', 'state_id', 'lat', 'long', 'checkout_type'
+        'user_id', 'customer_id', 'total_amount', 'status', 'phone', 'address', 'order_type', 'payment_refrence', 'coupon', 'state_id', 'lat', 'long', 'checkout_type', 'shipping', 'hub_id'
     ];
 
     public function orders()
@@ -26,6 +26,11 @@ class Checkout extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function station()
+    {
+        return $this->belongsTo(Hub::class, 'hub_id');
     }
 
     public function user()

@@ -11,7 +11,7 @@ class Cart extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'customer_id', 'product_id', 'price', 'checkout_id', 'ratings', 'review_comment', 'review_published', 'qty', 'cart_type'
+        'user_id', 'customer_id', 'product_id', 'price', 'checkout_id', 'ratings', 'review_comment', 'review_published', 'qty', 'cart_type', 'session'
     ];
 
     protected $casts = [

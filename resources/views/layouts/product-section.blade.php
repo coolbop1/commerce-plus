@@ -140,12 +140,21 @@
             
                     <!-- Add to cart & Buy now Buttons -->
                     <div class="mt-3">
-                                    <button data-value="{{ str_replace('"', "'", json_encode($product)) }}" type="button" class="btn btn-warning mr-2 add-to-cart fw-600 w-150px rounded-0 text-white"
-                        onclick="addToCart({{ $product->id }}, this, 'online' )">
+                        <button 
+                        {{-- data-value="{{ str_replace('"', "'", json_encode($product)) }}"  --}}
+                        type="button" class="btn btn-warning mr-2 add-to-cart fw-600 w-150px rounded-0 text-white"
+                        {{-- onclick="addToCart({{ $product->id }}, this, 'online' )" --}}
+                        onclick="addToCartV2({{ $product->id }})"
+                        >
                         <i class="las la-shopping-bag"></i>
                         <span class="d-none d-md-inline-block"> Add to cart</span>
                         </button>
-                        <button type="button" data-value="{{ str_replace('"', "'", json_encode($product)) }}" class="btn btn-primary buy-now fw-600 add-to-cart w-150px rounded-0" onclick="addToCart({{ $product->id }}, this, 'online', true)">
+                        <button type="button" 
+                        {{-- data-value="{{ str_replace('"', "'", json_encode($product)) }}"  --}}
+                        class="btn btn-primary buy-now fw-600 add-to-cart w-150px rounded-0" 
+                        {{-- onclick="addToCart({{ $product->id }}, this, 'online', true)"" --}}
+                        onclick="addToCartV2({{ $product->id }})"
+                        >
                         <i class="la la-shopping-cart"></i> Buy Now
                         </button>
                         <button type="button" class="btn btn-secondary out-of-stock fw-600 d-none" disabled>

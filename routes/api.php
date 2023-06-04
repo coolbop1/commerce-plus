@@ -10,6 +10,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\SellerDashboardController;
 use App\Http\Controllers\API\StoreController;
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\TemporaryFiles;
 use Illuminate\Http\Request;
@@ -32,9 +33,14 @@ Route::controller(RegisterController::class)->group(function(){
 });
 Route::post('/ajax-search', [HomeController::class, 'search']);
 
-Route::post('user-customer', [RegisterController::class, 'register']);
+Route::post('user-customer/{session_id}', [RegisterController::class, 'register']);
         
 Route::middleware(['auth:sanctum', 'permission'])->group( function () {
+    Route::post('add-to-cart', [CartController::class, 'addItemToCartNoauth']);
+    Route::post('remove-from-cart', [CartController::class, 'removeItemFromCart']);
+    Route::post('view-cart', [CartController::class, 'getMyCart']);
+
+    Route::get('set-customer-id', [StoreController::class, 'setCustomerId']);
     Route::post('user-customer-auth', [RegisterController::class, 'register']);
     Route::post('validate-cart', [StoreController::class, 'validateCart']);
     Route::post('submit-order', [StoreController::class, 'submitOrder']);
@@ -66,6 +72,9 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('create-delivery-boy', [DeliveryBoyController::class, 'create']);
         Route::post('update-delivery-boy', [DeliveryBoyController::class, 'update']);
         Route::post('list-all-orders', [AdminController::class, 'listOrders']);
+        Route::post('create-hub', [RoleController::class, 'createHub']);
+        Route::post('update-hub', [RoleController::class, 'updateHub']);
+        Route::post('save-connect-rate', [RoleController::class, 'saveConnectRate']);
     });
 
     //Store endpoints
@@ -80,6 +89,12 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('pos-order', [StoreController::class, 'posOrder']);
         Route::post('toggle-refund-request-approval', [StoreController::class, 'toggleRefundApproval']);
         Route::post('store-withdrawal-request/{store_id}', [StoreController::class, 'withdrawalRequest']);
+        Route::get('/set-customer-id', function (Request $request) {
+            $customer_id = $_GET['customer_id'];
+            $session_id = $_GET['session_id'];
+            $cart = Cart::where('session', $session_id)->update(['customer_id' => $customer_id]);
+            return $cart;
+        });
     });
     Route::middleware('roles:ROLE_VENDOR|ROLE_DELIVERY')->group( function () {
         Route::put('update-order-status/{order_id}', [StoreController::class, 'updateOrderStatus']);
@@ -118,8 +133,8 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
 });
 //Cart Route
 Route::post('add-item-to-cart', [CartController::class, 'addItemToCartNoauth']);
-Route::get('remove-item-from-cart/{cart_id}', [CartController::class, 'removeItemFromCart']);
-Route::get('view-cart/{cart_user_id?}', [CartController::class, 'getMyCart']);
+Route::post('remove-item-from-cart/{cart_user_id?}', [CartController::class, 'removeItemFromCart']);
+Route::post('view-cart-items/{cart_user_id?}', [CartController::class, 'getMyCart']);
 
 Route::get('list-products', [ProductController::class, 'listProducts']);
 Route::get('list-categories', [CategoryController::class, 'listCategories']);
@@ -135,6 +150,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     if(isset($_GET['session'])) {
         session_start();
         $_SESSION['logged_in'] = $request->user()->id;
+    }
+    return $request->user();
+});
+Route::middleware('auth:sanctum')->get('/set-pick-up-station-id', function (Request $request) {
+    if(isset($_GET['hub_id'])) {
+        $_SESSION['hub_id'] = $_GET['hub_id'];
+    } else {
+        unset($_SESSION['hub_id']);
     }
     return $request->user();
 });

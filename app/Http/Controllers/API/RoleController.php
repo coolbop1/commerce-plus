@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Hub;
+use App\Models\HubConnect;
+use App\Models\LocalGovt;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +35,87 @@ class RoleController extends BaseController
         );
         $success['data'] =  $role;
         return $this->sendResponse($success, 'Role created successfully.');
+    }
+
+    public function createHub(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'address' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+
+        $input = $request->all();
+        $hub = Hub::create($input);
+        if($request->local_govts) {
+            $hub_id = $hub->id;
+            LocalGovt::where('hub_id', $hub_id)->update(['hub_id' => null]);
+            $local_govt_array = explode(',', $request->local_govts);
+            LocalGovt::whereIn('name', $local_govt_array)->update(['hub_id' => $hub_id]);
+        }
+        $success['data'] =  $hub;
+        return $this->sendResponse($success, 'Hub created successfully.');
+    }
+
+    public function updateHub(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'hub_id' => 'required',
+            'name' => 'required',
+            'address' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $input = $request->all();
+        $hub = Hub::updateOrCreate(
+            ['id' => $request->hub_id],
+            $input
+        );
+        if($request->local_govts) {
+            $hub_id = $hub->id;
+            LocalGovt::where('hub_id', $hub_id)->update(['hub_id' => null]);
+            $local_govt_array = explode(',', $request->local_govts);
+            LocalGovt::whereIn('name', $local_govt_array)->update(['hub_id' => $hub_id]);
+        }
+
+        $success['data'] =  $hub;
+        return $this->sendResponse($success, 'Hub created successfully.');
+    }
+
+    public function saveConnectRate(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'from' => 'required',
+            'to' => 'required',
+            'rate' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+        $data = HubConnect::updateOrCreate(
+            [
+                "from" => $request->from,
+                "to" => $request->to
+            ],
+            [
+                "rate" => $request->rate
+            ]
+            );
+        if($request->double){
+            HubConnect::updateOrCreate(
+                [
+                    "from" => $request->to,
+                    "to" => $request->from
+                ],
+                [
+                    "rate" => $request->rate
+                ]
+                );
+        }
+        return $this->sendResponse([], 'Hub connect saved successfully.');
     }
 
 

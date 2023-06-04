@@ -30,7 +30,12 @@
                                             <i class="la la-heart-o"></i>
                                             </a>
                                             {{-- <a href="javascript:void(0)" onclick="showAddToCartModal({{ $product->id }})" data-toggle="tooltip" data-title="Add to cart" data-placement="left"> --}}
-                                            <a data-value="{{ str_replace('"', "'", json_encode($product)) }}" href="javascript:void(0)" onclick="addToCart ({{ $product->id }}, this, type = 'online')" data-toggle="tooltip" data-title="Add to cart" data-placement="left">
+                                            <a 
+                                            {{-- data-value="{{ str_replace('"', "'", json_encode($product)) }}"  --}}
+                                            href="javascript:void(0)" 
+                                            {{-- onclick="addToCart({{ $product->id }}, this, type = 'online')"  --}}
+                                            onclick="addToCartV2({{ $product->id }})"
+                                            data-toggle="tooltip" data-title="Add to cart" data-placement="left">
                                             <i class="las la-shopping-cart"></i>
                                             </a>
                                         </div>

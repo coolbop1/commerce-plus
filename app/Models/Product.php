@@ -50,6 +50,7 @@ class Product extends Model
             'featured',
             'published',
             'is_digital',
+            'weight',
     ];
 
     protected $casts = [

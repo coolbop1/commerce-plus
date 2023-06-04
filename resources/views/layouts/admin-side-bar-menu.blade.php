@@ -276,6 +276,12 @@
                                     </li>
                                                             </ul>
                         </li>
+                        <li class="aiz-side-nav-item">
+                            <a href="/admin/hub" class="aiz-side-nav-link">
+                                <i class="las la-truck aiz-side-nav-icon"></i>
+                                <span class="aiz-side-nav-text">Hub & Stations</span>
+                            </a>
+                        </li>
                                     
                 <!-- Refund addon -->
                                                             <li class="aiz-side-nav-item">

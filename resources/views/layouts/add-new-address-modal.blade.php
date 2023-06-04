@@ -228,7 +228,7 @@
 
             
             @if (is_null($user))
-            <form onsubmit="return submitForm(this, url = '/api/user-customer', 'POST', 'add-user-customer')">
+            <form onsubmit="return submitForm(this, url = '/api/user-customer/'+sessionStorage.getItem('COMMERCE_PLUS_SESSION'), 'POST', 'add-user-customer')">
             @else
             <form onsubmit="return submitForm(this, url = '/api/user-customer-auth', 'POST', 'add-user-customer')">
             @endif
@@ -260,12 +260,15 @@
                         <!-- State -->
                         <div class="row">
                             <div class="col-md-2">
-                                <label>State</label>
+                                <label>Local Govt Area</label>
                             </div>
                             <div class="col-md-10">
                                 <select id="cus_state" class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" required>
                                     @foreach ($states as $state)
-                                        <option id="cus_state_{{ $state->id }}" value="{{ $state->id }}">{{ $state->name }}</option>   
+                                        <option value={{ null }}>{{ $state->name }}</option> 
+                                        @foreach ($state->localGovts as $local_govt)
+                                            <option style="color: grey" value="{{ $state->id.'_'.$local_govt->id }}">{{ $local_govt->name }}</option>
+                                        @endforeach  
                                     @endforeach
                                 </select>
                             </div>
@@ -359,22 +362,22 @@
     </div>
 </div>
 <script type="text/javascript">
-if(window.location.pathname == '/checkout' || window.location.pathname == '/checkout/delivery_info')
-{
-    let customer_address_string = '';
-    let cart_storage =  'COMMERCE_PLUS_CART';
-    cart_storage = localStorage.getItem(cart_storage);
-    let cartItems = JSON.parse(cart_storage);
-    if (cartItems.length == 0) {
-        window.location.href = '/';
-    } else if(cartItems[0].is_digital) {
-        sessionStorage.setItem('COMMERCE_PLUS_ORDER_PAYLOAD', cart_storage+';;;'+customer_address_string);
-        window.location.href = '/checkout/payment_select';
-    }
-}
-populateCartCount();
-populateCheckoutProductList();
-populatePaymentCartCard();
+// if(window.location.pathname == '/checkout' || window.location.pathname == '/checkout/delivery_info')
+// {
+//     let customer_address_string = '';
+//     let cart_storage =  'COMMERCE_PLUS_CART';
+//     cart_storage = localStorage.getItem(cart_storage);
+//     let cartItems = JSON.parse(cart_storage);
+//     if (cartItems.length == 0) {
+//         window.location.href = '/';
+//     } else if(cartItems[0].is_digital) {
+//         sessionStorage.setItem('COMMERCE_PLUS_ORDER_PAYLOAD', cart_storage+';;;'+customer_address_string);
+//         window.location.href = '/checkout/payment_select';
+//     }
+// }
+// populateCartCount();
+// populateCheckoutProductList();
+// populatePaymentCartCard();
     function add_new_address(){
         $('#new-address-modal').modal('show');
     }
@@ -403,27 +406,38 @@ populatePaymentCartCard();
     
     function deliveryInfo(formElement) {
         let params = new FormData(formElement);
-
-        let customer_address_string = ''
-        let cart_storage =  'COMMERCE_PLUS_CART';
-        cart_storage = localStorage.getItem(cart_storage);
-        let picked = null;
-        var object = {};
-        let all_customer_account = getAllLoadedCustomers();
-        console.log("$all_customer_account",all_customer_account);
+        let http_f = new XMLHttpRequest();
+        http_f.open("GET", '/api/set-customer-id?customer_id='+params.get('customer_id'), true);
+        http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+        http_f.onreadystatechange = function() {
+            if(http_f.readyState == 4) {
+                if(http_f.status == 200) {
+                    console.log("user fetched", this.responseText);
+                }
+            }
+        }
+        http_f.send();
+        window.location.href = '/checkout/delivery_info';
+        // let customer_address_string = ''
+        // let cart_storage =  'COMMERCE_PLUS_CART';
+        // cart_storage = localStorage.getItem(cart_storage);
+        // let picked = null;
+        // var object = {};
+        // let all_customer_account = getAllLoadedCustomers();
+        // console.log("$all_customer_account",all_customer_account);
        
         
-        params.forEach((val, key) => {
-            object[key] = val;
-        });
-        picked = all_customer_account.find(item => item.id == object.customer_id);
-        customer_address_string = JSON.stringify(picked);
-        if(customer_address_string !== '' && cart_storage !== '') {
-            sessionStorage.setItem('COMMERCE_PLUS_ORDER_PAYLOAD', cart_storage+';;;'+customer_address_string);
-            window.location.href = '/checkout/delivery_info';
-        } else {
-            sessionStorage.removeItem('COMMERCE_PLUS_ORDER_PAYLOAD');
-        }
+        // params.forEach((val, key) => {
+        //     object[key] = val;
+        // });
+        // picked = all_customer_account.find(item => item.id == object.customer_id);
+        // customer_address_string = JSON.stringify(picked);
+        // if(customer_address_string !== '' && cart_storage !== '') {
+        //     sessionStorage.setItem('COMMERCE_PLUS_ORDER_PAYLOAD', cart_storage+';;;'+customer_address_string);
+        //     window.location.href = '/checkout/delivery_info';
+        // } else {
+        //     sessionStorage.removeItem('COMMERCE_PLUS_ORDER_PAYLOAD');
+        // }
 
 
         return false;
@@ -446,16 +460,29 @@ populatePaymentCartCard();
                 return false
             } else {
                 pale['address'] = object.pickup_point_id_9;
+                let http_f = new XMLHttpRequest();
+                http_f.open("GET", '/api/set-pick-up-station-id?hub_id='+object.pickup_point_id_9, true);
+                http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+                http_f.onreadystatechange = function() {
+                    if(http_f.readyState == 4) {
+                        if(http_f.status == 200) {
+                            console.log("user fetched", this.responseText);
+                        }
+                    }
+                }
+                http_f.send();
             }
         } else {
             showAlert("Please select a shipping typet", 'alert-warning', []);
             return false
         }
-        let delivery_info = JSON.stringify(pale);
-        let order_payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
-        let order_payload_array = order_payload.split(';;;');
+        // let delivery_info = JSON.stringify(pale);
+        // let order_payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
+        // let order_payload_array = order_payload.split(';;;');
+        // let customer = JSON.parse(order_payload_array[1]);
 
-        sessionStorage.setItem('COMMERCE_PLUS_ORDER_PAYLOAD', order_payload_array[0]+';;;'+order_payload_array[1]+';;;'+delivery_info);
+
+        // sessionStorage.setItem('COMMERCE_PLUS_ORDER_PAYLOAD', order_payload_array[0]+';;;'+order_payload_array[1]+';;;'+delivery_info);
         
         window.location.href = '/checkout/payment_select';
 
@@ -492,7 +519,7 @@ populatePaymentCartCard();
         }
     }
 
-    function populatePaymentCartCard(){
+    function populatePaymentCartCardo(){
         if(window.location.pathname == '/checkout/payment_select')
         {
             let cart_storage =  'COMMERCE_PLUS_CART';

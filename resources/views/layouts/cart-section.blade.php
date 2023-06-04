@@ -84,7 +84,7 @@
                     <!-- Subtotal -->
                     <div class="px-0 py-2 mb-4 border-top d-flex justify-content-between">
                         <span class="opacity-60 fs-14">Subtotal</span>
-                        <span id="cart-list-page-subtotal" class="fw-700 fs-16">$49.000</span>
+                        <span id="cart-list-page-subtotal" class="fw-700 fs-16"></span>
                     </div>
                     <div class="row align-items-center">
                         <!-- Return to shop -->
@@ -204,7 +204,7 @@
                                                     <span class="flex-grow-1 pl-3 text-left">
                                                         <div class="row">
                                                             <span class="fs-14 text-secondary col-3">Address</span>
-                                                            <span class="fs-14 text-dark fw-500 ml-2 col">{{ $customer->address }}</span>
+                                                            <span class="fs-14 text-dark fw-500 ml-2 col">{{$customer->lga->name." , ".$customer->address }}</span>
                                                         </div>
                                                         {{-- <div class="row">
                                                             <span class="fs-14 text-secondary col-3">Postal Code</span>
@@ -360,7 +360,7 @@
                                         <div class="col-md-6">
                                             <div class="row gutters-5">
                                                 <!-- Home Delivery -->
-                                                                                                    <div class="col-6">
+                                                <div class="col-6">
                                                     <label class="aiz-megabox d-block bg-white mb-0">
                                                         <input
                                                             type="radio"
@@ -409,7 +409,7 @@
                                                                 data-content="<span class='d-block'>
                                                                                 <span class='d-block fs-16 fw-600 mb-2'>{{ $pickupstation->name }}</span>
                                                                                 <span class='d-block opacity-50 fs-12'><i class='las la-map-marker'></i> {{ $pickupstation->address }}</span>
-                                                                                <span class='d-block opacity-50 fs-12'><i class='las la-phone'></i>{{ $pickupstation->phone }}</span>
+                                                                                <span class='d-block opacity-50 fs-12'><i class='las la-phone'></i> {{ $pickupstation->phone }}</span>
                                                                             </span>"
                                                             >
                                                             </option>
@@ -592,6 +592,7 @@
                                         </div>
                                                                  <!-- khalti -->
                                                                     <!-- Cash Payment -->
+                                        @if (isset($is_digital) && !$is_digital)
                                         <div id="use_cod" class="col-6 col-xl-3 col-md-4">
                                             <label class="aiz-megabox d-block mb-3">
                                                 <input value="cod" class="online_payment"
@@ -606,6 +607,8 @@
                                                 </span>
                                             </label>
                                         </div>
+                                        @endif
+                                        @if (isset($has_balance) && $has_balance == true)
                                         <div id="use_wallet_card" data-value="{{ $user->balance }}" class="col-6 col-xl-3 col-md-4">
                                             <label class="aiz-megabox d-block mb-3">
                                                 <input value="wallet" class="online_payment"
@@ -618,7 +621,8 @@
                                                     </span>
                                                 </span>
                                             </label>
-                                        </div>
+                                        </div>  
+                                        @endif
                                                                                                                                                     <!-- Offline Payment -->
                                                                                 
                                                                                                                                                     </div>
@@ -780,7 +784,7 @@
         </div>
     </div>
 </section>
-<script src="https://js.paystack.co/v1/inline.js"></script>
+{{-- <script src="https://js.paystack.co/v1/inline.js"></script> --}}
 @endif
 @endsection
 
@@ -878,7 +882,7 @@
                             <table class="table">
                                 <tr>
                                     <td class="w-50 fw-600">Order date:</td>
-                                    <td>{{ date('d-m-Y H:i A', $first_order->created_at) }}</td>
+                                    <td>{{ Carbon\Carbon::parse($first_order->updated_at)->format('d-m-Y H:i A') }}</td>
                                 </tr>
                                 <tr>
                                     <td class="w-50 fw-600">Name:</td>
@@ -891,7 +895,11 @@
                                 @if (optional($first_order->customer)->address)
                                 <tr>
                                     <td class="w-50 fw-600">Shipping address:</td>
+                                    @if ($checkout->hub_id)
+                                        <td>Pickup Station: {{ $checkout->station->address }} , Phone: {{ $checkout->station->phone }}</td>
+                                    @else
                                     <td>{{ json_decode($first_order->customer)->address }}, {{ json_decode($first_order->customer->state)->name }}, Nigeria</td>
+                                    @endif
                                 </tr>
                                 @endif
                             </table>
@@ -909,7 +917,7 @@
                                 @if (optional($first_order->customer)->address)
                                 <tr>
                                     <td class="w-50 fw-600">Shipping:</td>
-                                    <td>Flat shipping rate</td>
+                                    <td>₦{{ number_format($checkout->shipping, 2) }}</td>
                                 </tr>
                                 @endif
                                 <tr>
@@ -972,7 +980,14 @@
                                                     </td>
                                                     @else
                                                     <td>
-                                                        @if ($checkout->shipping_type && $checkout->shipping_type == 'home_delivery')
+                                                        @if ($checkout->hub_id)
+                                                        Pickip Point:
+                                                        {{ $checkout->station->address }}  
+                                                        Pickip Point
+                                                        @else
+                                                        Home Delivery
+                                                        @endif
+                                                        {{-- @if ($checkout->shipping_type && $checkout->shipping_type == 'home_delivery')
                                                             Home Delivery
                                                         @elseif ($checkout->shipping_type && $checkout->shipping_type == 'carrier')
                                                            Carrier
@@ -981,7 +996,7 @@
                                                                 {{ $checkout->pickup_point->name }}
                                                             @endif
                                                             Pickip Point
-                                                        @endif
+                                                        @endif --}}
                                                     </td>
                                                     @endif
 

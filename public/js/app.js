@@ -371,6 +371,9 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                     case 'add-brand':
                         window.location.href = '/admin/brands';
                         break;
+                    case 'add-hub':
+                        window.location.href = '/admin/hub';
+                        break;
                 
                     default:
                         window.location.href = '/';
@@ -514,6 +517,7 @@ function switchStore  (store_id, url = null)  {
     http_f.onreadystatechange = function() {
         if(http_f.readyState == 4) {
             if(http_f.status == 200) {
+                sessionStorage.removeItem('COMMERCE_PLUS_SESSION');
                 window.location.href = url ?? '/seller/dashboard';
             }
         }
@@ -612,35 +616,35 @@ function updateProfile(element) {
 function submitOrder(paymentType, cart, paymentReference = null) {
     console.log('payment_type ', paymentType);
     // console.log('paymentReference ', paymentReference);
-    let payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
-    console.log('payload payload payload ',payload);
-    let data = payload.split(';;;');
-    let customer = null;
-    let delivery_type = null;
-    console.log('cart-- ',cart)
-    if(!(cart[0].is_digital)) {
-        customer = JSON.parse(data[1]);
-        delivery_type = JSON.parse(data[2]);
-        console.log('delivery_type ',delivery_type);
-    }
-    console.log('out side here delivery_type ',delivery_type);
+    // let payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
+    // console.log('payload payload payload ',payload);
+    // let data = payload.split(';;;');
+    // let customer = null;
+    // let delivery_type = null;
+    // console.log('cart-- ',cart)
+    // if(!(cart[0].is_digital)) {
+    //     customer = JSON.parse(data[1]);
+    //     delivery_type = JSON.parse(data[2]);
+    //     console.log('delivery_type ',delivery_type);
+    // }
+    // console.log('out side here delivery_type ',delivery_type);
     
     let params = new FormData();
     params.append('order_type', paymentType);
     if(paymentReference) {
         params.append('payment_refrence', paymentReference);
     }
-    params.append('all_cart_items', JSON.stringify(cart));
-    if(customer?.id){
-        params.append('customer_id', customer.id);
-    }
-    if(delivery_type?.shipping_type) {
-        params.append('delivery_type', delivery_type.shipping_type);
-    }
-    params.append('cart_type', cart[0].is_digital ? 'digital' : 'physical');
-    if(delivery_type && delivery_type?.shipping_type != 'home_delivery') {
-        params.append('pick_point_id', delivery_type.address);
-    }
+    //params.append('all_cart_items', JSON.stringify(cart));
+    // if(customer?.id){
+    //     params.append('customer_id', customer.id);
+    // }
+    // if(delivery_type?.shipping_type) {
+    //     params.append('delivery_type', delivery_type.shipping_type);
+    // }
+    // params.append('cart_type', cart[0].is_digital ? 'digital' : 'physical');
+    // if(delivery_type && delivery_type?.shipping_type != 'home_delivery') {
+    //     params.append('pick_point_id', delivery_type.address);
+    // }
    
     let http_f = new XMLHttpRequest();
     http_f.open("POST", '/api/submit-order', true);
@@ -651,6 +655,7 @@ function submitOrder(paymentType, cart, paymentReference = null) {
             let response = JSON.parse(this?.responseText);
             if(http_f.status == 200) {
                 showAlert(response.message, 'alert-success');
+                sessionStorage.removeItem('COMMERCE_PLUS_SESSION');
                 sessionStorage.removeItem('COMMERCE_PLUS_ORDER_PAYLOAD');
                 localStorage.removeItem('COMMERCE_PLUS_CART');
                 window.location.href = '/checkout/order-confirmed';
@@ -666,42 +671,6 @@ function submitOrder(paymentType, cart, paymentReference = null) {
 }
 
 function pickPaymentType(formElement) {
-
-    let payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
-    if(payload == null) {
-        //
-        showAlert("No order in progress please try again", 'alert-warning', []);
-       return false
-    }
-    let data = payload.split(';;;');
-    let products = JSON.parse(data[0]);
-    let customer = null;
-    let delivery_type = null;
-    if (!(products[0].is_digital)) {
-        customer = JSON.parse(data[1]);
-        delivery_type = JSON.parse(data[2]);
-    }
- //    const cart = product => element => product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
-    let payload_ = {};
-    const carts = () => element => {
-     let object= {}; 
-     object['product_id'] = element['id'];
-     object['price'] = element['new_price'] ?? element['price'];
-     object['quantity_added'] = element['quantity_added'] == undefined ? 1 : element['quantity_added'];
-     object['is_digital'] = element['is_digital'];
-     return object;
-    }
-    //product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
- //    let cart_items = products.map(cart('id'));
- //    let cart_items_quantity = products.map(cart('quantity_added'));
-    let all_cart_items = products.map(carts());
-    let param = new FormData(formElement);
-
-    payload_['customer_id'] = customer?.id;
-    payload_['all_cart_items'] = all_cart_items;
-    payload_['payment_type'] = param.get('payment_option');
-    payload_['cart_type'] = products[0].is_digital ? 'digital' : 'physical';
-
     let http_f = new XMLHttpRequest();
     http_f.open("POST", '/api/validate-cart', true);
     http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
@@ -737,7 +706,114 @@ function pickPaymentType(formElement) {
             }
         }
     }
+    let param = new FormData(formElement);
+    let payload_ = {};
+    payload_['payment_type'] = param.get('payment_option');
+
     http_f.send(JSON.stringify(payload_));
+
+
+
+
+
+
+    // let params = new FormData(formElement);
+    // var object = {};
+    // params.forEach((val, key) => {
+    //     console.log("form ",key, val);
+    //     object[key] = val;
+    // });
+    // switch (object.payment_option) {
+    //     case "paystack":
+    //         payWithPaystack(cart_sub_total, cart);
+    //         break;
+    //     case "cod":
+    //         submitOrder('cod' ,cart);
+    //         break;
+    //     case "wallet":
+    //     submitOrder('wallet' ,cart);
+    //         break;
+    
+    //     default:
+    //         break;
+    // }
+
+
+
+
+
+
+//     let payload = sessionStorage.getItem('COMMERCE_PLUS_ORDER_PAYLOAD');
+//     if(payload == null) {
+//         //
+//         showAlert("No order in progress please try again", 'alert-warning', []);
+//        return false
+//     }
+//     let data = payload.split(';;;');
+//     let products = JSON.parse(data[0]);
+//     let customer = null;
+//     let delivery_type = null;
+//     if (!(products[0].is_digital)) {
+//         customer = JSON.parse(data[1]);
+//         delivery_type = JSON.parse(data[2]);
+//     }
+//  //    const cart = product => element => product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
+//     let payload_ = {};
+//     const carts = () => element => {
+//      let object= {}; 
+//      object['product_id'] = element['id'];
+//      object['price'] = element['new_price'] ?? element['price'];
+//      object['quantity_added'] = element['quantity_added'] == undefined ? 1 : element['quantity_added'];
+//      object['is_digital'] = element['is_digital'];
+//      return object;
+//     }
+//     //product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
+//  //    let cart_items = products.map(cart('id'));
+//  //    let cart_items_quantity = products.map(cart('quantity_added'));
+//     let all_cart_items = products.map(carts());
+//     let param = new FormData(formElement);
+
+//     payload_['customer_id'] = customer?.id;
+//     payload_['all_cart_items'] = all_cart_items;
+//     payload_['payment_type'] = param.get('payment_option');
+//     payload_['cart_type'] = products[0].is_digital ? 'digital' : 'physical';
+
+//     let http_f = new XMLHttpRequest();
+//     http_f.open("POST", '/api/validate-cart', true);
+//     http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+//     http_f.setRequestHeader("Content-type", "application/json;");
+//     http_f.onreadystatechange = function() {
+//         if(http_f.readyState == 4) {
+//             let response = JSON.parse(this?.responseText);
+//             if(http_f.status == 200) {
+//                 let params = new FormData(formElement);
+//                 var object = {};
+//                 params.forEach((val, key) => {
+//                     console.log("form ",key, val);
+//                     object[key] = val;
+//                 });
+//                 let cart_sub_total = response.data.subtotal;
+//                 let cart = response.data.cart;
+//                 switch (object.payment_option) {
+//                     case "paystack":
+//                         payWithPaystack(cart_sub_total, cart);
+//                         break;
+//                     case "cod":
+//                         submitOrder('cod' ,cart);
+//                         break;
+//                     case "wallet":
+//                     submitOrder('wallet' ,cart);
+//                         break;
+                
+//                     default:
+//                         break;
+//                 }
+//             } else {
+//                 showAlert(response.message, 'alert-warning', []);
+//             }
+//         }
+//     }
+//     http_f.send(JSON.stringify(payload_));
 
 
     return false;
@@ -966,7 +1042,177 @@ function addToWishListV2 (product_id, ele = null) {
     }
 }
 
-function addToCart (product_, ele = null, type = 'pos', buynow = false){
+function viewMyCart(page = window.location.pathname == '/cart') {
+    console.log("got to viewMyCart");
+    let session_string = sessionStorage.getItem('COMMERCE_PLUS_SESSION');
+   
+    let params = new FormData()
+    let http_f = new XMLHttpRequest();
+    if(COMMERCE_PLUS_TOKEN && window.location.pathname != '/seller/pos') {
+        http_f.open("POST", '/api/view-cart', true);
+        params.append('is_web', true);
+        http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    } else if(session_string) {
+        http_f.open("POST", '/api/view-cart-items/'+session_string, true);
+        params.append('is_web', session_string);
+    }
+    if(page){
+        document.getElementById('cart-list-on-page').innerHTML =  `<div style="text-align:center"><i class="las la-spinner la-spin la-3x opacity-70"></i></div>`;
+    }
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                if(page){
+                    document.getElementById('cart-list-on-page').innerHTML = response.data.items.length > 0 ? response.data.page : `<i class="las la-frown la-3x opacity-60 mb-3"></i>
+                    <h3 class="h6 fw-700">Your Cart is empty</h3>`;
+                    document.getElementById('cart-list-page-subtotal').innerText = response.data.total_price
+                }
+                if(window.location.pathname == '/seller/pos') {
+                    document.getElementById('cart-details').innerHTML = response.data.pos_cart;
+                    document.getElementById('order-confirmation').innerHTML = response.data.pos_order_cart;
+                }
+                if(window.location.pathname == '/checkout/delivery_info'){
+                    let http_f = new XMLHttpRequest();
+                    http_f.open("GET", '/api/set-pick-up-station-id', true);
+                    http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+                    http_f.onreadystatechange = function() {
+                        if(http_f.readyState == 4) {
+                            if(http_f.status == 200) {
+                                console.log("user fetched", this.responseText);
+                            }
+                        }
+                    }
+                    http_f.send();
+                    document.getElementById('checkout-point-product-list').innerHTML = response.data.product_list;
+                }
+                if(window.location.pathname == '/checkout/payment_select')
+                {
+                    document.getElementById('payment-cart-list-card').innerHTML = response.data.payment_cart_list;
+
+                    document.getElementById('payment-cart-card-count').innerText = response.data.items.length;
+                    document.getElementById('sub_total').value = response.data.total_price;
+                    document.getElementById('cart-subtotal-card').innerText = '₦'+response.data.total_price;
+                    document.getElementById('cart-tax-card').innerText = '₦'+(0.00);
+                    document.getElementById('cart-total-shipping-card').innerText = '₦'+(response.data.shipping ?? 0.00);
+                    document.getElementById('cart-total-card').innerText = '₦'+((response.data.total_amount) ?? 0.00);
+                }
+                if(response.data.items.length == 0 && (window.location.pathname == '/checkout' || window.location.pathname == '/checkout/delivery_info' || window.location.pathname == '/checkout/payment_select'))
+                {
+                    window.location.href = '/';
+                }
+                document.getElementById('cart-list-top').innerHTML = response.data.items.length > 0 ? response.data.view : `<i class="las la-frown la-3x opacity-60 mb-3"></i>
+                <h3 class="h6 fw-700">Your Cart is empty</h3>`;
+                document.getElementById('cart-count-top').innerText = response.data.items.length
+                document.getElementById('cart-count-bottom').innerText = response.data.items.length
+            } else {
+                //showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http_f.send(params);
+}
+
+function addToCartV2 (product_id, type = 'online', quantity = null) {
+    let session_string = sessionStorage.getItem('COMMERCE_PLUS_SESSION');
+    let params = new FormData()
+    if(quantity){
+        if(isNaN(quantity))
+        {
+            return showAlert("Quantity have to be a number", 'alert-warning', []);
+        }
+
+        params.append('quantity', quantity);
+    }
+    params.append('product_id', product_id);
+    let http_f = new XMLHttpRequest();
+    params.append('cart_type', type);
+    if(COMMERCE_PLUS_TOKEN && type == 'online') {
+        http_f.open("POST", '/api/add-to-cart', true);
+        http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    } else {
+        http_f.open("POST", '/api/add-item-to-cart', true);
+        if(session_string) {
+            params.append('session', session_string);
+        } else {
+            let time_ = Date.now();
+            session_string = Math.random().toString(36).slice(2)+""+time_;
+            sessionStorage.setItem('COMMERCE_PLUS_SESSION', session_string);
+            params.append('session', session_string);
+        }
+    }
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                    showAlert(response.message, 'alert-success');
+                    viewMyCart();
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http_f.send(params);
+}
+
+function removeFromCartV2 (product_id, type = 'online', entire = false){
+    let session_string = sessionStorage.getItem('COMMERCE_PLUS_SESSION');
+    let params = new FormData()
+    params.append('product_id', product_id);
+    if(entire){
+        params.append('remove', true); 
+    }
+    let http_f = new XMLHttpRequest();
+    if(COMMERCE_PLUS_TOKEN && type == 'online') {
+        http_f.open("POST", '/api/remove-from-cart', true);
+        http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    } else {
+        http_f.open("POST", '/api/remove-item-from-cart/'+session_string, true);
+    }
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                    showAlert(response.message, 'alert-success');
+                    viewMyCart();
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+            }
+        }
+    }
+    http_f.send(params);
+}
+
+function saveConnectRate(id, ele, double = false) {
+    let params = new FormData();
+    ele.innerHTML =  `<div style="text-align:center"><i class="las la-spinner la-spin la-3x opacity-70"></i></div>`;
+    let value = document.getElementById('connect_rate_'+id).value;
+    let from_id = ele.getAttribute('from-id')
+    params.append('rate', value);
+    params.append('from', from_id);
+    params.append('to', id);
+    if(double) {
+        params.append('double', double);
+    }
+    let http_f = new XMLHttpRequest();
+    http_f.open("POST", '/api/save-connect-rate', true);
+    http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http_f.onreadystatechange = function() {
+        if(http_f.readyState == 4) {
+            let response = JSON.parse(this?.responseText);
+            if(http_f.status == 200) {
+                    showAlert(response.message, 'alert-success');
+            } else {
+                showAlert(response.message, 'alert-warning', []);
+            }
+            ele.innerHTML = double ?`Save Both` : `Save`;
+        }
+    }
+    http_f.send(params);
+}
+
+function addToCart(product_, ele = null, type = 'pos', buynow = false){
     let new_add = null;
     let cart_storage = null;
     let cart = null;
@@ -1219,73 +1465,73 @@ function removeFromCartTwo (product_id, store_id = null, del = false, type = 'po
     sessionStorage.removeItem('COMMERCE_PLUS_ORDER_PAYLOAD');
 }
 
-function populateCartDetails(store_id = null) {
-    let cart_storage = store_id ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
-    let cartItems = JSON.parse(localStorage.getItem(cart_storage));
-    let cart_total = cartItems?.reduce((a, b) => a + (((b.new_price || b.price) * (b.quantity_added || 1)) || 0), 0) ?? 0.00;
-    document.getElementById('cart-details').innerHTML = `
-    <div class="aiz-pos-cart-list mb-4 mt-3 c-scrollbar-light">
-    `+(cartItems?.length > 0 ? '<ul id="cart-item-list" class="list-group list-group-flush"></ul>' : '<div class="text-center"><i class="las la-frown la-3x opacity-50"></i><p>No Product Added</p></div>')+`
+// function populateCartDetails(store_id = null) {
+//     let cart_storage = store_id ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
+//     let cartItems = JSON.parse(localStorage.getItem(cart_storage));
+//     let cart_total = cartItems?.reduce((a, b) => a + (((b.new_price || b.price) * (b.quantity_added || 1)) || 0), 0) ?? 0.00;
+//     document.getElementById('cart-details').innerHTML = `
+//     <div class="aiz-pos-cart-list mb-4 mt-3 c-scrollbar-light">
+//     `+(cartItems?.length > 0 ? '<ul id="cart-item-list" class="list-group list-group-flush"></ul>' : '<div class="text-center"><i class="las la-frown la-3x opacity-50"></i><p>No Product Added</p></div>')+`
        
         
-    </div>
-    <div>
-            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
-                <span>Sub Total</span>
-                <span>₦`+cart_total+`</span>
-            </div>
-            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
-                <span>Tax</span>
-                <span>₦0.000</span>
-            </div>
-            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
-                <span>Shipping</span>
-                <span>₦0.000</span>
-            </div>
-            <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
-                <span>Discount</span>
-                <span>₦0.000</span>
-            </div>
-            <div class="d-flex justify-content-between fw-600 fs-18 border-top pt-2">
-                <span>Total</span>
-                <span>₦`+cart_total+`</span>
-            </div>
-        </div>
-    `;
-    cartItems.forEach(item => {
-        document.getElementById('cart-item-list').innerHTML += `
-            <li class="list-group-item py-0 pl-2">
-                <div class="row gutters-5 align-items-center">
-                    <div class="col-auto w-60px">
-                        <div class="row no-gutters align-items-center flex-column aiz-plus-minus">
-                            <button onClick='addToCart(`+JSON.stringify(item)+`)' class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="plus" data-field="qty-0">
-                                <i class="las la-plus"></i>
-                            </button>
-                            <input type="number" name="qty-0" id="qty-0" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="`+(item.quantity_added ?? 1) +`" min="`+item.min_quantity+`" max="`+item.quantity+`" onchange='addToCart(`+JSON.stringify(item)+`, this)'>
-                            <button onClick="removeFromCartTwo(`+item.id+`, `+item.store_id+`)" class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="minus" data-field="qty-0">
-                                <i class="las la-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="text-truncate-2">`+item.name+`</div>
-                        <span class="span badge badge-inline fs-12 badge-soft-secondary"></span>
-                    </div>
-                    <div class="col-auto">
-                        <div class="fs-12 opacity-60">₦`+(item.new_price || item.price)+` x `+(item.quantity_added ?? 1)+`</div>
-                        <div class="fs-15 fw-600">₦`+((item.new_price || item.price) * (item.quantity_added ?? 1))+`</div>
-                    </div>
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-circle btn-icon btn-sm btn-soft-danger ml-2 mr-0" onclick="removeFromCartTwo(`+item.id+`, `+item.store_id+`, true)">
-                            <i class="las la-trash-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </li>
-        `;
+//     </div>
+//     <div>
+//             <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+//                 <span>Sub Total</span>
+//                 <span>₦`+cart_total+`</span>
+//             </div>
+//             <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+//                 <span>Tax</span>
+//                 <span>₦0.000</span>
+//             </div>
+//             <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+//                 <span>Shipping</span>
+//                 <span>₦0.000</span>
+//             </div>
+//             <div class="d-flex justify-content-between fw-600 mb-2 opacity-70">
+//                 <span>Discount</span>
+//                 <span>₦0.000</span>
+//             </div>
+//             <div class="d-flex justify-content-between fw-600 fs-18 border-top pt-2">
+//                 <span>Total</span>
+//                 <span>₦`+cart_total+`</span>
+//             </div>
+//         </div>
+//     `;
+//     cartItems.forEach(item => {
+//         document.getElementById('cart-item-list').innerHTML += `
+//             <li class="list-group-item py-0 pl-2">
+//                 <div class="row gutters-5 align-items-center">
+//                     <div class="col-auto w-60px">
+//                         <div class="row no-gutters align-items-center flex-column aiz-plus-minus">
+//                             <button onClick='addToCart(`+JSON.stringify(item)+`)' class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="plus" data-field="qty-0">
+//                                 <i class="las la-plus"></i>
+//                             </button>
+//                             <input type="number" name="qty-0" id="qty-0" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="`+(item.quantity_added ?? 1) +`" min="`+item.min_quantity+`" max="`+item.quantity+`" onchange='addToCart(`+JSON.stringify(item)+`, this)'>
+//                             <button onClick="removeFromCartTwo(`+item.id+`, `+item.store_id+`)" class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="minus" data-field="qty-0">
+//                                 <i class="las la-minus"></i>
+//                             </button>
+//                         </div>
+//                     </div>
+//                     <div class="col">
+//                         <div class="text-truncate-2">`+item.name+`</div>
+//                         <span class="span badge badge-inline fs-12 badge-soft-secondary"></span>
+//                     </div>
+//                     <div class="col-auto">
+//                         <div class="fs-12 opacity-60">₦`+(item.new_price || item.price)+` x `+(item.quantity_added ?? 1)+`</div>
+//                         <div class="fs-15 fw-600">₦`+((item.new_price || item.price) * (item.quantity_added ?? 1))+`</div>
+//                     </div>
+//                     <div class="col-auto">
+//                         <button type="button" class="btn btn-circle btn-icon btn-sm btn-soft-danger ml-2 mr-0" onclick="removeFromCartTwo(`+item.id+`, `+item.store_id+`, true)">
+//                             <i class="las la-trash-alt"></i>
+//                         </button>
+//                     </div>
+//                 </div>
+//             </li>
+//         `;
 
-    })
-}
+//     })
+// }
 
 function orderConfirmationList(ele_id, store_id) {
     let cart_storage = store_id ? 'COMMERCE_PLUS_CART_'+store_id : 'COMMERCE_PLUS_CART';
@@ -1394,10 +1640,21 @@ function orderConfirmationList(ele_id, store_id) {
 
 function addCustomer() {
     let params = new FormData();
+    let state_local_govt  = document.getElementById('customer_state_id').value;
+    if(state_local_govt == null){
+        showAlert("Local Govt. field is required", 'alert-warning', []);
+    }
+    let state_id = null;
+    let lga_id = null;
+    if(isNaN(state_local_govt)) {
+        state_id = state_local_govt.split('_')[0];
+        lga_id = state_local_govt.split('_')[1]
+    }
     let customer_id = document.getElementById('customer_id').value;
     let customer_name = document.getElementById('customer_name').value;
     let customer_address = document.getElementById('customer_address').value;
-    let customer_state_id = document.getElementById('customer_state_id').value;
+    let customer_state_id = state_id ?? document.getElementById('customer_state_id').value;
+    let customer_lga_id = lga_id;
     let customer_phone = document.getElementById('customer_phone').value;
     let store_id = document.getElementById('customer_store_id').value;
  
@@ -1407,6 +1664,7 @@ function addCustomer() {
     params.append('address',  customer_address);
     params.append('store_id', store_id);
     params.append('state_id', customer_state_id);
+    params.append('local_govt_id', customer_lga_id);
     params.append('phone', customer_phone);
 
     let http_f = new XMLHttpRequest();
@@ -1426,51 +1684,55 @@ function addCustomer() {
     http_f.send(params);
 }
 
-function submitPosOrder(payment_type, payload, store_id) {
-    if(payload == null) {
-        showAlert('Please pick a customer address before submiting the order', 'alert-warning', []);
-    } else {
-       let data = payload.split(';;;');
-       let products = JSON.parse(data[0]);
-       let customer = JSON.parse(data[1]);
-    //    const cart = product => element => product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
-    let payload_ = {};
-       const carts = () => element => {
-        let object= {}; 
-        object['product_id'] = element['id'];
-        object['price'] = element['new_price'] ?? element['price'];
-        object['quantity_added'] = element['quantity_added'] == undefined ? 1 : element['quantity_added'];
-        return object;
-       }
-       //product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
-    //    let cart_items = products.map(cart('id'));
-    //    let cart_items_quantity = products.map(cart('quantity_added'));
-       let all_cart_items = products.map(carts());
-       let params = new FormData();
-       payload_['customer_id'] = customer.id;
-       payload_['all_cart_items'] = all_cart_items;
-       payload_['order_type'] = payment_type;
-       payload_['store_id'] = store_id;
+function submitPosOrder(payment_type) {
+    // if(payload == null) {
+    //     showAlert('Please pick a customer address before submiting the order', 'alert-warning', []);
+    // } else {
+    //    let data = payload.split(';;;');
+    //    let products = JSON.parse(data[0]);
+    //    let customer = JSON.parse(data[1]);
+    // //    const cart = product => element => product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
+    // let payload_ = {};
+    //    const carts = () => element => {
+    //     let object= {}; 
+    //     object['product_id'] = element['id'];
+    //     object['price'] = element['new_price'] ?? element['price'];
+    //     object['quantity_added'] = element['quantity_added'] == undefined ? 1 : element['quantity_added'];
+    //     return object;
+    //    }
+    //    //product == 'quantity_added' && element[product] == undefined ? 1 : element[product];
+    // //    let cart_items = products.map(cart('id'));
+    // //    let cart_items_quantity = products.map(cart('quantity_added'));
+    //    let all_cart_items = products.map(carts());
+    //    let params = new FormData();
+    //    payload_['customer_id'] = customer.id;
+    //    payload_['all_cart_items'] = all_cart_items;
+    //    payload_['order_type'] = payment_type;
+    //    payload_['store_id'] = store_id;}
 
+        let session_string = sessionStorage.getItem('COMMERCE_PLUS_SESSION');
+        let params = new FormData();
+        params.append("session", session_string);
+        params.append("order_type", payment_type);
         let http_f = new XMLHttpRequest();
         http_f.open("POST", '/api/pos-order', true);
         http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
-        http_f.setRequestHeader("Content-type", "application/json;");
+        //http_f.setRequestHeader("Content-type", "application/json;");
         http_f.onreadystatechange = function() {
             if(http_f.readyState == 4) {
                 let response = JSON.parse(this?.responseText);
                 if(http_f.status == 200) {
                     showAlert(response.message, 'alert-success');
-                    sessionStorage.removeItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD');
-                    localStorage.removeItem('COMMERCE_PLUS_CART_'+store_id);
+                    sessionStorage.removeItem('COMMERCE_PLUS_SESSION')
+                    // sessionStorage.removeItem('COMMERCE_PLUS_POS_ORDER_PAYLOAD');
+                    // localStorage.removeItem('COMMERCE_PLUS_CART_'+store_id);
                     window.location.href = '/seller/pos';
                 } else {
                     showAlert(response.message, 'alert-warning', []);
                 }
             }
         }
-        http_f.send(JSON.stringify(payload_));
-    }
+        http_f.send(params);
 
 }
 

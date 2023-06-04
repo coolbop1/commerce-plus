@@ -107,6 +107,10 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/orders/{code}', [AdminController::class, 'order']);
     Route::get('/admin/inhouse-orders', [AdminController::class, 'inhouseOrders']);
     Route::get('/admin/seller_orders', [AdminController::class, 'sellerOrders']);
+    Route::get('/admin/hub', [AdminController::class, 'hub']);
+    Route::get('/admin/hub/create', [AdminController::class, 'hubCreate']);
+    Route::get('/admin/hubs/edit/{id}', [AdminController::class, 'hubEdit']);
+    Route::get('/admin/hubs/destroy/{id}', [AdminController::class, 'hubDelete']);
 });
 
 Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {

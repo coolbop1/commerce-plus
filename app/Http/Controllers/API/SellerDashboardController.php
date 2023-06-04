@@ -69,8 +69,9 @@ class SellerDashboardController extends BaseController
         }
         $store = Store::with('products.category', 'orders')->find($store_id);
         $page ='shop';
+        $states = States::with('localGovts')->get();
         $files = TemporaryFiles::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
-        return view('vendor-shop', compact('user', 'store', 'page', 'files'));
+        return view('vendor-shop', compact('user', 'store', 'page', 'files', 'states'));
     }
 
     public function products()

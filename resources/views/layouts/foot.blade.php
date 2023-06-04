@@ -39,7 +39,7 @@
                         <img class="lazyload" src="/uploads/logo.png" alt="Active eCommerce CMS" height="44">
                     </a>
                     <div class="my-3">
-                        <span style="color: rgb(242, 243, 248); font-family: "Open Sans", sans-serif; background-color: rgb(17, 23, 35);">Complete system for your eCommerce business</span>
+                        <span style="color: rgb(242, 243, 248); font-family: 'Open Sans', sans-serif; background-color: rgb(17, 23, 35);">Complete system for your eCommerce business</span>
                     </div>
                     <div class="d-inline-block d-md-block mb-4">
                         <form class="form-inline" method="POST" action="/subscribers">
@@ -173,4 +173,8 @@
         </div>
     </div>
 </section>
+@if (Request::is('checkout/payment_select') )
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>viewMyCart();</script>
+@endif
 @endsection
