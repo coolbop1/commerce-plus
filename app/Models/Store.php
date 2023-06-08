@@ -90,6 +90,11 @@ class Store extends Model
         return [$this->users()->first()->email => $this->name];
     }
 
+    public function state()
+    {
+        return $this->belongsTo(States::class);
+    }
+
     public function lga()
     {
         return $this->belongsTo(LocalGovt::class, 'local_govt_id');

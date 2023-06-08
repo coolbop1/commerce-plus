@@ -10,7 +10,9 @@ use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Hub;
+use App\Models\States;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -155,6 +157,72 @@ class CartController extends BaseController
         }
         
         return $this->sendResponse($data, 'Cart retrived successfully.');
+    }
+
+    public function getMyaddress(Request $request, $customer_id) 
+    {
+        $user = $request->user();
+        $customer = $user->customer->where('id', $customer_id)->first();
+        if(is_null($customer)){
+            return $this->sendError('Customer not found', [], 404);
+        }
+        $states = States::all();
+        $form = view('partials.edit-customer-form', compact('customer', 'states'))->render();
+        $data['form'] = $form;
+        $data['data'] = $customer;
+
+        return $this->sendResponse($data, 'Customer retrived successfully.');
+    }
+
+    public function addAddress(Request $request, $customer_id = null) 
+    {
+        $validator = Validator::make($request->all(), [
+            'address' => 'required', 
+            'state_id' => 'required|integer',
+            'local_govt_id' => 'required|integer',
+            'phone' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors(), 400);       
+        }
+
+        if($customer_id) {
+            Customer::where('user_id', $request->user()->id)->where('id', $customer_id)
+            ->update([
+                'address' => $request->address, 
+                'state_id' => $request->state_id,
+                'local_govt_id' => $request->local_govt_id,
+                'store_id' => 0, 
+                'phone' => $request->phone
+            ]);
+        } else {
+            Customer::create([
+                'user_id' => $request->user()->id,
+                'address' => $request->address, 
+                'state_id' => $request->state_id,
+                'local_govt_id' => $request->local_govt_id,
+                'store_id' => 0, 
+                'phone' => $request->phone
+            ]);
+        }
+        $user = $request->user();
+        $customers = $user->customers()->with('lga');
+        $list = view('partials.my-address-list', compact('customers'))->render();
+        $data['address_list'] = $list;
+        $data['data'] = $customers;
+
+        return $this->sendResponse([], $message = "Address added succesfully");
+    }
+
+    public function myAddressList(Request $request) 
+    {
+        $user = $request->user();
+        $customers = $user->customers()->with('lga');
+        $list = view('partials.my-address-list', compact('customers'))->render();
+        $data['view'] = $list;
+        $data['data'] = $customers;
+
+        return $this->sendResponse([], $message = "Address added succesfully");
     }
 
 }

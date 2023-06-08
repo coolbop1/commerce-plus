@@ -34,15 +34,12 @@ class RegisterController extends BaseController
    
         if($request->has('address') && $request->state_id == ''){
             return $this->sendError('Please pick a local govt. area.', [], 400);       
-        } elseif ($request->has('address')) {
-            $state_id = is_numeric($request->state_id) ? $request->state_id : explode('_', $request->state_id)[0];
-            $local_govt_id = !is_numeric($request->state_id) ? explode('_', $request->state_id)[1] : null;
         }
         if($request->user() && $request->has('customer_id') && $request->has('address') && !empty($request->customer_id)) { 
             $request->user()->customer()->where('id', $request->customer_id)->update([
                     'address' => $request->address, 
-                    'state_id' => $state_id ?? $request->state_id,
-                    'local_govt_id' => $local_govt_id,
+                    'state_id' => $request->state_id,
+                    'local_govt_id' => $request->local_govt_id,
                     'phone' => $request->phone
                 ]);
             return $this->sendResponse([], $message = "Address Updated succesfully");
@@ -51,8 +48,8 @@ class RegisterController extends BaseController
             $customer = Customer::create([
                 'user_id' => $request->user()->id,
                 'address' => $request->address, 
-                'state_id' => $state_id ?? $request->state_id,
-                'local_govt_id' => $local_govt_id,
+                'state_id' => $request->state_id,
+                'local_govt_id' => $request->local_govt_id,
                 'store_id' => 0, 
                 'phone' => $request->phone
             ]);
@@ -93,8 +90,8 @@ class RegisterController extends BaseController
                 'customer_name' => $request->name, 
                 'user_id' => $user->id, 
                 'address' => $request->address, 
-                'state_id' => $state_id, 
-                'local_govt_id' => $local_govt_id,
+                'state_id' => $request->state_id, 
+                'local_govt_id' => $request->local_govt_id,
                 'store_id' => 0, 
                 'phone' => $request->phone
             ]);
