@@ -64,19 +64,28 @@
                 </div>
             </div>
             <div class="row">
-                <label class="col-md-2 col-form-label">Shop LGA <span class="text-danger text-danger">*</span> <span id="validate-state_id" class="alert-danger"></span></label>
+                <label class="col-md-2 col-form-label">Shop State <span class="text-danger text-danger">*</span> <span id="validate-state_id" class="alert-danger"></span></label>
                 <div class="col-md-10">
-                    <select name="state_id" required class="select2 form-control aiz-selectpicker" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true">
+                    <select name="state_id" onchange="getLocalGovt(this, 'shop_lga_select')" required class="select2 form-control aiz-selectpicker" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true" required>
                         <option value="">Pick to add</option>
                         @foreach ($states as $state)
-                            @php
-                                $local_govts = $state->localGovts;
-                            @endphp
-                            <option  value="{{ $state->id }}">{{ $state->name }}</option>
-                            @foreach ($local_govts as $local_govt)
-                                <option {{ $store->state_id == $state->id && $store->local_govt_id == $local_govt->id ? 'selected' : '' }} style="color: gray" value="{{ $state->id.'_'.$local_govt->id }}">{{ $local_govt->name }}</option>
-                            @endforeach
+                            <option {{ $store->state_id == $state->id ? 'selected' : '' }}   value="{{ $state->id }}">{{ $state->name }}</option>
                         @endforeach
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <label class="col-md-2 col-form-label">Shop LGA <span class="text-danger text-danger">*</span> <span id="validate-state_id" class="alert-danger"></span></label>
+                <div class="col-md-10">
+                    <select id="shop_lga_select" name="local_govt_id" required class="select2 form-control" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true" required>
+                        @if ($store->local_govt_id)
+                        @foreach (optional(optional($store)->state)->localGovts ?? [] as $local_govt)
+                        <option {{ $store->local_govt_id == $local_govt->id ? 'selected' : '' }}  value="{{ $local_govt->id }}">{{ $local_govt->name }}</option>
+                        @endforeach
+                        @else
+                        <option value={{ null }}>Please Select a state first</option>
+                        @endif
                     </select>
                 </div>
             </div>

@@ -4,6 +4,7 @@
         $user = $user ?? $_SESSION['logged_in'];
         $cart = $user->carts->whereNull('checkout_id')->count();
         $role = optional($user->roles->first())->name;
+        //$user = null;
     } else {
         $cart = 0;
         $user = null;
@@ -484,6 +485,7 @@
             </div>
         </div>
     
+
         @if ($user && $is_buyer)
         <div class="aiz-mobile-side-nav collapse-sidebar-wrap sidebar-xl d-xl-none z-1035">
             <div class="overlay dark c-pointer overlay-fixed" data-toggle="class-toggle" data-backdrop="static" data-target=".aiz-mobile-side-nav" data-same=".mobile-side-nav-thumb"></div>
@@ -800,6 +802,8 @@
     
         </div>
     </div>
+            </div>
+        </div>
             
         @endif
         <!-- User Side nav -->

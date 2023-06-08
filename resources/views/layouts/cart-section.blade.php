@@ -189,7 +189,7 @@
         <div class="row cols-xs-space cols-sm-space cols-md-space">
             <div class="col-xxl-8 col-xl-10 mx-auto">
                 <form onsubmit="return deliveryInfo(this)">
-                        <div class="border bg-white p-4 mb-4">
+                        <div id="my_address_list" class="border bg-white p-4 mb-4">
                             @foreach ($customers as $customer)
                                 <div class="border mb-4">
                                     <div class="row">

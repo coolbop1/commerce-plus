@@ -146,7 +146,7 @@
     </div>
 </div>
     
-    <script>
+<script>
     function account_delete_confirm_modal(delete_url)
     {
         jQuery('#account_delete_confirm').modal('show', {backdrop: 'static'});
@@ -230,7 +230,7 @@
             @if (is_null($user))
             <form onsubmit="return submitForm(this, url = '/api/user-customer/'+sessionStorage.getItem('COMMERCE_PLUS_SESSION'), 'POST', 'add-user-customer')">
             @else
-            <form onsubmit="return submitForm(this, url = '/api/user-customer-auth', 'POST', 'add-user-customer')">
+            <form onsubmit="return submitForm(this, url = '/api/save-customer-adress', 'POST', 'add-user-customer')">
             @endif
             
              <div class="modal-body c-scrollbar-light">
@@ -246,56 +246,30 @@
                                 </div>
                             </div>
                         @endif
-                        <!-- Address -->
+                        <!-- State -->
                         <div class="row">
                             <div class="col-md-2">
-                                <label>Address</label>
+                                <label>State</label>
                             </div>
                             <div class="col-md-10">
-                                <textarea id="cus_address" class="form-control mb-3 rounded-0" placeholder="Your Address" rows="2" name="address" required></textarea>
+                                <select id="cus_state_new" onchange="getLocalGovt(this, 'cus_lga_new')" class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" required>
+                                    <option value={{ null }} >Choose a state</option>
+                                    @foreach ($states as $state)
+                                        <option value="{{ $state->id }}" >{{ $state->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-
-
-                        <!-- State -->
                         <div class="row">
                             <div class="col-md-2">
                                 <label>Local Govt Area</label>
                             </div>
                             <div class="col-md-10">
-                                <select id="cus_state" class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" required>
-                                    @foreach ($states as $state)
-                                        <option value={{ null }}>{{ $state->name }}</option> 
-                                        @foreach ($state->localGovts as $local_govt)
-                                            <option style="color: grey" value="{{ $state->id.'_'.$local_govt->id }}">{{ $local_govt->name }}</option>
-                                        @endforeach  
-                                    @endforeach
+                                <select id="cus_lga_new" class="form-control mb-3 rounded-0" data-live-search="true" name="local_govt_id" required>
+                                    <option value={{ null }}>Please Select a state first</option>
                                 </select>
                             </div>
                         </div>
-
-                        {{-- <!-- City -->
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>City</label>
-                            </div>
-                            <div class="col-md-10">
-                                <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="city_id" required>
-
-                                </select>
-                            </div>
-                        </div> --}}
-
-                                                
-                        {{-- <!-- Postal code -->
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>Postal Code</label>
-                            </div>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control mb-3 rounded-0" placeholder="Your Postal Code" name="postal_code" value="" required>
-                            </div>
-                        </div> --}}
 
                         <!-- Phone -->
                         <div class="row">
@@ -333,6 +307,15 @@
                             </div>
                         </div>
                         @endif
+                        <!-- Address -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Address</label>
+                            </div>
+                            <div class="col-md-10">
+                                <textarea id="cus_address" class="form-control mb-3 rounded-0" placeholder="Your Address" rows="2" name="address" required></textarea>
+                            </div>
+                        </div>
                         <!-- Save button -->
                         <div class="form-group text-right">
                             <button id="add-user-customer" type="submit" class="btn btn-primary rounded-0 w-150px">Save</button>
@@ -345,11 +328,11 @@
 </div>
 
 <!-- Edit Address Modal -->
-<div class="modal fade" id="edit-address-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit-address-modal">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New Address</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Update Address</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -382,22 +365,28 @@
         $('#new-address-modal').modal('show');
     }
 
-    function edit_address(address) {
-        let picked = null;
-        let all_customer_account = JSON.parse(JSON.stringify(<?php echo json_encode($customers); ?>))
-        console.log("$all_customer_account",all_customer_account);
-        picked = all_customer_account.find(item => item.id == address);
-        
-        document.getElementById('cus_id').value = picked?.id;
-        document.getElementById('cus_address').value = picked?.address;
-        document.getElementById('cus_state').value = picked?.state_id;
-        document.getElementById('cus_phone').value = picked?.phone;
+    function edit_address(customer_id) {
+        $('#edit-address-modal').modal('show');
+        document.getElementById('edit_modal_body').innerHTML = `
+            <div style='width:100%;text-align:center'>
+                <i class="las la-spinner la-spin la-3x opacity-70"></i>
+            </div>
+        `;
+        let http = new XMLHttpRequest();
+        http.open("GET", '/api/get-customer-adress/'+customer_id, true);
+        http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+        http.onreadystatechange = function() {
+            if(http.readyState == 4) {
+                let response = JSON.parse(this.responseText);
+                if(http.status == 200) { 
+                    document.getElementById('edit_modal_body').innerHTML = response.data.form;
+                } else {
 
-        
-        
-
-        console.log( "picked ", picked)
-        $('#new-address-modal').modal('show');
+                }
+                //console.log("this.responseText", this.responseText);
+            }
+        }
+        http.send();
 
     }
     function getAllLoadedCustomers() {
@@ -541,7 +530,7 @@
                     <td class="product-name pl-0 fs-14 text-dark fw-400 border-top-0 border-bottom">
                         `+item.name+`
                         <strong class="product-quantity">
-                            × `+(item.quantity_added || 1)+`
+                             `+(item.quantity_added || 1)+`
                         </strong>
                     </td>
                     <td class="product-total text-right pr-0 fs-14 text-primary fw-600 border-top-0 border-bottom">

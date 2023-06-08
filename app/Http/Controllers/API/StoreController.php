@@ -74,7 +74,8 @@ class StoreController extends BaseController
             'name' => 'nullable|string',
             'user_id' => 'nullable|integer',
             'warehoused' => 'nullable|boolean',
-            'state_id' => 'required',
+            'state_id' => 'required|integer',
+            'local_govt_id' => 'required|integer',
             'lat' => 'nullable|numeric',
             'long' => 'nullable|numeric',
             'shop_logo' => 'nullable|string',
@@ -106,15 +107,12 @@ class StoreController extends BaseController
             $temp = TemporaryFiles::whereIn('id', explode(',', $request->banner))->orWhereIn('file_path', explode(',', $request->banner))->pluck('file_path')->toArray();
             $request_shop_banner = count($temp) > 0 ? implode(',', $temp) : null;
         }
-        $state_id = is_numeric($request->state_id) ? $request->state_id : explode('_', $request->state_id)[0];
-        $lga_id = is_numeric($request->state_id) ? 0 : explode('_', $request->state_id)[1];
-        info("request->state_id $state_id - $lga_id  ".json_encode($request->state_id));
         $store->update([
             'name' => $request->name ?? $store->name,
             'user_id' => $request->user_id ?? $store->user_id,
             'warehoused' => $request->warehoused ?? $store->warehoused,
-            'state_id' => $state_id,
-            'local_govt_id' => $lga_id,
+            'state_id' => $request->state_id,
+            'local_govt_id' => $request->local_govt_id,
             'lat' => $request->lat ?? $store->lat,
             'long' => $request->long ?? $store->long,
             'shop_logo' => $request_shop_logo ?? $store->shop_logo,

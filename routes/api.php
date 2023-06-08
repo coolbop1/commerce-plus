@@ -12,6 +12,7 @@ use App\Http\Controllers\API\SellerDashboardController;
 use App\Http\Controllers\API\StoreController;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\States;
 use App\Models\TemporaryFiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,10 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
     Route::post('add-to-cart', [CartController::class, 'addItemToCartNoauth']);
     Route::post('remove-from-cart', [CartController::class, 'removeItemFromCart']);
     Route::post('view-cart', [CartController::class, 'getMyCart']);
+    Route::get('get-customer-adress/{customer_id}', [CartController::class, 'getMyaddress']);
+    Route::get('get-customer-adress', [CartController::class, 'myAddressList']);
+    Route::post('save-customer-adress', [CartController::class, 'addAddress']);
+    Route::post('save-customer-adress/{customer_id}', [CartController::class, 'addAddress']);
 
     Route::get('set-customer-id', [StoreController::class, 'setCustomerId']);
     Route::post('user-customer-auth', [RegisterController::class, 'register']);
@@ -164,4 +169,30 @@ Route::middleware('auth:sanctum')->get('/set-pick-up-station-id', function (Requ
 Route::get('/logout', function (Request $request) {
     //session_start();
     session_destroy();
+});
+
+Route::get('/get-state-lga/{state_id}', function (Request $request, $state_id) {
+    $state = States::find($state_id);
+    if(is_null($state)){
+        $response = [
+            'success' => true,
+            'data'    => [],
+            'message' => 'Options retrived successfully.',
+        ];
+    
+    
+        return response()->json($response, 404);
+    }
+    $local_govts = $state->localGovts;
+
+    $options = view('partials.lga-options', compact('local_govts'))->render();
+    $data['options'] = $options;
+    $response = [
+        'success' => true,
+        'data'    => $data,
+        'message' => 'Options retrived successfully.',
+    ];
+
+
+    return response()->json($response, 200);
 });

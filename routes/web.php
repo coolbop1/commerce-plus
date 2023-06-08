@@ -111,6 +111,12 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/hub/create', [AdminController::class, 'hubCreate']);
     Route::get('/admin/hubs/edit/{id}', [AdminController::class, 'hubEdit']);
     Route::get('/admin/hubs/destroy/{id}', [AdminController::class, 'hubDelete']);
+
+    Route::get('/admin/station', [AdminController::class, 'station']);
+    Route::get('/admin/station/create', [AdminController::class, 'stationCreate']);
+    Route::get('/admin/station/edit/{id}', [AdminController::class, 'stationEdit']);
+    Route::get('/admin/station/destroy/{id}', [AdminController::class, 'stationDelete']);
+    Route::get('/admin/onforwarding', [AdminController::class, 'onForwarding']);
 });
 
 Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( function () {

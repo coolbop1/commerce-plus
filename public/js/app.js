@@ -28,6 +28,22 @@ function setAccessss () {
     }
 }
 
+function getLocalGovt(ele, child) {
+let http = new XMLHttpRequest();
+http.open("GET", '/api/get-state-lga/'+ele.value, true);
+http.onreadystatechange = function() {
+    if(http.readyState == 4) {
+        let response = JSON.parse(this.responseText);
+        if(http.status == 200) { 
+            document.getElementById(child).innerHTML = response.data.options;
+        } else {
+            console.log('failed to populate');
+        }
+        //console.log("this.responseText", this.responseText);
+    }
+}
+http.send();
+}
 // let http_f = new XMLHttpRequest();
 // http_f.open("GET", 'api/user?session', true);
 // http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
@@ -373,6 +389,10 @@ function submitForm(formElement, url, method = 'POST', button_id = 'reg-button')
                         break;
                     case 'add-hub':
                         window.location.href = '/admin/hub';
+                        break;
+                    case 'edit-customer-address' :
+                    case 'add-user-customer' :
+                        window.location.href = '/checkout'
                         break;
                 
                     default:

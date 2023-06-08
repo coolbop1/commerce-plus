@@ -81,6 +81,32 @@ class AdminController extends Controller
         return view('admin-hubs', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs'));
     }
 
+    public function station()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $all_hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();
+        $hubs = Hub::where('parent_id', '>', 0)->get();
+        return view('admin-stations', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs', 'all_hubs'));
+
+    }
+
+    public function onForwarding()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $local_govts = LocalGovt::with('hub')->get();
+        return view('onforwading', compact('user', 'store', 'ratings', 'page', 'stores', 'local_govts'));
+    }
+
     public function hubCreate()
     {
         if(isset($_SESSION['logged_in'])) {
@@ -95,6 +121,23 @@ class AdminController extends Controller
             return $query->whereNull('hub_id');  
           }])->get();
         return view('admin-add-hub', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs', 'hub', 'states'));
+    }
+
+    public function stationCreate()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();;
+        $hub = null;
+        $states = States::with(['localGovts' => function($query){
+            return $query->whereNull('hub_id');  
+          }])->get();
+        return view('admin-add-station', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs', 'hub', 'states'));
+    
     }
 
     public function hubEdit($id)
@@ -113,6 +156,24 @@ class AdminController extends Controller
         }])->get();
         return view('admin-add-hub', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs', 'hub', 'states'));
     }
+
+    public function stationEdit($id)
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $hub = Hub::find($id);
+        $hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();
+        //$local_govts = LocalGovt::whereNull('hub_id')->get();
+        $states = States::with(['localGovts' => function($query){
+          return $query->whereNull('hub_id');  
+        }])->get();
+        return view('admin-add-station', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs', 'hub', 'states'));
+    }
+
 
     public function hubDelete($id)
     {
