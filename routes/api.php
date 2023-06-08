@@ -94,12 +94,6 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('pos-order', [StoreController::class, 'posOrder']);
         Route::post('toggle-refund-request-approval', [StoreController::class, 'toggleRefundApproval']);
         Route::post('store-withdrawal-request/{store_id}', [StoreController::class, 'withdrawalRequest']);
-        Route::get('/set-customer-id', function (Request $request) {
-            $customer_id = $_GET['customer_id'];
-            $session_id = $_GET['session_id'];
-            $cart = Cart::where('session', $session_id)->update(['customer_id' => $customer_id]);
-            return $cart;
-        });
     });
     Route::middleware('roles:ROLE_VENDOR|ROLE_DELIVERY')->group( function () {
         Route::put('update-order-status/{order_id}', [StoreController::class, 'updateOrderStatus']);
@@ -148,6 +142,11 @@ Route::get('view-store/{store_id}', [StoreController::class, 'viewStore']);
 Route::get('view-product/{product_id}', [ProductController::class, 'show']);
 Route::post('list_category_products', [CategoryController::class, 'listCategoryProduct']);
 Route::post('list_brand_products', [CategoryController::class, 'listBrandProduct']);
+Route::middleware('auth:sanctum')->get('/set-customer-id', function (Request $request) {
+    $customer_id = $_GET['customer_id'];
+    $cart = Cart::where('user_id', $request->user()->id)->update(['customer_id' => $customer_id]);
+    return $cart;
+});
 
 
 
