@@ -512,7 +512,7 @@ class StoreController extends BaseController
 
         $request->merge([
             'all_cart_items' => $all_cart_items, 
-            'customer_id' => optional($all_cart_items->first())->customer_id,
+            'customer_id' => optional($all_cart_items->first())->customer_id  ,
             'cart_type' => optional(optional($all_cart_items->first())->product)->is_digital ? 'digital' : 'physical'
         ]);
         $validator = Validator::make($request->all(), [
