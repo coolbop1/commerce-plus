@@ -28,22 +28,166 @@ function setAccessss () {
     }
 }
 
-function getLocalGovt(ele, child) {
-let http = new XMLHttpRequest();
-http.open("GET", '/api/get-state-lga/'+ele.value, true);
-http.onreadystatechange = function() {
-    if(http.readyState == 4) {
-        let response = JSON.parse(this.responseText);
-        if(http.status == 200) { 
-            document.getElementById(child).innerHTML = response.data.options;
-        } else {
-            console.log('failed to populate');
-        }
-        //console.log("this.responseText", this.responseText);
+function getLocalGovt(ele, child, is_hub = false) {
+    let http = new XMLHttpRequest();
+    if(is_hub){
+        http.open("GET", '/api/get-state-lga/'+ele.value+'?is_hub=1', true);
+    } else {
+        http.open("GET", '/api/get-state-lga/'+ele.value, true);
     }
+
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                if(child == 'town_list') {
+                    document.getElementById('town_list').innerHTML = response.data.town_list;
+                    $(".confirm-deletes").click(function (e) {
+                        e.preventDefault();
+                        var url = $(this).data("onclick");
+                        console.log("url ",url);
+                        $("#delete-modal").modal("show");
+                        $("#delete-link").attr("onclick", url);
+                    });
+                } else {
+                    document.getElementById(child).innerHTML = response.data.options;
+                }
+                
+            } else {
+                console.log('failed to populate');
+            }
+            //console.log("this.responseText", this.responseText);
+        }
+    }
+    http.send();
 }
-http.send();
+
+function addLocalGovtToHub(ele, hub_id) {
+    // let beforeRequest = document.getElementById('attached_lga_card').innerHTML;
+    // document.getElementById('attached_lga_card').innerHTML =  `<div style="text-align:center"><i class="las la-spinner la-spin la-3x opacity-70"></i></div>`;
+    let http = new XMLHttpRequest();
+    http.open("GET", '/api/attach-lga-to-hub/'+hub_id+'/'+ele.value, true);
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                document.getElementById('attached_lga_card').innerHTML = response.data.view;
+                document.getElementById('lga_view_selector').innerHTML = response.data.options;
+            } else {
+                console.log('failed to populate');
+            }
+        }
+    }
+    http.send();
 }
+
+function detachLgaFromStation(local_govt_id, ele, hub_id){
+    // let beforeRequest = document.getElementById('attached_lga_card').innerHTML;
+    // document.getElementById('attached_lga_card').innerHTML =  `<div style="text-align:center"><i class="las la-spinner la-spin la-3x opacity-70"></i></div>`;
+    let http = new XMLHttpRequest();
+    http.open("GET", '/api/detach-lga-from-hub/'+hub_id+'/'+local_govt_id, true);
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                document.getElementById('attached_lga_card').innerHTML = response.data.view;
+                document.getElementById('lga_view_selector').innerHTML = response.data.options;
+            } else {
+                console.log('failed to populate');
+            }
+        }
+    }
+    http.send();
+}
+
+function saveOnForwardingRate(local_govt_id, ele) {
+    let params = new FormData();
+    let http = new XMLHttpRequest();
+    let rate = document.getElementById('onforwarding_'+local_govt_id).value;
+    params.append('rate', rate);
+    http.open("POST", '/api/set-local-govt-on-forwarding/'+local_govt_id, true);
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                let message = response.message;
+                showAlert(message, 'alert-success');
+            } else {
+                let message = response.message;
+                showAlert(message, 'alert-warning', response_.data ?? []);
+            }
+        }
+    }
+    http.send(params);
+}
+
+function addNewTown(town_id = null) {
+    let params = new FormData();
+    let town_name = null;
+    if (town_id) {
+        town_name = document.getElementById('town_name_input_'+town_id).value
+    } else {
+        town_name = document.getElementById('new_town').value
+    }
+    let state_select = document.getElementById('town_list_state');
+    let state_id = state_select.value;
+    
+    params.append('name', town_name);
+    params.append('state_id', state_id);
+    
+    let http = new XMLHttpRequest();
+    if (town_id) {
+        http.open("POST", '/api/add-town-name/'+town_id, true);
+    } else {
+        http.open("POST", '/api/add-town-name', true);
+    }
+    
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                let message = response.message;
+                showAlert(message, 'alert-success');
+                getLocalGovt(state_select, 'town_list');
+                document.getElementById('new_town').value = null;
+            } else {
+                let message = response.message;
+                showAlert(message, 'alert-warning', response_.data ?? []);
+            }
+        }
+    }
+    http.send(params);
+}
+
+function deleteTown(town_id) {
+    let state_select = document.getElementById('town_list_state');
+    let state_id = state_select.value;
+    let http = new XMLHttpRequest();
+    http.open("POST", '/api/delete-town/'+town_id, true);
+    http.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                let message = response.message;
+                showAlert(message, 'alert-success');
+                getLocalGovt(state_select, 'town_list');
+                $("#delete-modal").modal("hide");
+            } else {
+                let message = response.message;
+                showAlert(message, 'alert-warning', response_.data ?? []);
+                $("#delete-modal").modal("hide");
+            }
+        }
+    }
+    http.send();
+    
+}
+
 // let http_f = new XMLHttpRequest();
 // http_f.open("GET", 'api/user?session', true);
 // http_f.setRequestHeader("Authorization", "Bearer "+COMMERCE_PLUS_TOKEN);
@@ -1662,7 +1806,7 @@ function addCustomer() {
     let params = new FormData();
     let state_local_govt  = document.getElementById('customer_state_id').value;
     if(state_local_govt == null){
-        showAlert("Local Govt. field is required", 'alert-warning', []);
+        showAlert("Town field is required", 'alert-warning', []);
     }
     let state_id = null;
     let lga_id = null;

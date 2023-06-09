@@ -153,7 +153,7 @@
                         {{-- data-value="{{ str_replace('"', "'", json_encode($product)) }}"  --}}
                         class="btn btn-primary buy-now fw-600 add-to-cart w-150px rounded-0" 
                         {{-- onclick="addToCart({{ $product->id }}, this, 'online', true)"" --}}
-                        onclick="addToCartV2({{ $product->id }})"
+                        onclick="addToCartV2({{ $product->id }}); window.location.href = '/checkout'"
                         >
                         <i class="la la-shopping-cart"></i> Buy Now
                         </button>

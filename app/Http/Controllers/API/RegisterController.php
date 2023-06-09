@@ -33,7 +33,7 @@ class RegisterController extends BaseController
         ]);
    
         if($request->has('address') && $request->state_id == ''){
-            return $this->sendError('Please pick a local govt. area.', [], 400);       
+            return $this->sendError('Please pick a Town', [], 400);       
         }
         if($request->user() && $request->has('customer_id') && $request->has('address') && !empty($request->customer_id)) { 
             $request->user()->customer()->where('id', $request->customer_id)->update([

@@ -100,7 +100,7 @@
                         <label>State</label>
                     </div>
                     <div class="col-md-10">
-                        <select onchange="getLocalGovt(this, 'lga_view_selector')" class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" >
+                        <select onchange="getLocalGovt(this, 'lga_view_selector', is_hub = true)" class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" >
                             @foreach ($states as $state)
                                 <option value="{{ $state->id }}">{{ $state->name }}</option> 
                             @endforeach
@@ -110,11 +110,11 @@
                 <br>
                 <div class="form-group row">
                     <div class="col-md-2">
-                        <label>Local Govt.</label>
+                        <label>Town.</label>
                     </div>
                     <div class="col-md-10">
-                        <select id="lga_view_selector"  class="form-control mb-3 rounded-0" data-live-search="true" >
-                            <option value="0">Pick to add</option>
+                        <select id="lga_view_selector" onchange="addLocalGovtToHub(this, {{ $hub->id }})" class="form-control mb-3 rounded-0" data-live-search="true" >
+                            <option value={{ null }}>Pick to add</option>
                         </select>
                     </div>
                 </div>
@@ -176,15 +176,26 @@
 </div>
 
 @if ($hub && optional($hub)->parent_id)
-<div class="row">
+<div id="attached_lga_card" class="row">
     <div class="col-lg-8 mx-auto">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0 h6">({{ $hub->localGovts->count() }}) Local GovT. under ({{ $hub->name }}) station <br>
+                <h5 class="mb-0 h6">({{ $hub->localGovts->count() }}) Town under ({{ $hub->name }}) station <br>
                     <small>Save On forwarding rate on LGA or remove LGA from Station</small></h5>
             </div>
             <div class="card-body">
-                
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Towns</label>
+                    <div class="col-md-3">
+                        On Forwarding Rate
+                    </div>
+                    <div class="col-md-3">
+                        Action
+                    </div>
+                    <div class="col-md-3">
+                        <button onclick="detachLgaFromStation(`{{ implode(',', $hub->localGovts->pluck('id')->toArray()) }}`, this, {{ $hub->id }})" class="btn btn-danger">Delete All</button>
+                    </div>
+                </div>
                 @foreach ($hub->localGovts as $local_govt)
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{ $local_govt->name }}</label>
@@ -192,10 +203,10 @@
                         <input id="onforwarding_{{ $local_govt->id }}" value="{{ $local_govt->on_forwarding }}" placeholder="Enter on_forwarding Rate" name="small" class="form-control" required>
                     </div>
                     <div class="col-md-3">
-                        <button from-id="{{ $local_govt->id }}" onclick="saveOnForwardingRate({{ $local_govt->id }}, this)" class="btn btn-primary">Save</button>
+                        <button onclick="saveOnForwardingRate({{ $local_govt->id }}, this)" class="btn btn-primary">Save</button>
                     </div>
                     <div class="col-md-3">
-                        <button from-id="{{ $local_govt->id }}" onclick="detachLgaFromStation({{ $local_govt->id }}, this, true)" class="btn btn-danger confirm-delete"><i class="las la-trash"></i></button>
+                        <button onclick="detachLgaFromStation({{ $local_govt->id }}, this, {{ $hub->id }})" class="btn btn-danger "><i class="las la-trash"></i></button>
                     </div>
                 </div>
                 @endforeach

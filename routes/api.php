@@ -80,6 +80,12 @@ Route::middleware(['auth:sanctum', 'permission'])->group( function () {
         Route::post('create-hub', [RoleController::class, 'createHub']);
         Route::post('update-hub', [RoleController::class, 'updateHub']);
         Route::post('save-connect-rate', [RoleController::class, 'saveConnectRate']);
+        Route::get('attach-lga-to-hub/{hub_id}/{lga_id}', [AdminController::class, 'attachLgaToHub']);
+        Route::get('detach-lga-from-hub/{hub_id}/{lga_id}', [AdminController::class, 'detachLgaFromHub']);
+        Route::post('set-local-govt-on-forwarding/{lga_id}', [AdminController::class, 'saveOnforwardingRate']);
+        Route::post('add-town-name/{town_id}', [AdminController::class, 'addTownName']);
+        Route::post('add-town-name', [AdminController::class, 'addTownName']);
+        Route::post('delete-town/{town_id}', [AdminController::class, 'deleteTown']);
     });
 
     //Store endpoints
@@ -183,8 +189,15 @@ Route::get('/get-state-lga/{state_id}', function (Request $request, $state_id) {
         return response()->json($response, 404);
     }
     $local_govts = $state->localGovts;
+    $is_hub = false;
+    if($request->is_hub){
+        $local_govts = $local_govts->whereNull('hub_id');
+        $is_hub = true;
+    }
 
-    $options = view('partials.lga-options', compact('local_govts'))->render();
+    $options = view('partials.lga-options', compact('local_govts', 'is_hub'))->render();
+    $town_list = view('partials.town-list', compact('local_govts'))->render();
+    $data['town_list'] = $town_list;
     $data['options'] = $options;
     $response = [
         'success' => true,

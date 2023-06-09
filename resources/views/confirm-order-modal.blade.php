@@ -136,7 +136,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-2 control-label"">
-                                    <label>Local Govt Area</label>
+                                    <label>Town</label>
                                 </div>
                                 <div class="col-sm-10">
                                     <select id="customer_state_id" class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" required>
