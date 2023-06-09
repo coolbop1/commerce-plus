@@ -95,6 +95,7 @@
 
 
                 <br>
+                @if ($hub)
                 <div class="form-group row">
                     <div class="col-md-2">
                         <label>State</label>
@@ -113,11 +114,12 @@
                         <label>Town.</label>
                     </div>
                     <div class="col-md-10">
-                        <select id="lga_view_selector" onchange="addLocalGovtToHub(this, {{ $hub->id }})" class="form-control mb-3 rounded-0" data-live-search="true" >
+                        <select id="lga_view_selector" onchange="addLocalGovtToHub(this, {{ optional($hub)->id }})" class="form-control mb-3 rounded-0" data-live-search="true" >
                             <option value={{ null }}>Pick to add</option>
                         </select>
                     </div>
                 </div>
+                @endif
 
                 
 
