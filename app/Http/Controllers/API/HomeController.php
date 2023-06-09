@@ -72,7 +72,7 @@ class HomeController extends BaseController
             $user = User::find($_SESSION['logged_in']->id);
         }
         $product_name = str_replace('_', ' ',$product_slug); 
-        $product_name = str_replace('-:::-', '_',$product_name);
+        $product_name = str_replace(':::', '_',$product_name);
         $product = Product::where('name', $product_name)->first();
         $states = States::all();
         $customers = null;

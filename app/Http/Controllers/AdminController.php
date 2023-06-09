@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isNan;
+
 class AdminController extends Controller
 {
     public function __construct()
@@ -79,6 +81,18 @@ class AdminController extends Controller
         $store = $ratings = null;
         $hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();
         return view('admin-hubs', compact('user', 'store', 'ratings', 'page', 'stores', 'hubs'));
+    }
+
+    public function town()
+    {
+        if(isset($_SESSION['logged_in'])) {
+            $user = $_SESSION['logged_in'];
+        }
+        $stores = Store::withCount('customers', 'orders', 'products')->get();
+        $page ='dashboard';
+        $store = $ratings = null;
+        $states = States::all();
+        return view('admin-towns', compact('user', 'store', 'ratings', 'page', 'stores', 'states'));
     }
 
     public function station()
@@ -354,6 +368,154 @@ class AdminController extends Controller
 
         return view('partials.orders-list', compact('orders'));
        
+    }
+
+    public function attachLgaToHub(Request $request, $hub_id, $lga_id)
+    {
+        $lgs_ids = isNan($lga_id) ? explode(',', $lga_id) : [$lga_id];
+
+        LocalGovt::whereIn('id', $lgs_ids)->update(['hub_id' => $hub_id]);
+        $hub = Hub::find($hub_id);
+        $view = view('partials.attached-lga-view', compact('hub'))->render();
+        $local_govt = LocalGovt::find($lgs_ids[0]);
+        $state = States::find($local_govt->state_id);
+        $local_govts = $state->localGovts->whereNull('hub_id');
+        $is_hub = true;
+    
+        $options = view('partials.lga-options', compact('local_govts', 'is_hub'))->render();
+
+        $data['options'] = $options;
+        $data['view'] = $view;
+        $response = [
+            'success' => true,
+            'data'    => $data,
+            'message' => 'Lga list retrived successfully.',
+        ];
+
+
+        return response()->json($response, 200);
+    }
+
+    public function detachLgaFromHub(Request $request, $hub_id, $lga_id)
+    {
+        $lgs_ids = isNan($lga_id) ? explode(',', $lga_id) : [$lga_id];
+
+        LocalGovt::whereIn('id', $lgs_ids)->update(['hub_id' => null]);
+        $local_govt = LocalGovt::find($lgs_ids[0]);
+        $hub = Hub::find($hub_id);
+        $view = view('partials.attached-lga-view', compact('hub'))->render();
+        $local_govt = LocalGovt::find($lgs_ids[0]);
+        $state = States::find($local_govt->state_id);
+        $local_govts = $state->localGovts->whereNull('hub_id');
+        $is_hub = true;
+    
+        $options = view('partials.lga-options', compact('local_govts', 'is_hub'))->render();
+
+        $data['options'] = $options;
+        $data['view'] = $view;
+        $response = [
+            'success' => true,
+            'data'    => $data,
+            'message' => 'Lga list retrived successfully.',
+        ];
+
+
+        return response()->json($response, 200);
+    }
+
+    public function saveOnforwardingRate(Request $request, $lga_id)
+    {
+
+        if(!$request->rate || !is_numeric($request->rate)){
+            $response = [
+                'success' => true,
+                'data'    => [],
+                'message' => 'Rate Have to be a number',
+            ];
+        
+        
+            return response()->json($response, 404);
+        }
+
+        LocalGovt::where('id', $lga_id)->update(['on_forwarding' => $request->rate]);
+
+        $response = [
+            'success' => true,
+            'data'    => [],
+            'message' => 'Town On forwarding updated successfully.',
+        ];
+
+
+        return response()->json($response, 200);
+    }
+
+    public function addTownName(Request $request, $town_id = null)
+    {
+        if($town_id && !is_numeric($town_id)){
+            $response = [
+                'success' => true,
+                'data'    => [],
+                'message' => 'Town id Have to be a number',
+            ];
+        
+        
+            return response()->json($response, 404);
+        }
+        if($town_id) {
+            $lga = LocalGovt::where('id', $town_id)->where('state_id', $request->state_id)->first();
+            if(!$lga){
+                $response = [
+                    'success' => true,
+                    'data'    => [],
+                    'message' => 'Town not found',
+                ];
+                return response()->json($response, 404);
+            }
+            $lga->name = $request->name;
+            $lga->save();
+
+            $response = [
+                'success' => true,
+                'data'    => [],
+                'message' => 'Town updated successfully.',
+            ];
+    
+            return response()->json($response, 200);
+        }
+        LocalGovt::create([
+            "name" => $request->name,
+            "state_id" => $request->state_id
+        ]);
+        $response = [
+            'success' => true,
+            'data'    => [],
+            'message' => 'Town saved successfully.',
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    public function deleteTown(Request $request, $town_id)
+    {
+        if(!is_numeric($town_id)){
+            $response = [
+                'success' => true,
+                'data'    => [],
+                'message' => 'Town id Have to be a number',
+            ];
+        
+        
+            return response()->json($response, 404);
+        }
+
+        LocalGovt::where('id', $town_id)->delete();
+        $response = [
+            'success' => true,
+            'data'    => [],
+            'message' => 'Town deleted successfully.',
+        ];
+
+        return response()->json($response, 200);
     }
 
     public function order($code)

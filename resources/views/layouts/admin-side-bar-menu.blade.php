@@ -279,11 +279,17 @@
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-truck aiz-side-nav-icon"></i>
-                                <span class="aiz-side-nav-text">Hubs</span>
+                                <span class="aiz-side-nav-text">Shipping Rate Settings</span>
                                                                     {{-- <span class="badge badge-inline badge-danger">Addon</span> --}}
                                                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
+                                <li class="aiz-side-nav-item">
+                                    <a href="/admin/towns" class="aiz-side-nav-link">
+                                        <i class="las la-truck aiz-side-nav-icon"></i>
+                                        <span class="aiz-side-nav-text">Towns</span>
+                                    </a>
+                                </li>
                                 <li class="aiz-side-nav-item">
                                     <a href="/admin/hub" class="aiz-side-nav-link">
                                         <i class="las la-truck aiz-side-nav-icon"></i>
@@ -294,12 +300,6 @@
                                     <a href="/admin/station" class="aiz-side-nav-link">
                                         <i class="las la-truck aiz-side-nav-icon"></i>
                                         <span class="aiz-side-nav-text">Stations</span>
-                                    </a>
-                                </li>
-                                <li class="aiz-side-nav-item">
-                                    <a href="/admin/ungroup-lga" class="aiz-side-nav-link">
-                                        <i class="las la-truck aiz-side-nav-icon"></i>
-                                        <span class="aiz-side-nav-text">Ungrouped LGA</span>
                                     </a>
                                 </li>
                             </ul>

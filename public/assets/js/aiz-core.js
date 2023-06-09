@@ -1458,6 +1458,14 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 $("#delete-link").attr("href", url);
             });
 
+            $(".confirm-deletes").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("onclick");
+                console.log("url ",url);
+                $("#delete-modal").modal("show");
+                $("#delete-link").attr("onclick", url);
+            });
+
             $(".confirm-cancel").click(function (e) {
                 e.preventDefault();
                 var url = $(this).data("href");

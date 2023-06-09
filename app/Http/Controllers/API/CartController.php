@@ -138,6 +138,7 @@ class CartController extends BaseController
                         break;
                 }
             }
+            $shipping += optional(optional(optional($cart)->customer)->lga)->on_forwarding ?? 0;
         }
         $total_amount = $shipping + $total_price;
         if(!$internal){

@@ -23,7 +23,7 @@
      <!-- lGA-->
      <div class="row">
         <div class="col-md-2">
-            <label>Local Govt Area</label>
+            <label>Town</label>
         </div>
         <div class="col-md-10">
             <select id="cus_lga_edit" class="form-control mb-3 rounded-0" data-live-search="true" name="local_govt_id" required>

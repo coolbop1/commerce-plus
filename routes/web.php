@@ -111,6 +111,8 @@ Route::middleware(['session','webrole:ROLE_SUPERADMIN' ])->group( function () {
     Route::get('/admin/hub/create', [AdminController::class, 'hubCreate']);
     Route::get('/admin/hubs/edit/{id}', [AdminController::class, 'hubEdit']);
     Route::get('/admin/hubs/destroy/{id}', [AdminController::class, 'hubDelete']);
+    Route::get('/admin/towns', [AdminController::class, 'town']);
+
 
     Route::get('/admin/station', [AdminController::class, 'station']);
     Route::get('/admin/station/create', [AdminController::class, 'stationCreate']);

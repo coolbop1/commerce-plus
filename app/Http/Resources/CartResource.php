@@ -33,21 +33,21 @@ class CartResource extends JsonResource
        } else {
         $seller_hub = Hub::find($seller_parent_hub);
         $total_weight = $this->product->weight * $this->qty;
-        $shipping = 0;
+        $shipping = optional($this->product->store->lga)->on_forwarding ?? 0;
         if($seller_hub && !$this->product->is_digital) {
             switch (true) {
                 case $total_weight <= 2:
-                    $shipping =  is_numeric($seller_hub->small) ? $seller_hub->small : eval("return ".str_replace('kg', $total_weight, $seller_hub->small).";");
+                    $shipping +=  is_numeric($seller_hub->small) ? $seller_hub->small : eval("return ".str_replace('kg', $total_weight, $seller_hub->small).";");
                     break;
                 case $total_weight <= 7:
-                    $shipping = is_numeric($seller_hub->medium) ? $seller_hub->medium : eval("return ".str_replace('kg', $total_weight, $seller_hub->medium).";");
+                    $shipping += is_numeric($seller_hub->medium) ? $seller_hub->medium : eval("return ".str_replace('kg', $total_weight, $seller_hub->medium).";");
                     break;
                 case $total_weight <= 10:
-                    $shipping = is_numeric($seller_hub->large) ? $seller_hub->large : eval("return ".str_replace('kg', $total_weight, $seller_hub->large).";");
+                    $shipping += is_numeric($seller_hub->large) ? $seller_hub->large : eval("return ".str_replace('kg', $total_weight, $seller_hub->large).";");
                     break;
                 
                 default:
-                $shipping = is_numeric($seller_hub->heavy) ? $seller_hub->heavy : eval("return ".str_replace('kg', $total_weight, $seller_hub->heavy).";");
+                $shipping += is_numeric($seller_hub->heavy) ? $seller_hub->heavy : eval("return ".str_replace('kg', $total_weight, $seller_hub->heavy).";");
                     break;
             }
         }
