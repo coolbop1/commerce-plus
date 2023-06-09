@@ -73,7 +73,8 @@ class HomeController extends BaseController
         }
         $product_name = str_replace('_', ' ',$product_slug); 
         $product_name = str_replace(':::', '_',$product_name);
-        $product_name = str_replace('::::', '/',$product_name);
+        $product_name = str_replace(';;;', '/',$product_name);
+        info("product_name". $product_name);
         $product = Product::where('name', $product_name)->first();
         $states = States::all();
         $customers = null;

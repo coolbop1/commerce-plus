@@ -75,7 +75,7 @@ class Product extends Model
     public function getSlugAttribute()
     {
         $name = str_replace('_', ':::', $this->name);
-        $name = str_replace('/', '::::', $name);
+        $name = str_replace('/', ';;;', $name);
         $slug = str_replace(' ', '_', $name);
         return $slug;  
     }
