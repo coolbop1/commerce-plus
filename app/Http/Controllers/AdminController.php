@@ -746,8 +746,9 @@ class AdminController extends Controller
         if($delivery_boy_id) {
             $delivery_boy = DeliveryBoy::find($delivery_boy_id);
         }
+        $hubs = Hub::where('parent_id', 0)->orWhereNull('parent_id')->get();
 
         $page ='deliveryBoyForm';
-        return view('delivery-boy-create', compact('user', 'store', 'ratings', 'page', 'stores', 'states', 'delivery_boy'));
+        return view('delivery-boy-create', compact('user', 'store', 'ratings', 'page', 'stores', 'states', 'delivery_boy', 'hubs'));
     }
 }
