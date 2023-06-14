@@ -48,6 +48,19 @@
                         </select>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Hub</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="hub_id">
+                            <option value={{ null }}>Choose hub</option>
+                            @foreach ($hubs as $hub)
+                                <option {{ $delivery_boy && $delivery_boy->hub_id ==  $hub->id ? 'selected' : ''}}  value="{{ $hub->id }}">{{ $hub->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label" for="signinSrEmail">
                         Image

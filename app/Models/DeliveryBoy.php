@@ -19,6 +19,11 @@ class DeliveryBoy extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function hub()
+    {
+        return $this->belongsTo(Hub::class);
+    }
+
     public function deliveries()
     {
         return $this->hasMany(Delivery::class);

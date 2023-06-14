@@ -48,6 +48,7 @@ class DeliveryBoyController extends BaseController
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'state_id' => $request->state_id,
+                'hub_id' => $request->hub_id ?? null,
                 'image' => $request->image ?? null
             ]);
             $role = Role::where('name', 'ROLE_DELIVERY')->first();
@@ -97,6 +98,9 @@ class DeliveryBoyController extends BaseController
         }
         if($request->state_id) {
             $delivery_boy_input['state_id'] = $request->state_id;
+        }
+        if($request->hub_id) {
+            $delivery_boy_input['hub_id'] = $request->hub_id;
         }
         if($request->image) {
             if($request->image){
