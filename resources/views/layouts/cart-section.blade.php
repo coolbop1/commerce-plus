@@ -204,7 +204,7 @@
                                                     <span class="flex-grow-1 pl-3 text-left">
                                                         <div class="row">
                                                             <span class="fs-14 text-secondary col-3">Address</span>
-                                                            <span class="fs-14 text-dark fw-500 ml-2 col">{{$customer->lga->name." , ".$customer->address }}</span>
+                                                            <span class="fs-14 text-dark fw-500 ml-2 col">{{optional(optional($customer)->lga)->name." , ".$customer->address }}</span>
                                                         </div>
                                                         {{-- <div class="row">
                                                             <span class="fs-14 text-secondary col-3">Postal Code</span>

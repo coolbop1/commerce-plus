@@ -20,7 +20,11 @@
                         <th data-breakpoints="lg">Delivery Status</th>
                         <th data-breakpoints="lg">Payment Status</th>
                         @if ($page != 'delivered')
-                        <th data-breakpoints="lg">Payment Type</th>   
+                            @if ($delivery_boy->is_operator)
+                                <th data-breakpoints="lg">Delivery Person</th>  
+                            @else
+                                <th data-breakpoints="lg">Payment Type</th>  
+                            @endif 
                         @endif
                         @switch($page)
                             @case('assigned')
@@ -33,7 +37,11 @@
                             <th data-breakpoints="lg">Mark As Delivered</th>    
                                 @break
                             @case('pending')
-                            <th data-breakpoints="lg">Assign To Me</th>    
+                                @if ($delivery_boy->is_operator)
+                                    <th data-breakpoints="lg">Assign Delivery Person</th> 
+                                @else
+                                    <th data-breakpoints="lg">Assign To Me</th> 
+                                @endif   
                                 @break
                         
                             @default
@@ -47,8 +55,10 @@
                 </thead>
                 <tbody class="fs-14">
                     
-                    @foreach ($assigned_deliveries as $delivery)
+                    @foreach ($assigned_deliveries as $route_trail)
                     @php
+                        $order_ = $route_trail->order;
+                        $delivery = $order_->delivery;
                         $delivery = $delivery instanceof App\Models\CancelledDelivery ? $delivery->delivery : $delivery;
                     @endphp
                         <tr>
@@ -84,6 +94,9 @@
                             @if ($page != 'delivered')
                             <!-- Payment Type -->
                             <td class="w-120px" style="vertical-align: middle;">
+                                @if ($delivery_boy->is_operator)
+                                    {{ optional(optional(optional($route_trail)->deliveryBoy)->user)->name ?? '' }}   
+                                @else
                                 @switch($delivery->order->checkout->order_type)
                                     @case('cod')
                                         Cash On Delivery
@@ -98,6 +111,7 @@
                                     @default
                                         
                                 @endswitch
+                                @endif
                             </td>  
                             @endif
                             
@@ -106,7 +120,7 @@
                             @case('assigned')
                                 <td style="vertical-align: middle;">
                                     <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input @if ($delivery->status != 'pending')
+                                        <input @if ($route_trail->status == 'awaiting_delivery')
                                             disabled
                                             checked
                                         @endif onchange="return update_order_status(this,{{ $delivery->order->id }}, '/delivery/pickup-deliveries')" value="out_for_delivery" type="checkbox">
@@ -117,35 +131,46 @@
                             @case('picked_up')
                                 <td style="vertical-align: middle;">
                                     <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input @if ($delivery->status == 'on_the_way')
+                                        <input @if ($route_trail->status == 'awaiting_delivery')
                                             disabled
                                             checked
-                                        @endif onchange="return update_delivery_status(this,{{ $delivery->id }}, '/delivery/on-the-way-deliveries')" value="on_the_way" type="checkbox">
+                                        @endif onchange="return update_delivery_status(this,{{ $route_trail->id }}, '/delivery/on-the-way-deliveries')" value="on_the_way" type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </td>  
                                 @break
                             @case('on_the_way')
                                 <td style="vertical-align: middle;">
-                                    <input class="form-control" style="margin-bottom: 5px" type="text" placeholder="Delivery Code (POD)" id="pod_input" />
+                                    @if (!$delivery_boy->is_operator)
+                                        <input class="form-control" style="margin-bottom: 5px" type="password" placeholder="Delivery Code (POD)" id="pod_input" />
+                                    @endif
                                     <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input @if ($delivery->status == 'delivered')
+                                        <input @if ($route_trail->status == 'delivered')
                                             disabled
                                             checked
-                                        @endif onchange="return update_delivery_status(this,{{ $delivery->id }}, '/delivery/completed-deliveries')" value="delivered" type="checkbox">
+                                        @endif onchange="return update_delivery_status(this,{{ $route_trail->id }}, '/delivery/completed-deliveries')" value="delivered" type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </td>  
                                 @break
                             @case('pending')
                                 <td style="vertical-align: middle;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input @if ($delivery->status == 'delivered')
-                                            disabled
-                                            checked
-                                        @endif onchange="return update_delivery_status(this,{{ $delivery->id }}, '/delivery/assigned-deliveries')" value="assigned" type="checkbox">
-                                        <span class="slider round"></span>
-                                    </label>
+                                    @if ($delivery_boy->is_operator)
+                                        <select onchange="return update_delivery_status(this,{{ $route_trail->id }}, '/delivery/assigned-deliveries')" class="form-control mb-3 aiz-selectpickers" data-live-search="true">
+                                            <option value={{ null }}>Choose Delivery Person</option>
+                                            @foreach ($delivery_boys as $deliveryBoy)
+                                                <option value="{{ $deliveryBoy->id }}">{{ $deliveryBoy->user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <label class="aiz-switch aiz-switch-success mb-0">
+                                            <input @if ($delivery->status == 'delivered')
+                                                disabled
+                                                checked
+                                            @endif onchange="return update_delivery_status(this,{{ $route_trail->id }}, '/delivery/assigned-deliveries')" value="assigned" type="checkbox">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    @endif
                                 </td>  
                                 @break
                         

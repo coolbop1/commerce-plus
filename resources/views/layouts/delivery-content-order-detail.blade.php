@@ -1,5 +1,4 @@
 @section('order-detail')
-<div class="aiz-user-panel">
                             <!-- Order id -->
     <div class="aiz-titlebar mt-2 mb-4">
         <div class="row align-items-center">
@@ -85,7 +84,7 @@
 
     <!-- Order Details -->
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-8">
             <div class="card mt-4 shadow-none rounded-0 border">
                 <div class="card-header border-bottom-0">
                     <b class="fs-16 fw-700 text-dark">Order Details</b>
@@ -96,8 +95,8 @@
                             <tr>
                                 <th class="pl-0">#</th>
                                 <th width="30%">Product</th>
-                                <th>Variation</th>
-                                <th>Quantity</th>
+                                {{-- <th>Variation</th> --}}
+                                <th>Qty</th>
                                 <th>Delivery Type</th>
                                 <th class="text-right pr-0">Price</th>
                             </tr>
@@ -115,9 +114,9 @@
                                 <td>
                                     <a href="/product/{{ str_replace(' ', '-', $cart->product->name) }}" target="_blank">{{ $cart->product->name }}</a>
                                 </td>
-                                <td>
+                                {{-- <td>
                                         
-                                </td>
+                                </td> --}}
                                 <td>
                                     {{ $cart->qty }}
                                 </td>
@@ -131,9 +130,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    
     <!-- Order Ammount -->
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div class="card mt-4 shadow-none rounded-0 border">
             <div class="card-header border-bottom-0">
                 <b class="fs-16 fw-700 text-dark">Order Amount</b>
@@ -153,7 +152,7 @@
                                 <span class="text-italic">₦{{ number_format($order->shipping, 2) }}</span>
                             </td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td class="w-50 fw-600">Tax</td>
                             <td class="text-right">
                                 <span class="text-italic">₦{{ number_format($order->tax, 2) }}</span>
@@ -162,10 +161,9 @@
                         <tr>
                             <td class="w-50 fw-600">Coupon</td>
                             <td class="text-right">
-                                {{ $order->coupon }}
                                 <span class="text-italic">₦{{ number_format($order->coupon, 2) }}</span>
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td class="w-50 fw-600">Total</td>
                             <td class="text-right">
@@ -180,6 +178,5 @@
             </div>
         </div>
     </div>
-
 </div>
 @endsection

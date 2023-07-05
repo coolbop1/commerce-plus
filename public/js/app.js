@@ -62,6 +62,36 @@ function getLocalGovt(ele, child, is_hub = false) {
     http.send();
 }
 
+function getStations(ele, child) {
+    let http = new XMLHttpRequest();
+    
+    http.open("GET", '/api/get-stations/'+ele.value, true);
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                if(child == 'town_list') {
+                    document.getElementById('town_list').innerHTML = response.data.town_list;
+                    $(".confirm-deletes").click(function (e) {
+                        e.preventDefault();
+                        var url = $(this).data("onclick");
+                        console.log("url ",url);
+                        $("#delete-modal").modal("show");
+                        $("#delete-link").attr("onclick", url);
+                    });
+                } else {
+                    document.getElementById(child).innerHTML = response.data.options;
+                }
+                
+            } else {
+                console.log('failed to populate');
+            }
+            //console.log("this.responseText", this.responseText);
+        }
+    }
+    http.send();
+}
+
 function addLocalGovtToHub(ele, hub_id) {
     // let beforeRequest = document.getElementById('attached_lga_card').innerHTML;
     // document.getElementById('attached_lga_card').innerHTML =  `<div style="text-align:center"><i class="las la-spinner la-spin la-3x opacity-70"></i></div>`;
@@ -1960,12 +1990,17 @@ function update_order_status(ele, order_id, url = null) {
     http.send(JSON.stringify(payload_));
 }
 
-function update_delivery_status(ele, id, url = null) {
+function update_delivery_status(ele, id, url = null, delivery_status = null) {
     let status = ele.value;
     let payload_ = {};
-    payload_['status'] = status;
+    if (isNaN(status)) {
+        payload_['status'] = status;
+    } else {
+        payload_['delivery_boy_id'] = status;
+        payload_['status'] = delivery_status || 'assigned';
+    }
     if(status == 'delivered') {
-        payload_['pod'] = document.getElementById('pod_input').value; 
+        payload_['pod'] = document.getElementById('pod_input')?.value || null; 
     }
 
     let http = new XMLHttpRequest();

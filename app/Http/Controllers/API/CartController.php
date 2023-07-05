@@ -99,29 +99,55 @@ class CartController extends BaseController
         return $this->sendResponse([], 'Product removed successfully.');
     }
 
-    public function getMyCart(Request $request, $user_id = null, $internal = false, $selected_id = [])
+    public function getMyCart(Request $request, $user_id = null, $internal = false, $selected_id = [], $track = false)
     {
-        $c_user_id = $request->user()->id ?? $user_id;
+        $c_user_id = $user_id ?? $request->user()->id ?? null;
 
-        if(is_null($c_user_id)) {
+        if(is_null($c_user_id) && count($selected_id) == 0) {
             return $this->sendError('Cart not found', [], 404);  
         }
-        $carts = $request->user() ? Cart::with('product')->where('user_id', $c_user_id)->whereNull('checkout_id')->get() : Cart::where('session', $c_user_id)->whereNull('checkout_id')->get();
-        info("carts $c_user_id ".json_encode($carts));
+        $carts = $request->user() ? Cart::with('product')->where('user_id', $c_user_id)->whereNull('checkout_id')->get() : Cart::with('product')->where('session', $c_user_id)->whereNull('checkout_id')->get();
+        
         if(count($selected_id) > 0) {
             $carts = Cart::whereIn('id', $selected_id)->get();
         }
-        
+        info("the cartsss ".json_encode($carts));
         $carts_ = CartResource::collection($carts);
         $total_price = collect(json_decode(json_encode($carts_), true))->sum('price');
         $total_weight = collect(json_decode(json_encode($carts_), true))->sum('weight');
         $shipping = collect(json_decode(json_encode($carts_), true))->sum('ship');
-        if($request->user()) {
+        $seller_route_ = collect(json_decode(json_encode($carts_), true))->first();
+        $seller_route = $track ? collect(json_decode(json_encode($carts_), true))->first()['route'] : [];
+        $buyer_route = [];
+        if($request->user() || count($selected_id) > 0) {
             $cart = $carts->first();
             $hub = isset($_SESSION['hub_id']) ? $_SESSION['hub_id'] : optional(optional(optional(optional($cart)->customer)->lga)->hub)->parent_id;
         
             if($hub && $cart && !($cart->product->is_digital)) {
                 $customer_hub = Hub::find($hub);
+                if($track) {
+                    $customer_station = optional(optional(optional($cart)->customer)->lga)->hub;
+                    $customer_hub->type = 'hub';
+                    if($cart->Order){
+                        $trails = $cart->Order->routeTrails ?? null;
+                        if($trails) {
+                            $trail = $trails->where('destination_station_id', $customer_station->id)->whereNotNull('destination_station_id')->first();
+                            $customer_hub->delivery_status = optional($trail)->status;
+                        }
+                    }
+                    $buyer_route[] = $customer_hub->toArray();
+                    $customer_town = optional(optional($cart)->customer)->lga;
+                    $customer_station->type = 'station';
+                    if($cart->Order){
+                        $trails = $cart->Order->routeTrails ?? null;
+                        if($trails) {
+                            $trail = $trails->where('destination_town_id', $customer_town->id)->where('destination_type', 'town')->first();
+                            $customer_station->delivery_status = optional($trail)->status;
+                            $customer_station->delivery_statuss = optional($trail)->status;
+                        }
+                    }
+                    $buyer_route[] = $customer_station->toArray();
+                }
                 switch (true) {
                     case $total_weight <= 2:
                         $shipping += is_numeric($customer_hub->small) ? $customer_hub->small : eval("return ".str_replace('kg', $total_weight, $customer_hub->small).";");
@@ -139,6 +165,18 @@ class CartController extends BaseController
                 }
             }
             $shipping += optional(optional(optional($cart)->customer)->lga)->on_forwarding ?? 0;
+            if(isset($customer_town) && $track) {
+                $customer_town->type = 'town';
+                if($cart->Order){
+                    $trails = $cart->Order->routeTrails ?? null;
+                    if($trails) {
+                        $trail = $trails->where('destination_town_id', $customer_town->id)->first();
+                        $customer_station->delivery_status = optional($trail)->status;
+                    }
+                }
+                $buyer_route[] = $customer_town->toArray();
+            }
+            
         }
         $total_amount = $shipping + $total_price;
         if(!$internal){
@@ -149,6 +187,10 @@ class CartController extends BaseController
             $data['pos_cart'] = view('partials.pos-cart', compact('carts', 'total_price', 'shipping', 'total_amount'))->render();
             $data['pos_order_cart'] = view('partials.pos-order-cart', compact('carts', 'total_price', 'shipping', 'total_amount'))->render();
         }
+        if($track) {
+            $data['track'] = array_merge($seller_route, $buyer_route);
+        }
+        
         $data['items'] = $carts;
         $data['total_price'] = $internal ? $total_price : number_format($total_price, 2);
         $data['shipping'] = $internal ? $shipping : number_format($shipping, 2);

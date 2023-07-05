@@ -46,8 +46,8 @@ class OrderProcessed extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         
-        return ['vonage', 'mail', 'database'];
-        //return (new MailMessage)->markdown('mail.order-processed');
+        //return ['vonage', 'mail', 'database'];
+        return (new MailMessage)->markdown('mail.order-processed');
     }
 
     /**

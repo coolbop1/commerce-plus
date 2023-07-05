@@ -12,6 +12,7 @@ use App\Http\Controllers\API\SellerDashboardController;
 use App\Http\Controllers\API\StoreController;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Hub;
 use App\Models\States;
 use App\Models\TemporaryFiles;
 use Illuminate\Http\Request;
@@ -206,5 +207,26 @@ Route::get('/get-state-lga/{state_id}', function (Request $request, $state_id) {
     ];
 
 
+    return response()->json($response, 200);
+});
+Route::get('/get-stations/{hub_id}', function (Request $request, $hub_id) {
+    $stations = Hub::where('parent_id', $hub_id)->get();
+    if(is_null($stations)){
+        $response = [
+            'success' => true,
+            'data'    => [],
+            'message' => 'Options retrived successfully.',
+        ];
+    
+    
+        return response()->json($response, 404);
+    }
+    $options = view('partials.station-options', compact('stations'))->render();
+    $data['options'] = $options;
+    $response = [
+        'success' => true,
+        'data'    => $data,
+        'message' => 'Options retrived successfully.',
+    ];
     return response()->json($response, 200);
 });

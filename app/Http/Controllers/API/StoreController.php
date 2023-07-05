@@ -15,11 +15,14 @@ use App\Models\Checkout;
 use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\DeliveryBoy;
+use App\Models\Hub;
+use App\Models\LocalGovt;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\PodRecord;
 use App\Models\RechargeHistory;
 use App\Models\RefundRequest;
+use App\Models\RouteTrail;
 use App\Models\Store;
 use App\Models\Subscription;
 use App\Models\TemporaryFiles;
@@ -633,9 +636,12 @@ class StoreController extends BaseController
             $delivery->pod_record_id = $pod_record->id;
             $delivery->save();
             $order->checkout->customer->notify(new OrderProcessed($order));
+            $this->addRouteTrail($order->id);
         } 
         if($order->status == 'out_for_delivery') {
             Delivery::where('order_id', $order->id)->update(['status' => 'picked_up']);
+            $delivery_boy = DeliveryBoy::where('user_id', $request->user()->id)->first();
+            $this->addRouteTrail($order->id, $delivery_boy->id);
         }
 
 
@@ -646,23 +652,73 @@ class StoreController extends BaseController
         return $this->sendResponse($order, 'Order status updated successfully.');
     }
 
+    public function addRouteTrail($order_id, $delivery_boy_id = null, $delivered = false) {
+        $order = Order::find($order_id);
+        
+        $user_id = optional(optional($order)->checkout)->user_id ?? optional(optional(optional($order)->checkout)->customer)->user_id;; 
+        $user_ = User::find($user_id);
+        $request = new Request();
+        $request->merge(['user' => $user_]);
+        $carts_id = $order->checkout->carts->pluck('id')->toArray();
+        $request->setUserResolver(function () use ($user_) {
+            return $user_;
+        });
+        $user_carts = (new CartController())->getMyCart($request, $user_id, $internal = true, $carts_id, $track = true);
+        $track = $user_carts['track'] ?? [];
+        info("The track ",$track);
+        $route_trails = RouteTrail::where('order_id', $order->id)->get();
+        if(is_null($delivery_boy_id) && !$delivered) {
+            $destination_node = $route_trails->count() == 0 ? 1 : ($route_trails->count() + 1);
+            $origin_node = $destination_node - 1;
+            if(isset($track[$destination_node]))
+            RouteTrail::create([
+                "order_id" => $order->id,
+                "origin_type" => $track[$origin_node]['type'] ?? 'station',
+                "origin_hub_id" => $track[$origin_node]['type'] == 'station' ? $track[$origin_node]['parent_id'] : ($track[$origin_node]['type'] == 'town' ? $track[$origin_node]['hub']['parent_id'] : $track[$origin_node]['id']),
+                "origin_station_id" => $track[$origin_node]['type'] == 'station' ? $track[$origin_node]['id'] : ($track[$origin_node]['type'] == 'town' ? $track[$origin_node]['hub_id'] : null),
+                "origin_town_id" => $track[$origin_node]['type'] == 'station' ? null : ($track[$origin_node]['type'] == 'town' ? $track[$origin_node]['id'] : null),
+                "destination_type" => $track[$destination_node]['type'] ?? 'station',
+                "destination_hub_id" => $track[$destination_node]['type'] == 'station' ? $track[$destination_node]['parent_id'] : ($track[$destination_node]['type'] == 'town' ? $track[$destination_node]['hub']['parent_id'] : $track[$destination_node]['id']),
+                "destination_station_id" => $track[$destination_node]['type'] == 'station' ? $track[$destination_node]['id'] : ($track[$destination_node]['type'] == 'town' ? $track[$destination_node]['hub_id'] : null),
+                "destination_town_id" => $track[$destination_node]['type'] == 'station' ? null : ($track[$destination_node]['type'] == 'town' ? $track[$destination_node]['id'] : null)
+            ]);
+        } elseif(!$delivered) {
+            info("order here ... ".json_encode($order));
+            $route_trail = RouteTrail::where('order_id', $order->id)->where('status', '<>', 'delivered')->latest()->first();
+            if($route_trail->delivery_boy_id) {
+                $route_trail->status = 'awaiting_delivery';
+            }
+            $route_trail->delivery_boy_id = $route_trail->delivery_boy_id ?? $delivery_boy_id;
+            $route_trail->save();
+        } else {
+            $route_trail = RouteTrail::where('order_id', $order->id)->where('delivery_boy_id', $delivery_boy_id)->latest()->first();
+            $route_trail->status = 'delivered';
+            $route_trail->save();
+        }
+        return isset($route_trail) && !is_null($route_trail->destination_town_id);
+    }
+
     public function updateDeliveryStatus(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required|in:pending,picked_up,on_the_way,delivered,assigned',
             'pod' => 'required_if:status,delivered'
         ]);
-        if($validator->fails()){
+        $delivery_boy = $request->delivery_boy_id ? DeliveryBoy::find($request->delivery_boy_id) : DeliveryBoy::where('user_id', $request->user()->id)->first();
+        info('delivery_boy '.json_encode($delivery_boy));
+        if(!($delivery_boy->is_operator) && $validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
-        $delivery_boy = DeliveryBoy::where('user_id', $request->user()->id)->first();
+        
         if(is_null($delivery_boy)) {
             return $this->sendError('Unathorized', [], 401);
         }
 
-        $delivery = Delivery::where('id', $id)->where(function($query) use($delivery_boy){
+        $route_trail = $id ? RouteTrail::find($id) : RouteTrail::where('id', $id)->where(function($query) use($delivery_boy){
             $query->whereNull('delivery_boy_id')->orWhere('delivery_boy_id', $delivery_boy->id);
         })->first();
+        $order_ = $route_trail->order;
+        $delivery = $order_->delivery;
         if(is_null($delivery)) {
             return $this->sendError('Delivery not found', [], 404);
         }
@@ -670,31 +726,39 @@ class StoreController extends BaseController
             case 'delivered':
                 $customer = $delivery->order->checkout->customer;
                 $podRecord = PodRecord::where('expired', 0)->where('customer_id', $customer->id)->where('delivery_id', $delivery->id)->first();
-                if(is_null($podRecord)) {
+                if(is_null($podRecord) && !($delivery_boy->is_operator)) {
                     return $this->sendError('Delivery Proof not found', [], 404);
                 }
-                if(password_verify($request->pod, $podRecord->pod)) {
+                if(!password_verify($request->pod, $podRecord->pod) && !($delivery_boy->is_operator)) {
+                    return $this->sendError('Incorrect delivery code. Unauthorized', [], 401);
+                }
+                $order = $delivery->order;
+                if($this->addRouteTrail($order->id, $route_trail->delivery_boy_id ?? $delivery_boy->id, true)) {
                     $podRecord->update(['expired' => true]);
                     $delivery->status = $request->status;
                     $delivery->pod = $request->pod;
                     $delivery->save();
                     $delivery->order()->update(['status' => 'delivered']);
                     if($delivery->order->checkout->order_type == 'cod') {
-                        //Do something
+                        //TODo something
                     }
                 } else {
-                    return $this->sendError('Incorrect delivery code. Unauthorized', [], 401);
+                    $this->addRouteTrail($order->id);
                 }
                 break;
             case 'assigned':
                 CancelledDelivery::where('delivery_id', $delivery->id)->where('delivery_boy_id', $delivery_boy->id)->delete();
                 $delivery->delivery_boy_id = $delivery_boy->id;
                 $delivery->save();
+                $order = $delivery->order;
+                $this->addRouteTrail($order->id, $delivery_boy->id);
                 break;
             
             default:
             $delivery->status = $request->status;
             $delivery->save();
+            $order = $delivery->order;
+            $this->addRouteTrail($order->id, $delivery_boy->id);
                 break;
         }
 

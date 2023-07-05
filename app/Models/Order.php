@@ -47,6 +47,11 @@ class Order extends Model
         return $this->hasMany(RefundRequest::class);
     }
 
+    public function routeTrails()
+    {
+        return $this->hasMany(RouteTrail::class);
+    }
+
     public function isAssignedForDelivery()
     {
         return !is_null(optional($this->delivery)->delivery_boy_id);

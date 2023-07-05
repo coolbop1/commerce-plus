@@ -26,6 +26,7 @@ class CartResource extends JsonResource
         'qty' => $this->qty,
         'weight' => $this->product->weight * $this->qty
        ];
+       $route = [];
        $customer_parent_hub = optional(optional(optional($this->customer)->lga)->hub)->parent_id;
        $seller_parent_hub = optional(optional($this->product->store->lga)->hub)->parent_id;
        if($customer_parent_hub && $customer_parent_hub == $seller_parent_hub){
@@ -34,6 +35,40 @@ class CartResource extends JsonResource
         $seller_hub = Hub::find($seller_parent_hub);
         $total_weight = $this->product->weight * $this->qty;
         $shipping = optional($this->product->store->lga)->on_forwarding ?? 0;
+        $lga = $this->product->store->lga;
+        $lga->type = 'town';
+        if($this->Order){
+            $trails = $this->Order->routeTrails ?? null;
+            if($trails) {
+                $trail = collect($trails)->where('destination_station_id', $lga->hub->id)->first();
+                info("it ___ trail town - station".json_encode($trail));
+                
+                $lga->delivery_status = optional($trail)->status;
+            }
+        }
+        $route[] = $lga;
+        $seller_station = optional($this->product->store->lga)->hub;
+        $seller_station->type = 'station';
+        if($this->Order){
+            $trails = $this->Order->routeTrails ?? optional($this->Order)['routeTrails'] ?? null;
+            if($trails) {
+                $trail = collect($trails)->where('destination_hub_id', $seller_station->parent_id)->whereNull('destination_station_id')->first();
+                info("it ___ trail station - hub ".json_encode($trail));
+                $seller_station->delivery_status = optional($trail)->status;
+            }
+        }
+        $route[] = $seller_station;
+        $seller_hub->type = 'hub';
+        //info("it has order ".json_encode($this));
+        if($this->Order){
+            $trails = optional($this->Order)->routeTrails ?? optional($this->Order)['routeTrails'] ?? null;
+            if($trails) {
+                $trail = collect($trails)->where('destination_hub_id', $customer_parent_hub)->first();
+                info("it ___ trail hub - hub ".json_encode($trail));
+                $seller_hub->delivery_status = optional($trail)->status;
+            }
+        }
+        $route[] = $seller_hub;
         if($seller_hub && !$this->product->is_digital) {
             switch (true) {
                 case $total_weight <= 2:
@@ -58,7 +93,7 @@ class CartResource extends JsonResource
         }
         $data['ship'] = $shipping;
        }
-
+       $data['route'] = $route;
        return $data; 
     }
 }

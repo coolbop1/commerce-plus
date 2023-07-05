@@ -129,6 +129,7 @@ Route::middleware(['session','webrole:ROLE_DELIVERY', 'rider' ])->group( functio
     Route::get('/delivery/cancel-request/{delivery_id}', [DeliveryController::class, 'cancelRequest']);
     Route::get('/delivery/invoice/{id}', [SellerDashboardController::class, 'downloadInvoice']);
     Route::get('/delivery/order-detail/{order_code}', [DeliveryController::class, 'orderDetails']);
+    Route::get('/delivery-boy/order-detail/{order_code}', [DeliveryController::class, 'orderDetails']);
     Route::get('/delivery/completed-deliveries', [DeliveryController::class, 'delivered']);
     Route::get('/delivery/pending-deliveries', [DeliveryController::class, 'pending']);
     Route::get('/delivery/cancelled-deliveries', [DeliveryController::class, 'cancelled']);
