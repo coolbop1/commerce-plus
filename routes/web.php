@@ -28,6 +28,7 @@ Route::get('/checkout/delivery_info', [HomeController::class, 'checkoutDeliveryI
 Route::get('/checkout/payment_select', [HomeController::class, 'checkoutPaymentSelect']);
 Route::get('/checkout/order-confirmed', [HomeController::class, 'checkoutOrderConfirmed']);
 Route::get('/flash-deals', [HomeController::class, 'flashDeal']);
+Route::get('/track-order', [HomeController::class, 'trackOrder']);
 Route::get('/terms', [HomeController::class, 'terms']);
 Route::get('/return-policy', [HomeController::class, 'returnPolicy']);
 Route::get('/support-policy', [HomeController::class, 'supportPolicy']);

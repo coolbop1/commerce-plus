@@ -99,6 +99,16 @@ class HomeController extends BaseController
         return view('flash-deal', compact('user', 'flash_sales', 'page'));
     }
 
+    public function trackOrder()
+    {
+        $user = null;
+        if(isset($_SESSION['logged_in'])) {
+            $user = User::find($_SESSION['logged_in']->id);
+        }
+        $page = 'trackOrder';
+        return view('track-order', compact('user', 'page'));
+    }
+
     public function terms()
     {
         $user = null;
