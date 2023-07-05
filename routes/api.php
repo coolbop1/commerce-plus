@@ -13,8 +13,10 @@ use App\Http\Controllers\API\StoreController;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Hub;
+use App\Models\Order;
 use App\Models\States;
 use App\Models\TemporaryFiles;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -207,6 +209,41 @@ Route::get('/get-state-lga/{state_id}', function (Request $request, $state_id) {
     ];
 
 
+    return response()->json($response, 200);
+});
+Route::get('/track-order/{order_code}', function (Request $request, $order_code) {
+    $order = Order::with('checkout.carts')->where('order_code', $order_code)->first();
+        
+    if(is_null($order)){
+        $response = [
+            'success' => true,
+            'data'    => [],
+            'message' => 'Order not found.',
+        ];
+    
+    
+        return response()->json($response, 404);
+    }
+    $user_id = optional(optional($order)->checkout)->user_id;
+    $user_ = User::find($user_id);
+    $request = new Request();
+    $request->merge(['user' => $user_]);
+    $carts_id = $order->checkout->carts->pluck('id')->toArray();
+
+    $request->setUserResolver(function () use ($user_) {
+        return $user_;
+    });
+    $user_carts = (new CartController())->getMyCart($request, null, $internal = true, $carts_id, $track = true);
+    $track = $user_carts['track'] ?? [];
+
+    
+    $view = view('partials.track-container', compact('order', 'track'))->render();
+    $data['view'] = $view;
+    $response = [
+        'success' => true,
+        'data'    => $data,
+        'message' => 'Track  successfully.',
+    ];
     return response()->json($response, 200);
 });
 Route::get('/get-stations/{hub_id}', function (Request $request, $hub_id) {

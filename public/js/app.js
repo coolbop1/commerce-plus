@@ -28,6 +28,24 @@ function setAccessss () {
     }
 }
 
+function trackOrder() {
+    let ele = document.getElementById('track-code');
+    let http = new XMLHttpRequest();
+    http.open("GET", '/api/track-order/'+ele.value, true);
+    http.onreadystatechange = function() {
+        if(http.readyState == 4) {
+            let response = JSON.parse(this.responseText);
+            if(http.status == 200) { 
+                document.getElementById('track-container').innerHTML = response.data.view;
+            } else {
+                console.log('failed to populate');
+                let message = response.message;
+                showAlert(message, 'alert-warning', response.data ?? []);
+            }
+        }
+    }
+    http.send();
+}
 function getLocalGovt(ele, child, is_hub = false) {
     let http = new XMLHttpRequest();
     if(is_hub){
