@@ -103,8 +103,21 @@ class BuyerController extends BaseController
         if(isset($_SESSION['logged_in'])) {
             $user = User::find($_SESSION['logged_in']->id);
         }
-        $order = Order::where('order_code', $order_code)->first();
-        return view('buyer-order-detail', compact('user', 'order'));
+        $order = Order::with('checkout.carts')->where('order_code', $order_code)->first();
+        
+        $user_id = optional(optional($order)->checkout)->user_id;
+        $user_ = User::find($user_id);
+        $request = new Request();
+        $request->merge(['user' => $user_]);
+        $carts_id = $order->checkout->carts->pluck('id')->toArray();
+
+        $request->setUserResolver(function () use ($user_) {
+            return $user_;
+        });
+       $user_carts = (new CartController())->getMyCart($request, null, $internal = true, $carts_id, $track = true);
+       $track = $user_carts['track'] ?? [];
+       //dump($track);
+        return view('buyer-order-detail', compact('user', 'order', 'track'));
 
     }
 

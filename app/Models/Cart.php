@@ -38,9 +38,22 @@ class Cart extends Model
         return $this->belongsTo(Checkout::class);
     }
 
-    public function Order()
+    // public function Order()
+    // {
+    //     return $this->belongsTo(Order::class);
+    //     //return $this->hasOne(Order::class, 'id', 'order_id');
+    // }
+    protected $appends = ['Order'];
+
+    public function getOrderAttribute()
     {
-        return $this->belongsTo(Order::class);
+        return $this->order_();  
+    }
+
+    public function order_()
+    {
+       // $ckeckout = $this->checkout()->where('cart_id', $this->id)->first();
+        return Order::with('routeTrails')->where('checkout_id', $this->checkout_id)->first();
     }
 
     public function refundRequest()

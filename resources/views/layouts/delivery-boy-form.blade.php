@@ -53,10 +53,26 @@
                         <label>Hub</label>
                     </div>
                     <div class="col-md-10">
-                        <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="hub_id">
+                        <select onchange="getStations(this, 'station_view_selector')" class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="hub_id">
                             <option value={{ null }}>Choose hub</option>
                             @foreach ($hubs as $hub)
                                 <option {{ $delivery_boy && $delivery_boy->hub_id ==  $hub->id ? 'selected' : ''}}  value="{{ $hub->id }}">{{ $hub->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Station</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select id="station_view_selector" class="form-control mb-3" name="station_id">
+                            <option value={{ null }}>Choose station</option>
+                            @php
+                                $hubs = App\Models\Hub::where('parent_id', optional($delivery_boy)->hub_id)->get();
+                            @endphp
+                            @foreach ($hubs as $hub)
+                                <option {{ $delivery_boy && $delivery_boy->station_id ==  $hub->id ? 'selected' : ''}}  value="{{ $hub->id }}">{{ $hub->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -90,6 +106,15 @@
                     <label class="col-sm-2 col-from-label">Address</label>
                     <div class="col-sm-10">
                         <textarea class="form-control" name="address">{{ $delivery_boy ? $delivery_boy->address : '' }}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-from-label">Hub Operator</label>
+                    <div class="col-sm-10">
+                        <label class="aiz-switch aiz-switch-success mb-0">
+                            <input name="is_operator" value="1" type="checkbox" {{ $delivery_boy ? $delivery_boy->is_operator : '' }}>
+                            <span class="slider round"></span>
+                        </label>
                     </div>
                 </div>
 

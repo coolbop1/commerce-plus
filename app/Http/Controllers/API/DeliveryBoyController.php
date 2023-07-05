@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 class DeliveryBoyController extends BaseController
 {
     public function create(Request $request){
+        $request->merge(['password' => 'password']);
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'phone' => 'required|unique:users,phone',
@@ -49,7 +50,9 @@ class DeliveryBoyController extends BaseController
                 'address' => $request->address,
                 'state_id' => $request->state_id,
                 'hub_id' => $request->hub_id ?? null,
-                'image' => $request->image ?? null
+                'image' => $request->image ?? null,
+                'station_id' => $request->station_id ?? null,
+                'is_operator' => $request->is_operator ?? 0
             ]);
             $role = Role::where('name', 'ROLE_DELIVERY')->first();
             $user->roles()->attach($role->id);
@@ -101,6 +104,12 @@ class DeliveryBoyController extends BaseController
         }
         if($request->hub_id) {
             $delivery_boy_input['hub_id'] = $request->hub_id;
+        }
+        if($request->station_id) {
+            $delivery_boy_input['station_id'] = $request->station_id;
+        }
+        if($request->is_operator) {
+            $delivery_boy_input['is_operator'] = $request->is_operator;
         }
         if($request->image) {
             if($request->image){

@@ -6,6 +6,7 @@
 @include('layouts.delivery-mobile-bottom-nav')
 @include('layouts.delivery-panel-modal')
 @include('layouts.delivery-content-order-detail')
+@include('layouts.track-container')
 <!-- aiz-main-wrapper -->
 <div class="aiz-main-wrapper d-flex flex-column bg-white">
 
@@ -29,7 +30,10 @@
     <div class="container">
         <div class="d-flex align-items-start">
             @yield('delivery-side-bar')
+            <div class="aiz-user-panel">
             @yield('order-detail')
+            @yield('track-container')
+            </div>
 
         </div>
     </div>
