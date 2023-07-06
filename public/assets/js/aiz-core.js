@@ -1466,6 +1466,22 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 $("#delete-link").attr("onclick", url);
             });
 
+            $("#confirm-select").change(function (e) {
+                e.preventDefault();
+                var url = $(this).data("onclick");
+                console.log("url ",url);
+                $("#confirm-modal").modal("show");
+                $("#conf-link").attr("onclick", url);
+            });
+
+            $(".confirm-select").change(function (e) {
+                e.preventDefault();
+                var url = $(this).data("onclick");
+                console.log("url ",url);
+                $("#confirm-modal").modal("show");
+                $("#conf-link").attr("onclick", url);
+            });
+
             $(".confirm-cancel").click(function (e) {
                 e.preventDefault();
                 var url = $(this).data("href");

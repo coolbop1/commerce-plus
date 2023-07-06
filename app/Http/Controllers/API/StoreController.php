@@ -636,7 +636,7 @@ class StoreController extends BaseController
             $delivery->pod_record_id = $pod_record->id;
             $delivery->save();
             $order->checkout->customer->notify(new OrderProcessed($order));
-            $this->addRouteTrail($order->id);
+            $this->addRouteTrail($order->id, null, false, $request->accept_type == 'dropoff');
         } 
         if($order->status == 'out_for_delivery') {
             Delivery::where('order_id', $order->id)->update(['status' => 'picked_up']);
@@ -652,7 +652,7 @@ class StoreController extends BaseController
         return $this->sendResponse($order, 'Order status updated successfully.');
     }
 
-    public function addRouteTrail($order_id, $delivery_boy_id = null, $delivered = false) {
+    public function addRouteTrail($order_id, $delivery_boy_id = null, $delivered = false, $dropOff = false) {
         $order = Order::find($order_id);
         
         $user_id = optional(optional($order)->checkout)->user_id ?? optional(optional(optional($order)->checkout)->customer)->user_id;; 
@@ -680,7 +680,8 @@ class StoreController extends BaseController
                 "destination_type" => $track[$destination_node]['type'] ?? 'station',
                 "destination_hub_id" => $track[$destination_node]['type'] == 'station' ? $track[$destination_node]['parent_id'] : ($track[$destination_node]['type'] == 'town' ? $track[$destination_node]['hub']['parent_id'] : $track[$destination_node]['id']),
                 "destination_station_id" => $track[$destination_node]['type'] == 'station' ? $track[$destination_node]['id'] : ($track[$destination_node]['type'] == 'town' ? $track[$destination_node]['hub_id'] : null),
-                "destination_town_id" => $track[$destination_node]['type'] == 'station' ? null : ($track[$destination_node]['type'] == 'town' ? $track[$destination_node]['id'] : null)
+                "destination_town_id" => $track[$destination_node]['type'] == 'station' ? null : ($track[$destination_node]['type'] == 'town' ? $track[$destination_node]['id'] : null),
+                "status" => $dropOff ? "awaiting_delivery" : "in_transit"
             ]);
         } elseif(!$delivered) {
             info("order here ... ".json_encode($order));
@@ -691,7 +692,12 @@ class StoreController extends BaseController
             $route_trail->delivery_boy_id = $route_trail->delivery_boy_id ?? $delivery_boy_id;
             $route_trail->save();
         } else {
-            $route_trail = RouteTrail::where('order_id', $order->id)->where('delivery_boy_id', $delivery_boy_id)->latest()->first();
+            $delivery_boy = DeliveryBoy::find($delivery_boy_id);
+            $route_trail = RouteTrail::where('order_id', $order->id)->when(optional($delivery_boy)->is_operator, function($q) use($delivery_boy_id){
+                return $q->where('delivery_boy_id', $delivery_boy_id)->orWhereNull('delivery_boy_id');
+            }, function($q) use($delivery_boy_id){
+                return $q->where('delivery_boy_id', $delivery_boy_id);
+            })->latest()->first();
             $route_trail->status = 'delivered';
             $route_trail->save();
         }

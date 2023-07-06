@@ -30,11 +30,11 @@ class DeliveryController extends Controller
             $user = $_SESSION['logged_in'];
         }
         $delivery_boy = DeliveryBoy::with('user')->where('user_id', $user->id)->first();
-        $pending_deliveries = RouteTrail::where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
+        $pending_deliveries = RouteTrail::whereHas('order')->where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
             if($delivery_boy->station_id) {
                 $q->whereNull('origin_station_id')->orWhere('origin_station_id', $delivery_boy->station_id);
             }
-        })->whereNull('delivery_boy_id')->where('status', 'in_transit')->get();
+        })->whereNull('delivery_boy_id')->where('status', 'in_transit')->orderBy('id', 'DESC')->get();
         // Delivery::where('status', 'pending')->get();
 
         return view('delivery-dashboard', compact('user', 'delivery_boy', 'pending_deliveries'));
@@ -47,13 +47,13 @@ class DeliveryController extends Controller
         }
         $delivery_boy = DeliveryBoy::with('user')->where('user_id', $user->id)->first();
         //$assigned_deliveries = Delivery::with('delivery_boy.user', 'order')->where('delivery_boy_id', $delivery_boy->id)->where('status', '<>', 'delivered')->get();
-        $assigned_deliveries = RouteTrail::where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
+        $assigned_deliveries = RouteTrail::whereHas('order')->where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
             if($delivery_boy->station_id) {
                 $q->whereNull('origin_station_id')->orWhere('origin_station_id', $delivery_boy->station_id);
             }
         })->when(!$delivery_boy->is_operator, function($q) use($delivery_boy){
             return $q->where('delivery_boy_id', $delivery_boy->id);
-        })->where('status', '<>', 'delivered')->get();
+        })->where('status', '<>', 'delivered')->orderBy('id', 'DESC')->get();
 
         return view('delivery-assigned', compact('user', 'delivery_boy', 'assigned_deliveries'));
     }
@@ -65,13 +65,13 @@ class DeliveryController extends Controller
         }
         $delivery_boy = DeliveryBoy::with('user')->where('user_id', $user->id)->first();
         //$assigned_deliveries = Delivery::with('delivery_boy.user', 'order')->where('delivery_boy_id', $delivery_boy->id)->where('status', 'picked_up')->get();
-        $assigned_deliveries = RouteTrail::where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
+        $assigned_deliveries = RouteTrail::whereHas('order')->where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
             if($delivery_boy->station_id) {
                 $q->whereNull('origin_station_id')->orWhere('origin_station_id', $delivery_boy->station_id);
             }
         })->when(!$delivery_boy->is_operator, function($q) use($delivery_boy){
             return $q->where('delivery_boy_id', $delivery_boy->id);
-        })->where('status', 'awaiting_delivery')->get();
+        })->where('status', 'awaiting_delivery')->orderBy('id', 'DESC')->get();
         return view('delivery-picked', compact('user', 'delivery_boy', 'assigned_deliveries'));
     }
 
@@ -82,13 +82,13 @@ class DeliveryController extends Controller
         }
         $delivery_boy = DeliveryBoy::with('user')->where('user_id', $user->id)->first();
         //$assigned_deliveries = Delivery::with('delivery_boy.user', 'order')->where('delivery_boy_id', $delivery_boy->id)->where('status', 'on_the_way')->get();
-        $assigned_deliveries = RouteTrail::where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
+        $assigned_deliveries = RouteTrail::whereHas('order')->where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
             if($delivery_boy->station_id) {
                 $q->whereNull('origin_station_id')->orWhere('origin_station_id', $delivery_boy->station_id);
             }
         })->when(!$delivery_boy->is_operator, function($q) use($delivery_boy){
             return $q->where('delivery_boy_id', $delivery_boy->id);
-        })->where('status', 'awaiting_delivery')->get();
+        })->where('status', 'awaiting_delivery')->orderBy('id', 'DESC')->get();
 
         return view('delivery-ontheway', compact('user', 'delivery_boy', 'assigned_deliveries'));
     }
@@ -100,13 +100,14 @@ class DeliveryController extends Controller
         }
         $delivery_boy = DeliveryBoy::with('user')->where('user_id', $user->id)->first();
         //$assigned_deliveries = Delivery::with('delivery_boy.user', 'order')->where('delivery_boy_id', $delivery_boy->id)->where('status', 'delivered')->get();
-        $assigned_deliveries = RouteTrail::where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
+        $assigned_deliveries = RouteTrail::whereHas('order')->where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
             if($delivery_boy->station_id) {
                 $q->whereNull('origin_station_id')->orWhere('origin_station_id', $delivery_boy->station_id);
             }
         })->when(!$delivery_boy->is_operator, function($q) use($delivery_boy){
             return $q->where('delivery_boy_id', $delivery_boy->id);
-        })->where('status', 'delivered')->get();
+        })->where('status', 'delivered')->orderBy('id', 'DESC')->get();
+        info($assigned_deliveries);
 
         return view('delivery-delivered', compact('user', 'delivery_boy', 'assigned_deliveries'));
     }
@@ -124,11 +125,11 @@ class DeliveryController extends Controller
         // $assigned_deliveries = Delivery::with('delivery_boy.user')->whereHas('order.routeTrails', function($query) use($delivery_boy){
         //     return $delivery_boy->hub_id == $query->orderTrails->
         // })->whereNull('delivery_boy_id')->where('status', 'pending')->get();
-        $assigned_deliveries = RouteTrail::where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
+        $assigned_deliveries = RouteTrail::whereHas('order')->where('origin_hub_id', $delivery_boy->hub_id)->where(function($q) use($delivery_boy){
             if($delivery_boy->station_id) {
                 $q->whereNull('origin_station_id')->orWhere('origin_station_id', $delivery_boy->station_id);
             }
-        })->whereNull('delivery_boy_id')->where('status', 'in_transit')->get();
+        })->whereNull('delivery_boy_id')->where('status', 'in_transit')->orderBy('id', 'DESC')->get();
 
         return view('delivery-pending', compact('user', 'delivery_boy', 'assigned_deliveries', 'delivery_boys'));
     }

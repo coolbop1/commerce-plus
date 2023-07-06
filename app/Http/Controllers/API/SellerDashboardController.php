@@ -426,7 +426,7 @@ class SellerDashboardController extends BaseController
         }
         $page = 'orders';
         $store = Store::with('products.category', 'orders')->find($store_id);
-        $orders = Order::with('checkout.user', 'checkout.customer')->where('store_id', $store_id)->get();
+        $orders = Order::with('checkout.user', 'checkout.customer')->where('store_id', $store_id)->orderBy('id', 'DESC')->get();
 
         return view('vendor-orders', compact('user', 'store', 'page', 'orders'));
     }

@@ -1988,7 +1988,12 @@ function update_refund_approval(ele, id) {
 function update_order_status(ele, order_id, url = null) {
     let status = ele.value;
     let payload_ = {};
-    payload_['status'] = status;
+    if(status == 'accepted-dropoff'){
+        payload_['status'] = 'accepted';
+        payload_['accept_type'] = 'dropoff';
+    } else {
+        payload_['status'] = status;
+    }
 
     let http = new XMLHttpRequest();
     http.open("PUT", '/api/update-order-status/'+order_id, true);

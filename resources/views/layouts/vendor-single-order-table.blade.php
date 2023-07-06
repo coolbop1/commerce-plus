@@ -6,12 +6,10 @@
 
     <div class="card-body">
         <div class="row gutters-5">
-            <div class="col text-md-left text-center">
-                @php
-                    $order_status = $order->status;
-                    $payment_status = $order->payment_status;
-                @endphp
-            </div>
+            @php
+                $order_status = $order->status;
+                $payment_status = $order->payment_status;
+            @endphp
             <div class="col-md-3 ml-auto">
                 <label for="update_payment_status">Payment Status</label>
                 @if ($order->payment_type == 'cod' && $payment_status == 'unpaid')
@@ -30,18 +28,22 @@
                 <label for="update_payment_status">Delivery Status</label>
                     <input type="text" class="form-control" value="{{ optional(optional($order)->delivery)->status == 'pending' && $order->isAssignedForDelivery() ? ' Assigned For Delivery' : (optional(optional($order)->delivery)->status ?? 'pending') }}" disabled>
             </div>
-            <div class="col-md-3 ml-auto">
-                <label for="update_delivery_status">Order Status</label>
-                @if ($order_status != 'delivered' && $order_status != 'cancelled')
-                    <select data-code="{{ $order->order_code }}" onchange="return update_order_status(this, {{ $order->id }})" class="form-control aiz-selectpicker" data-minimum-results-for-search="Infinity" id="update_delivery_status">
+            <div class="col-md-6 ml-auto">
+                <label for="update_delivery_status">Order Confirmation Status</label>
+                @if ($order_status == 'pending' || $order_status == 'cancelled')
+                    <select id="confirm-select" data-onclick="return update_order_status(document.getElementById('confirm-select'), {{ $order->id }})" data-code="{{ $order->order_code }}" 
+                        {{-- onchange="return update_order_status(this, {{ $order->id }})"  --}}
+                        class="form-control aiz-selectpicker" data-minimum-results-for-search="Infinity" id="update_delivery_status">
                         <option value="pending" @if ($order_status == 'pending') selected @endif>
                             Pending</option>
                         <option value="accepted" @if ($order_status == 'accepted') selected @endif>
-                            Accepted</option>
+                            Accepted (Waiting For Pick-up)</option>
+                        <option value="accepted-dropoff" @if ($order_status == 'accepted') selected @endif>
+                            Accepted (On the way to station)</option>
                         <option value="declined" @if ($order_status == 'declined') selected @endif>
                             Declined</option>
-                        <option value="out_for_delivery" @if ($order_status == 'out_for_delivery') selected @endif>
-                            Out for delivery</option>
+                        {{-- <option value="out_for_delivery" @if ($order_status == 'out_for_delivery') selected @endif>
+                            Out for delivery</option> --}}
                         {{-- <option value="picked_up" @if ($order_status == 'picked_up') selected @endif>
                             Picked Up</option>
                         <option value="on_the_way" @if ($order_status == 'on_the_way') selected @endif>
