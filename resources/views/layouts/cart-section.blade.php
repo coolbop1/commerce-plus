@@ -19,27 +19,27 @@
                 <div class="row">
                     <div class="col-xl-8 mx-auto">
                         <div class="row gutters-5 sm-gutters-10">
-                            <div class="col active">
+                            <div onclick="window.location.href = '/cart'" style="cursor: pointer" class="col active">
                                 <div class="text-center border border-bottom-6px p-2 text-primary">
                                     <i class="la-3x mb-2 las la-shopping-cart cart-animate"></i>
                                     <h3 class="fs-14 fw-600 d-none d-lg-block">1. My Cart</h3>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col">
                                 <div class="text-center border border-bottom-6px p-2">
                                     <i class="la-3x mb-2 opacity-50 las la-map"></i>
                                     <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
                                     </h3>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col">
                                 <div class="text-center border border-bottom-6px p-2">
                                     <i class="la-3x mb-2 opacity-50 las la-truck"></i>
                                     <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
                                     </h3>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div onclick="window.location.href = '/checkout/payment_select'" style="cursor: pointer" class="col">
                                 <div class="text-center border border-bottom-6px p-2">
                                     <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
                                     <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">4. Payment</h3>
@@ -136,27 +136,27 @@
         <div class="row">
             <div class="col-xl-8 mx-auto">
                 <div class="row gutters-5 sm-gutters-10">
-                    <div class="col done">
+                    <div onclick="window.location.href = '/cart'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 las la-shopping-cart cart-animate"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">1. My Cart</h3>
                         </div>
                     </div>
-                    <div class="col active">
+                    <div  onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col active">
                         <div class="text-center border border-bottom-6px p-2 text-primary">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
                             </h3>
                         </div>
                     </div>
-                    <div class="col">
+                    <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col">
                         <div class="text-center border border-bottom-6px p-2">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
                             </h3>
                         </div>
                     </div>
-                    <div class="col">
+                    <div onclick="window.location.href = '/checkout/payment_select'" style="cursor: pointer" class="col">
                         <div class="text-center border border-bottom-6px p-2">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">4. Payment</h3>
@@ -295,27 +295,27 @@
         <div class="row">
             <div class="col-xl-8 mx-auto">
                 <div class="row gutters-5 sm-gutters-10">
-                    <div class="col done">
+                    <div onclick="window.location.href = '/cart'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 las la-shopping-cart cart-animate"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">1. My Cart</h3>
                         </div>
                     </div>
                     <div class="col done">
-                        <div class="text-center border border-bottom-6px p-2 text-success">
+                        <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
                             </h3>
                         </div>
                     </div>
-                    <div class="col active">
+                    <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col active">
                         <div class="text-center border border-bottom-6px p-2 text-primary">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
                             </h3>
                         </div>
                     </div>
-                    <div class="col">
+                    <div onclick="window.location.href = '/checkout/payment_select'" style="cursor: pointer" class="col">
                         <div class="text-center border border-bottom-6px p-2">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">4. Payment</h3>
@@ -486,26 +486,26 @@
             <div class="col-xl-8 mx-auto">
                 <div class="row gutters-5 sm-gutters-10">
                     <div class="col done">
-                        <div class="text-center border border-bottom-6px p-2 text-success">
+                        <div onclick="window.location.href = '/cart'" style="cursor: pointer" class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 las la-shopping-cart cart-animate"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">1. My Cart</h3>
                         </div>
                     </div>
-                    <div class="col done">
+                    <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
                             </h3>
                         </div>
                     </div>
-                    <div class="col done">
+                    <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
                             </h3>
                         </div>
                     </div>
-                    <div class="col active">
+                    <div onclick="window.location.href = '/checkout/payment_select'" style="cursor: pointer" class="col active">
                         <div class="text-center border border-bottom-6px p-2 text-primary">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">4. Payment</h3>
@@ -816,27 +816,27 @@
         <div class="row">
             <div class="col-xl-8 mx-auto">
                 <div class="row gutters-5 sm-gutters-10">
-                    <div class="col done">
+                    <div onclick="window.location.href = '/cart'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 las la-shopping-cart cart-animate"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">1. My Cart</h3>
                         </div>
                     </div>
-                    <div class="col done">
+                    <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
                             </h3>
                         </div>
                     </div>
-                    <div class="col done">
+                    <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
                             </h3>
                         </div>
                     </div>
-                    <div class="col done">
+                    <div onclick="window.location.href = '/checkout/payment_select'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">4. Payment</h3>
