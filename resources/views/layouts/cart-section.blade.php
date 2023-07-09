@@ -28,14 +28,14 @@
                             <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col">
                                 <div class="text-center border border-bottom-6px p-2">
                                     <i class="la-3x mb-2 opacity-50 las la-map"></i>
-                                    <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
+                                    <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping address
                                     </h3>
                                 </div>
                             </div>
                             <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col">
                                 <div class="text-center border border-bottom-6px p-2">
                                     <i class="la-3x mb-2 opacity-50 las la-truck"></i>
-                                    <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
+                                    <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery options
                                     </h3>
                                 </div>
                             </div>
@@ -145,14 +145,14 @@
                     <div  onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col active">
                         <div class="text-center border border-bottom-6px p-2 text-primary">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping address
                             </h3>
                         </div>
                     </div>
                     <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col">
                         <div class="text-center border border-bottom-6px p-2">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery options
                             </h3>
                         </div>
                     </div>
@@ -304,14 +304,14 @@
                     <div class="col done">
                         <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping address
                             </h3>
                         </div>
                     </div>
                     <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col active">
                         <div class="text-center border border-bottom-6px p-2 text-primary">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery options
                             </h3>
                         </div>
                     </div>
@@ -494,14 +494,14 @@
                     <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping address
                             </h3>
                         </div>
                     </div>
                     <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery options
                             </h3>
                         </div>
                     </div>
@@ -825,14 +825,14 @@
                     <div onclick="window.location.href = '/checkout'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-map"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">2. Shipping address
                             </h3>
                         </div>
                     </div>
                     <div onclick="window.location.href = '/checkout/delivery_info'" style="cursor: pointer" class="col done">
                         <div class="text-center border border-bottom-6px p-2 text-success">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
-                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery info
+                            <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50">3. Delivery options
                             </h3>
                         </div>
                     </div>
