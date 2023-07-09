@@ -89,7 +89,24 @@ class CartResource extends JsonResource
         
         if($customer_parent_hub && !$this->product->is_digital){
             $travel_cost = HubConnect::where('from', $seller_parent_hub)->where('to', $customer_parent_hub)->first();
-            $shipping += optional($travel_cost)->rate ?? 0;
+            if($travel_cost) {
+                switch (true) {
+                    case $total_weight <= 2:
+                        $shipping +=  is_numeric($travel_cost->small) ? ($travel_cost->small ?? optional($travel_cost)->rate ?? 0) : eval("return ".str_replace('kg', $total_weight, $travel_cost->small).";");
+                        break;
+                    case $total_weight <= 7:
+                        $shipping += is_numeric($travel_cost->medium) ? ($travel_cost->medium ?? optional($travel_cost)->rate ?? 0) : eval("return ".str_replace('kg', $total_weight, $travel_cost->medium).";");
+                        break;
+                    case $total_weight <= 10:
+                        $shipping += is_numeric($travel_cost->large) ? ($travel_cost->large ?? optional($travel_cost)->rate ?? 0) : eval("return ".str_replace('kg', $total_weight, $travel_cost->large).";");
+                        break;
+                    
+                    default:
+                    $shipping += is_numeric($travel_cost->heavy) ? ($travel_cost->heavy ?? optional($travel_cost)->rate ?? 0) : eval("return ".str_replace('kg', $total_weight, $travel_cost->heavy).";");
+                        break;
+                }
+            }
+            // $shipping += optional($travel_cost)->rate ?? 0;
         }
         $data['ship'] = $shipping;
        }

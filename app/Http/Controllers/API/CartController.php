@@ -111,7 +111,6 @@ class CartController extends BaseController
         if(count($selected_id) > 0) {
             $carts = Cart::whereIn('id', $selected_id)->get();
         }
-        info("the cartsss ".json_encode($carts));
         $carts_ = CartResource::collection($carts);
         $total_price = collect(json_decode(json_encode($carts_), true))->sum('price');
         $total_weight = collect(json_decode(json_encode($carts_), true))->sum('weight');

@@ -104,18 +104,63 @@
                 @endphp
                 @foreach ($hubs as $hub_)
                 <div class="form-group row">
-                    <label class="col-md-3 col-form-label">{{ $hub_->name }}</label>
+                    <label class="col-md-3 col-form-label">{{ $hub_->name }} Small (0 - 2kg)</label>
                     <div class="col-md-3">
                         @php
                             $the_rate = $hub_connect->where('from', $hub->id)->where('to', $hub_->id)->first()
                         @endphp
-                        <input id="connect_rate_{{ $hub_->id }}" value="{{ optional($the_rate)->rate }}" placeholder="Enter Rate" name="small" class="form-control" required>
+                        <input id="connect_rate_small_{{ $hub_->id }}" value="{{ optional($the_rate)->small ?? optional($the_rate)->rate }}" placeholder="Enter Rate" name="small" class="form-control" required>
                     </div>
                     <div class="col-md-3">
-                        <button from-id="{{ $hub->id }}" onclick="saveConnectRate({{ $hub_->id }}, this)" class="btn btn-primary">Save</button>
+                        <button from-id="{{ $hub->id }}" column="small_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this)" class="btn btn-primary">Save</button>
                     </div>
                     <div class="col-md-3">
-                        <button from-id="{{ $hub->id }}" onclick="saveConnectRate({{ $hub_->id }}, this, true)" class="btn btn-primary">Save Both</button>
+                        <button from-id="{{ $hub->id }}" column="small_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this, true)" class="btn btn-primary">Save Both</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label">{{ $hub_->name }} Medium (2.1 - 7kg)</label>
+                    <div class="col-md-3">
+                        @php
+                            $the_rate = $hub_connect->where('from', $hub->id)->where('to', $hub_->id)->first()
+                        @endphp
+                        <input id="connect_rate_medium_{{ $hub_->id }}" value="{{ optional($the_rate)->medium ?? optional($the_rate)->rate }}" placeholder="Enter Rate" name="small" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <button from-id="{{ $hub->id }}" column="medium_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this)" class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button from-id="{{ $hub->id }}" column="medium_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this, true)" class="btn btn-primary">Save Both</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label">{{ $hub_->name }} Large (7.1 - 10kg)</label>
+                    <div class="col-md-3">
+                        @php
+                            $the_rate = $hub_connect->where('from', $hub->id)->where('to', $hub_->id)->first()
+                        @endphp
+                        <input id="connect_rate_large_{{ $hub_->id }}" value="{{ optional($the_rate)->large ?? optional($the_rate)->rate }}" placeholder="Enter Rate" name="small" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <button from-id="{{ $hub->id }}" column="large_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this)" class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button from-id="{{ $hub->id }}" column="large_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this, true)" class="btn btn-primary">Save Both</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label">{{ $hub_->name }} Heavy (> than 10kg)</label>
+                    <div class="col-md-3">
+                        @php
+                            $the_rate = $hub_connect->where('from', $hub->id)->where('to', $hub_->id)->first()
+                        @endphp
+                        <input id="connect_rate_heavy_{{ $hub_->id }}" value="{{ optional($the_rate)->heavy ?? optional($the_rate)->rate }}" placeholder="Enter Rate" name="small" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <button from-id="{{ $hub->id }}" column="heavy_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this)" class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button from-id="{{ $hub->id }}" column="heavy_{{ $hub_->id }}" onclick="saveConnectRate({{ $hub_->id }}, this, true)" class="btn btn-primary">Save Both</button>
                     </div>
                 </div>
                 @endforeach
