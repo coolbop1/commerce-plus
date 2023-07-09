@@ -95,14 +95,16 @@ class RoleController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors(), 400);       
         }
+        $data_ = [];
+        $data_['rate'] = $request->rate;
+        $column = $request->column ?? 'rate';
+        $data_[$column] = $request->rate;
         $data = HubConnect::updateOrCreate(
             [
                 "from" => $request->from,
                 "to" => $request->to
             ],
-            [
-                "rate" => $request->rate
-            ]
+            $data_
             );
         if($request->double){
             HubConnect::updateOrCreate(
@@ -110,9 +112,7 @@ class RoleController extends BaseController
                     "from" => $request->to,
                     "to" => $request->from
                 ],
-                [
-                    "rate" => $request->rate
-                ]
+                $data_
                 );
         }
         return $this->sendResponse([], 'Hub connect saved successfully.');

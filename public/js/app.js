@@ -1399,11 +1399,15 @@ function removeFromCartV2 (product_id, type = 'online', entire = false){
 function saveConnectRate(id, ele, double = false) {
     let params = new FormData();
     ele.innerHTML =  `<div style="text-align:center"><i class="las la-spinner la-spin la-3x opacity-70"></i></div>`;
-    let value = document.getElementById('connect_rate_'+id).value;
+    let from_column = ele.getAttribute('column');
+    console.log("from_column ", from_column);
+    let value = document.getElementById('connect_rate_'+from_column).value;
     let from_id = ele.getAttribute('from-id')
     params.append('rate', value);
     params.append('from', from_id);
     params.append('to', id);
+    let column = from_column.split('_')[0];
+    params.append('column', column);
     if(double) {
         params.append('double', double);
     }
